@@ -1,0 +1,23 @@
+﻿<Window x:Class="TheFinalTesting.View.FrmDebug"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheFinalTesting.View"
+        mc:Ignorable="d" Loaded="Window_Loaded" WindowStartupLocation="CenterOwner"
+        Title="仪器调试" Height="450" Width="800">
+    <StackPanel Margin="5">
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <TextBlock Text="地址:"/>
+            <ComboBox Name="cmbAddress" Width="60"/>
+            <Button Name="btnInitialize" Content="初始化" Click="btnInitialize_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <TextBox Name="txtCommand" Width="100" HorizontalAlignment="Left"/>
+            <Button Name="btnSend" Content="Send Command" Click="btnSend_Click"/>
+            <Button Name="btnRead" Content="Read Command" Click="btnRead_Click"/>
+            <Button Name="btnSendAndRead" Content="SendAndRead" Click="btnSendAndRead_Click"/>
+        </StackPanel>
+        <TextBox Name="tbResult" IsHitTestVisible="False" Margin="5" Width="400" Height="150" HorizontalAlignment="Left"/>
+    </StackPanel>
+</Window>

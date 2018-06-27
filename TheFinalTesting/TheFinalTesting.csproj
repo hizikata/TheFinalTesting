@@ -82,6 +82,9 @@
     <Compile Include="Model\SenParas.cs" />
     <Compile Include="ViewModel\LocatorViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\FrmDebug.xaml.cs">
+      <DependentUpon>FrmDebug.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FrmMain.xaml.cs">
       <DependentUpon>FrmMain.xaml</DependentUpon>
     </Compile>
@@ -120,6 +123,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dictionary\Template.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FrmDebug.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

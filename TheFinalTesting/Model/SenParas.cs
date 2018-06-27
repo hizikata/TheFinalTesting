@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace I2CIO_Test.Model
+namespace TheFinalTesting.Model
 {
     /// <summary>
     /// 计算灵敏度涉及的参数

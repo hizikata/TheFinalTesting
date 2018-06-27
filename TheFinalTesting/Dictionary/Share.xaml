@@ -5,4 +5,10 @@
         <GradientStop Color="#242424" Offset="0"/>
         <GradientStop Color="#101010" Offset="1"/>
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="tbBackground">
+        <GradientStopCollection>
+            <GradientStop Color="AliceBlue" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+        </GradientStopCollection>
+    </LinearGradientBrush>
 </ResourceDictionary>

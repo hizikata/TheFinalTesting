@@ -36,7 +36,7 @@ namespace TheFinalTesting.Model
             SelectMod("5");
             Status = visa32.viPrintf(Vi, ":FETC:AMPL:EXTR?\n");
             CheckStatus(Vi, Status);
-            return ReadCommand();
+            return ReadCommand().Trim();
 
         }
         /// <summary>
@@ -48,7 +48,7 @@ namespace TheFinalTesting.Model
             SelectMod("5");
             Status = visa32.viPrintf(Vi, ":FETC:AMPL:CROS?\n");
             CheckStatus(Vi, Status);
-            return ReadCommand();
+            return ReadCommand().Trim();
         }
         /// <summary>
         /// 获取误码率

@@ -9,22 +9,163 @@
         Title="终测系统" Height="519.483" Width="822.31" >
     <DockPanel>
         <Menu DockPanel.Dock="Top" Background="LightGray">
-            <MenuItem Header="设置"/>
+            <MenuItem Header="设备">
+                <MenuItem Header="通用调试" Click="MenuItem_Click"/>
+                <MenuItem Header="频谱分析仪"/>
+                <MenuItem Header="Aglient 3440A"/>
+                <MenuItem Header="Aglient E3631A"/>
+                <MenuItem Header="PST 3202"/>
+            </MenuItem>
+            <MenuItem Header="测试" Command="{Binding TestCommand}"/>
         </Menu>
         <TabControl>
-            <TabItem Header="设备">
+            <TabItem Header="设备" Height="21" VerticalAlignment="Top">
                 <StackPanel Margin="5">
 
-                    <GroupBox Header="设备列表">
-                        <StackPanel Margin="5">
-                            <!--仪器列表-->
-                            <ListView ItemsSource="{Binding Devices}" ItemTemplate="{Binding Source={StaticResource deviceInfo}}"/>
+                    <GroupBox Header="初始化">
+                        <StackPanel>
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="COM口:"/>
+                                <ComboBox Width="80" ItemsSource="{Binding StrCom}" SelectedItem="{Binding SelectedCom, Mode=OneWayToSource}"/>
+                            </StackPanel>
+                            <StackPanel Margin="5">
+                                <!--仪器列表-->
+                                <ListView ItemsSource="{Binding Devices}" ItemTemplate="{Binding Source={StaticResource deviceInfo}}"/>
+                                <!--<ContentControl Content="{Binding Devices}" ContentTemplate="{StaticResource deviceInfo}"/>-->
+                                <Button Content="初始化" Command="{Binding InitializeCommand}" HorizontalAlignment="Left" Margin="100,5"/>
+                                <TextBox IsHitTestVisible="False" Height="300" Width="600" HorizontalAlignment="Left" Text="{Binding InitializationInfo, Mode=OneWay}"/>
+                            </StackPanel>
+                            
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="参数"></TabItem>
-            <TabItem Header="测试" IsSelected="True"></TabItem>
+            <TabItem Header="测试" IsSelected="True">
+                <StackPanel Orientation="Horizontal">
+                    <GroupBox Header="TX参数" Width="300" BorderThickness="3" BorderBrush="Gray">
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <StackPanel>
+                                <StackPanel Margin="0,3">
+                                    <TextBlock Text="Supply Current"/>
+                                    <TextBox Text="{Binding SupplyCurrent}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,3">
+                                    <TextBlock Text="Output Power(dBm)"/>
+                                    <TextBox Text="{Binding OutputPower}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,3">
+                                    <TextBlock Text="Exti Ratio(dB)"/>
+                                    <TextBox Text="{Binding ExtiRatio}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,3">
+                                    <TextBlock Text="Crossing Rate(%)"/>
+                                    <TextBox Text="{Binding CrossingRate}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,3">
+                                    <TextBlock Text="Tx Disable"/>
+                                    <TextBox />
+                                </StackPanel>
+                                <StackPanel Margin="0,3">
+                                    <TextBlock Text="Tx λc(nm)"/>
+                                    <TextBox Text="{Binding CenterWavelength}"/>
+                                </StackPanel>
+                                <StackPanel Margin="0,3">
+                                    <TextBlock Text="Tx SMSR(dB)"/>
+                                    <TextBox Text="{Binding SMSR}"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <StackPanel Margin="5,3,0,3">
+                                    <TextBlock Text="Jitter(ps)" />
+                                    <TextBox Text="{Binding Jitter}"/>
+                                </StackPanel>
+                                <StackPanel Margin="5,3,0,3">
+                                    <TextBlock Text="RisingTime(ps)" />
+                                    <TextBox Text="{Binding RisingTime}"/>
+                                </StackPanel>
+                                <StackPanel Margin="5,3,0,3">
+                                    <TextBlock Text="FallingTime(ps)" />
+                                    <TextBox Text="{Binding FallingTime}"/>
+                                </StackPanel>
+                                <StackPanel Margin="5,3,0,3">
+                                    <TextBlock Text="Mask Margin" />
+                                    <TextBox Text="{Binding MaskMargin}"/>
+                                </StackPanel>
+                                <StackPanel Margin="5,3,0,3">
+                                    <TextBlock Text="Tx Δλ" />
+                                    <TextBox Text="{Binding DifferenceWavelength}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="RX参数" Width="140" BorderBrush="Gray" BorderThickness="3">
+                        <StackPanel Margin="3">
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Sensitivity"/>
+                                <TextBox Text="{Binding Sensitivity}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="SD-Asserted(dBm)"/>
+                                <TextBox Text="{Binding SdAsserted}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="SD-Desserted(dBm)"/>
+                                <TextBox Text="{Binding SdDesserted}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Hystersis"/>
+                                <TextBox />
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="SD-High(V)"/>
+                                <TextBox Text="{Binding SDHigh}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="SD-Low"/>
+                                <TextBox Text="{Binding SDLow}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="DDMI/A0H" BorderBrush="Gray" BorderThickness="3" Width="140">
+                        <StackPanel Margin="3">
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Rx.Point1(@10)"/>
+                                <TextBox Text="{Binding RxPoint1}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Rx.Point2(@19)"/>
+                                <TextBox Text="{Binding RxPoint2}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Rx.Point3(@28)"/>
+                                <TextBox Text="{Binding RxPoint3}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Tx Power"/>
+                                <TextBox Text="{Binding TxPower}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Vcc"/>
+                                <TextBox Text="{Binding Vcc}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Temp"/>
+                                <TextBox Text="{Binding Temp}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,3">
+                                <TextBlock Text="Bias"/>
+                                <TextBox Text="{Binding Bias}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="A/W" BorderBrush="Gray" BorderThickness="3">
+                        <StackPanel Margin="3">
+                            
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>

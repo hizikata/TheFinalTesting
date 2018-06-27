@@ -272,7 +272,7 @@ namespace XuxzLib.Communication
             if (SerBuf[0] == 7)  // USB_ISS module ID
             {
                 byte USBISS_found = SerBuf[1];                                           // and set the usb-iss found indicator   并设置了usb-iss发现指示器
-                sb = sb.Append(string.Format("myFound USB-ISS Version {0}\r\n", USBISS_found));  //print the software version on screen
+                sb = sb.Append(string.Format("USB-ISS Version {0}\r\n", USBISS_found));  //print the software version on screen
                 SerBuf[0] = 0x5A;                            // USB_ISS Module Command
                 SerBuf[1] = (byte)IssCmds.GET_SER_NUM;       // Get Revision
                 this.iss_transmit(SerBuf, 2, port);

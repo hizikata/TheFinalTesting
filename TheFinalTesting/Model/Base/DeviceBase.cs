@@ -6,7 +6,7 @@ using XuxzLib.Communication;
 
 namespace TheFinalTesting.Model
 {
-    internal abstract class DeviceBase : IDisposable,IDeviceCommonMethods
+    internal class DeviceBase : IDisposable,IDeviceCommonMethods
     {
         #region Fields
         /// <summary>
@@ -30,6 +30,7 @@ namespace TheFinalTesting.Model
             Status = visa32.viOpenDefaultRM(out DefRM);
             //timeout 设置为10 (超时时间)
             Status = visa32.viOpen(DefRM, DeviceConn, visa32.VI_NO_LOCK, 10, out Vi);
+#warning 现场测试请取消下一行的注释
             CheckStatus(Vi, Status);
         }
 
