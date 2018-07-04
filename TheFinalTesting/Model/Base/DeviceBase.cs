@@ -6,6 +6,11 @@ using XuxzLib.Communication;
 
 namespace TheFinalTesting.Model
 {
+    public enum ConnectionType
+    {
+        GPIB,
+        Ethernet
+    }
     internal class DeviceBase : IDisposable,IDeviceCommonMethods
     {
         #region Fields
@@ -32,6 +37,19 @@ namespace TheFinalTesting.Model
             Status = visa32.viOpen(DefRM, DeviceConn, visa32.VI_NO_LOCK, 10, out Vi);
 #warning 现场测试请取消下一行的注释
             CheckStatus(Vi, Status);
+        }
+        public DeviceBase(string addStr,ConnectionType type)
+        {
+            switch (type)
+            {
+                case ConnectionType.Ethernet:
+                    Status = visa32.viOpenDefaultRM(out DefRM);
+                    Status = visa32.viOpen(DefRM, addStr, visa32.VI_NO_LOCK, 10, out Vi);
+                    CheckStatus(Vi, Status);
+                    break;
+                default:
+                    break;
+            }
         }
 
 
@@ -99,6 +117,18 @@ namespace TheFinalTesting.Model
             Status = visa32.viPrintf(Vi, strCmd);
             CheckStatus(Vi, Status);
             return true;
+        }
+        /// <summary>
+        /// 仪器读写命令
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public virtual string WriteAndRead(string command)
+        {
+            string strCmd = command + "\n";
+            Status = visa32.viPrintf(Vi, strCmd);
+            CheckStatus(Vi, Status);
+            return ReadCommand();
         }
         /// <summary>
         /// 释放VISA资源

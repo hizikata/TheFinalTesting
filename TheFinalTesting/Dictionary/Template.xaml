@@ -44,9 +44,9 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+            <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}"/>
             <TextBlock Grid.Column="1" Text="{Binding DeviceName}" />
-            <ComboBox  Grid.Column="2" ItemsSource="{Binding Source={StaticResource address}}"  SelectedIndex="{Binding Address, Mode=TwoWay}"/>
+            <ComboBox  Grid.Column="2" ItemsSource="{StaticResource address}"  SelectedIndex="{Binding Address}"/>
             <TextBlock Grid.Column="3" Text="{Binding Remark}" Margin="5,0"/>
         </Grid>
     </DataTemplate>

@@ -11,6 +11,6 @@ namespace TheFinalTesting.Model
         public AQ6317B(string add):base(add)
         {
             DeviceName = "AQ6317B Optical Specturm Analyzer";
-        }
+        } 
     }
 }

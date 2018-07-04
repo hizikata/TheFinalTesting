@@ -17,6 +17,7 @@
                 <MenuItem Header="PST 3202"/>
             </MenuItem>
             <MenuItem Header="测试" Command="{Binding TestCommand}"/>
+            <MenuItem Header="测试页面" Click="MenuItem_Click_2"/>
         </Menu>
         <TabControl>
             <TabItem Header="设备" Height="21" VerticalAlignment="Top">
@@ -33,7 +34,7 @@
                                 <ListView ItemsSource="{Binding Devices}" ItemTemplate="{Binding Source={StaticResource deviceInfo}}"/>
                                 <!--<ContentControl Content="{Binding Devices}" ContentTemplate="{StaticResource deviceInfo}"/>-->
                                 <Button Content="初始化" Command="{Binding InitializeCommand}" HorizontalAlignment="Left" Margin="100,5"/>
-                                <TextBox IsHitTestVisible="False" Height="300" Width="600" HorizontalAlignment="Left" Text="{Binding InitializationInfo, Mode=OneWay}"/>
+                                <TextBox IsHitTestVisible="False" Height="150" Width="600" HorizontalAlignment="Left" Text="{Binding InitializationInfo, Mode=OneWay}"/>
                             </StackPanel>
                             
                         </StackPanel>

@@ -40,6 +40,42 @@ namespace TheFinalTesting.Model
             if (result == "1")
                 this.WriteCommand("OUTP:STAT 0\n");
         }
-
+        /// <summary>
+        /// 获取电压
+        /// </summary>
+        /// <param name="channelNum">通道编号(1,2,3)</param>
+        public string GetVolage(string channelNum)
+        {
+            string command = string.Format(":CHAN{0}:MEAS:VOLT\n",channelNum);
+            return WriteAndRead(command);
+        }
+        /// <summary>
+        /// 获取电流
+        /// </summary>
+        /// <param name="channelNum"></param>
+        /// <returns></returns>
+        public string GetCurrent(string channelNum)
+        {
+            string command = string.Format(":CHAN{0}:MEAS:VOLT?\n", channelNum);
+            return WriteAndRead(command);
+        }
+        /// <summary>
+        /// 设置电压
+        /// </summary>
+        /// <param name="volage"></param>
+        public bool SetVolage(string channelNum,string volage)
+        {
+            string command = string.Format(":CHAN{0}:CURR {1}", channelNum, volage);
+            return WriteCommand(command);
+        }
+        /// <summary>
+        /// 设置电流
+        /// </summary>
+        /// <param name="current"></param>
+        public bool SetCurrent(string channelNum,string current)
+        {
+            string command = string.Format(":CHAN{0}:VOLT {1}", channelNum, current);
+            return WriteCommand(command);
+        }
     }
 }

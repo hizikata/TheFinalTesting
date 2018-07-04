@@ -11,14 +11,20 @@ namespace TheFinalTesting.Model
     /// </summary>
     internal class MP2100A : DeviceBase
     {
+        #region Fields
         /// <summary>
-        /// MP2100A 眼图仪
+        /// 构造函数
         /// </summary>
         /// <param name="add"></param>
         public MP2100A(string add) : base(add)
         {
             DeviceName = "Anritsu MP2100A";
         }
+        public MP2100A(string addStr, ConnectionType type) : base(addStr, type)
+        {
+
+        }
+        #endregion  
         /// <summary>
         /// 自动调整画面
         /// </summary>
@@ -62,7 +68,35 @@ namespace TheFinalTesting.Model
             return ReadCommand();
         }
         /// <summary>
-        /// 选择眼图仪当前操作模块
+        /// 获取Jitter
+        /// </summary>
+        /// <returns></returns>
+        public string GetJitter()
+        {
+            SelectMod("5");
+            string command = string.Format(":FETCh:TIME:JITTer:RMS?\n");
+            //string command = string.Format(":FETCh:TIME:JITTer:PPeak?\n");
+            return WriteAndRead(command);
+            
+        }
+        /// <summary>
+        /// 获取MaskMargin
+        /// </summary>
+        /// <returns></returns>
+        public string GetMaskMargin()
+        {
+            SelectMod("5");
+            string command = string.Format(":MEAS:MASK:MARG?\n");
+            return WriteAndRead(command);
+        }
+        public bool SetSampRun()
+        {
+            SelectMod("5");
+            string command = string.Format(":SAMP:STAT RUN\n");
+            return WriteCommand(command);
+        }
+        /// <summary>
+        /// 设置眼图仪当前操作模块
         /// </summary>
         /// <param name="modelNum"></param>
         public void SelectMod(string modelNum)

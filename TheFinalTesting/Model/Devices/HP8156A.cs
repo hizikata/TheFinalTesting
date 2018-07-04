@@ -41,7 +41,7 @@ namespace TheFinalTesting.Model
         /// <summary>
         /// 设置衰减
         /// </summary>
-        /// <param name="att">衰减</param>
+        /// <param name="att">衰减(形如28)</param>
         public void SetAtt(string att)
         {
             Status = visa32.viPrintf(Vi, ":INP:ATT " + att + "dB\n");
@@ -52,7 +52,7 @@ namespace TheFinalTesting.Model
         /// </summary>
         public void Open()
         {
-            Status = visa32.viPrintf(Vi, "OUTP ON\n");
+            Status = visa32.viPrintf(Vi, ":OUTP ON\n");
             CheckStatus(Vi, Status);
         }
         /// <summary>
@@ -60,7 +60,7 @@ namespace TheFinalTesting.Model
         /// </summary>
         public void Close()
         {
-            Status = visa32.viPrintf(Vi, "OUTP OFF\n");
+            Status = visa32.viPrintf(Vi, ":OUTP OFF\n");
             CheckStatus(Vi, Status);
         }
         /******

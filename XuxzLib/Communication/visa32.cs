@@ -27,17 +27,17 @@ namespace XuxzLib.Communication
         /// </summary>
         /// <param name="sesn">Unique logical identifier to a Default Resource Manager session.</param>
         /// <returns></returns>
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#141", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#141", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOpenDefaultRM(out int sesn);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#128", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#128", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGetDefaultRM(out int sesn);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#129", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#129", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viFindRsrc(int sesn, string expr, out int vi, out int retCount, StringBuilder desc);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#130", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#130", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viFindNext(int vi, StringBuilder desc);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#146", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#146", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viParseRsrc(int sesn, string desc, ref short intfType, ref short intfNum);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#147", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#147", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viParseRsrcEx(int sesn, string desc, ref short intfType, ref short intfNum, StringBuilder rsrcClass, StringBuilder expandedUnaliasedName, StringBuilder aliasIfExists);
         /// <summary>
         /// 打开与指定仪器的通话
@@ -48,58 +48,58 @@ namespace XuxzLib.Communication
         /// <param name="timeout">输入 定时时间。默认值为10秒</param>
         /// <param name="vi"> 输出 通话的唯一逻辑标识符 Unique logical identifier reference to a session</param>
         /// <returns></returns>
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#131", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#131", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOpen(int sesn, string viDesc, int mode, int timeout, out int vi);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#132", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#132", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viClose(int vi);
 
         #region viGetAttribute Overloads
 
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#133", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#133", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGetAttribute(int vi, int attrName, out byte attrValue);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#133", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#133", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGetAttribute(int vi, int attrName, out short attrValue);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#133", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#133", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGetAttribute(int vi, int attrName, out int attrValue);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#133", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#133", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGetAttribute(int vi, int attrName, StringBuilder attrValue);
         #endregion
 
         #region viSetAttribute Overloads
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#134", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#134", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viSetAttribute(int vi, int attrName, byte attrValue);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#134", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#134", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viSetAttribute(int vi, int attrName, short attrValue);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#134", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#134", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viSetAttribute(int vi, int attrName, int attrValue);
         #endregion
 
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#142", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#142", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viStatusDesc(int vi, int status, StringBuilder desc);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#143", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#143", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viTerminate(int vi, short degree, int jobId);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#144", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#144", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viLock(int vi, int lockType, int timeout, string requestedKey, StringBuilder accessKey);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#145", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#145", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viUnlock(int vi);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#135", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#135", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viEnableEvent(int vi, int eventType, short mechanism, int context);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#136", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#136", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viDisableEvent(int vi, int eventType, short mechanism);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#137", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#137", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viDiscardEvents(int vi, int eventType, short mechanism);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#138", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#138", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viWaitOnEvent(int vi, int inEventType, int timeout, ref int outEventType, ref int outEventContext);
 
         public delegate int viEventHandler(int vi, int eventType, int context, int userHandle);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#139", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#139", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viInstallHandler(int vi, int eventType, viEventHandler handler, int UserHandle);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#140", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#140", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viUninstallHandler(int vi, int eventType, viEventHandler handler, int userHandle);
         #endregion
 
         #region - Basic I/O Operations --------------------------------------------------
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#256", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#256", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viRead(int vi, byte[] buffer, int count, out int retCount);
 
         public static int viRead(int vi, out string asciiResults, int maxCount)
@@ -118,305 +118,305 @@ namespace XuxzLib.Communication
 
         // FUTURE: add overloads for viReadAsync, viReadToFile, viWrite, viWriteAsync, viWriteFromFile that take a string argument
 
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#277", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#277", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viReadAsync(int vi, byte[] buffer, int count, out int jobId);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#219", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#219", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viReadToFile(int vi, string filename, int count, ref int retCount);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#257", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#257", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viWrite(int vi, byte[] buffer, int count, out int retCount);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#278", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#278", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viWriteAsync(int vi, byte[] buffer, int count, out int jobId);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#218", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#218", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viWriteFromFile(int vi, string filename, int count, ref int retCount);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#258", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#258", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viAssertTrigger(int vi, short protocol);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#259", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#259", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viReadSTB(int vi, ref short status);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#260", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#260", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viClear(int vi);
         #endregion
 
         #region - Formatted and Buffered I/O Operations ---------------------------------
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#267", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#267", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viSetBuf(int vi, short mask, int bufSize);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#268", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#268", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viFlush(int vi, short mask);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#202", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#202", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viBufWrite(int vi, byte[] buffer, int count, out int retCount);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#203", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#203", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viBufRead(int vi, byte[] buffer, int count, out int retCount);
 
         #region viPrintf Overloads
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, int[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, short[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, float[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, double[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, byte[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, string arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, int arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, short arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, float arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, double arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#269", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viPrintf(int vi, string writeFmt, byte arg);
         #endregion
 
         #region viSPrintf Overloads
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, int[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, short[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, float[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, double[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, byte[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, string arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, int arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, short arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, float arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, double arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#204", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSPrintf(int vi, StringBuilder buffer, string writeFmt, byte arg);
         #endregion
 
         #region viScanf Overloads
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, int[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, short[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, float[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, double[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, byte[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, ref int count, int[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, ref int count, short[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, ref int count, float[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, ref int count, double[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, ref int count, byte[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, StringBuilder arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, ref int stringSize, StringBuilder arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, out int arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, out short arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, out float arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, out double arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#271", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viScanf(int vi, string readFmt, out byte arg);
         #endregion
 
         #region viSScanf Overloads
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, int[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, short[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, float[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, double[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, byte[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, ref int count, int[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, ref int count, short[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, ref int count, float[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, ref int count, double[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, ref int count, byte[] arr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, StringBuilder arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, ref int stringSize, StringBuilder arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, out int arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, out short arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, out float arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, out double arg);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("VISA32.DLL", EntryPoint = "#206", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern int viSScanf(int vi, string buffer, string readFmt, out byte arg);
         #endregion
 
         #endregion
 
         #region - Memory I/O Operations -------------------------------------------------
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#273", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#273", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viIn8(int vi, short accSpace, int offset, out byte val8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#274", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#274", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOut8(int vi, short accSpace, int offset, byte val8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#261", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#261", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viIn16(int vi, short accSpace, int offset, out short val16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#262", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#262", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOut16(int vi, short accSpace, int offset, short val16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#281", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#281", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viIn32(int vi, short accSpace, int offset, out int val32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#282", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#282", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOut32(int vi, short accSpace, int offset, int val32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#283", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#283", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveIn8(int vi, short accSpace, int offset, int length, byte[] buf8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#284", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#284", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveOut8(int vi, short accSpace, int offset, int length, byte[] buf8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#285", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#285", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveIn16(int vi, short accSpace, int offset, int length, short[] buf16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#286", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#286", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveOut16(int vi, short accSpace, int offset, int length, short[] buf16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#287", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#287", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveIn32(int vi, short accSpace, int offset, int length, int[] buf32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#288", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#288", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveOut32(int vi, short accSpace, int offset, int length, int[] buf32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#200", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#200", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMove(int vi, short srcSpace, int srcOffset, short srcWidth, short destSpace, int destOffset, short destWidth, int srcLength);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#201", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#201", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveAsync(int vi, short srcSpace, int srcOffset, short srcWidth, short destSpace, int destOffset, short destWidth, int srcLength, out int jobId);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#263", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#263", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMapAddress(int vi, short mapSpace, int mapOffset, int mapSize, short accMode, int suggested, out int address);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#264", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#264", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viUnmapAddress(int vi);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#275", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#275", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern void viPeek8(int vi, int address, out byte val8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#276", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#276", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern void viPoke8(int vi, int address, byte val8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#265", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#265", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern void viPeek16(int vi, int address, out short val16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#266", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#266", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern void viPoke16(int vi, int address, short val16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#289", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#289", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern void viPeek32(int vi, int address, out int val32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#290", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#290", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern void viPoke32(int vi, int address, int val32);
 
         #region 64-bit Extension Functions
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#220", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#220", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viIn64(int vi, short accSpace, int offset, out long val64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#221", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#221", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOut64(int vi, short accSpace, int offset, long val64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#222", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#222", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viIn8Ex(int vi, short accSpace, long offset, out byte val8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#223", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#223", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOut8Ex(int vi, short accSpace, long offset, byte val8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#224", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#224", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viIn16Ex(int vi, short accSpace, long offset, out short val16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#225", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#225", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOut16Ex(int vi, short accSpace, long offset, short val16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#226", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#226", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viIn32Ex(int vi, short accSpace, long offset, out int val32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#227", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#227", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOut32Ex(int vi, short accSpace, long offset, int val32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#228", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#228", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viIn64Ex(int vi, short accSpace, long offset, out long val64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#229", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#229", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viOut64Ex(int vi, short accSpace, long offset, long val64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#230", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#230", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveIn64(int vi, short accSpace, int offset, int length, long[] buf64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#231", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#231", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveOut64(int vi, short accSpace, int offset, int length, long[] buf64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#232", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#232", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveIn8Ex(int vi, short accSpace, long offset, int length, byte[] buf8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#233", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#233", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveOut8Ex(int vi, short accSpace, long offset, int length, byte[] buf8);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#234", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#234", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveIn16Ex(int vi, short accSpace, long offset, int length, short[] buf16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#235", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#235", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveOut16Ex(int vi, short accSpace, long offset, int length, short[] buf16);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#236", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#236", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveIn32Ex(int vi, short accSpace, long offset, int length, int[] buf32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#237", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#237", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveOut32Ex(int vi, short accSpace, long offset, int length, int[] buf32);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#238", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#238", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveIn64Ex(int vi, short accSpace, long offset, int length, long[] buf64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#239", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#239", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveOut64Ex(int vi, short accSpace, long offset, int length, long[] buf64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#240", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#240", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveEx(int vi, short srcSpace, long srcOffset, short srcWidth, short destSpace, long destOffset, short destWidth, int srcLength);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#241", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#241", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMoveAsyncEx(int vi, short srcSpace, long srcOffset, short srcWidth, short destSpace, long destOffset, short destWidth, int srcLength, out int jobId);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#242", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#242", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMapAddressEx(int vi, short mapSpace, long mapOffset, int mapSize, short accMode, int suggested, out int address);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#243", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#243", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMemAllocEx(int vi, int memSize, out long offset);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#244", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#244", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMemFreeEx(int vi, long offset);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#245", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#245", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern void viPeek64(int vi, int address, out long val64);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#246", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#246", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern void viPoke64(int vi, int address, long val64);
         #endregion
         #endregion
 
         #region - Shared Memory Operations ----------------------------------------------
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#291", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#291", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMemAlloc(int vi, int memSize, out int offset);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#292", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#292", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMemFree(int vi, int offset);
         #endregion
 
         #region - Interface Specific Operations -----------------------------------------
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#208", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#208", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGpibControlREN(int vi, short mode);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#210", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#210", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGpibControlATN(int vi, short mode);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#211", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#211", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGpibSendIFC(int vi);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#212", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#212", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGpibCommand(int vi, string buffer, int count, out int retCount);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#213", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#213", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viGpibPassControl(int vi, short primAddr, short secAddr);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#209", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#209", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viVxiCommandQuery(int vi, short mode, int devCmd, out int devResponse);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#214", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#214", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viAssertUtilSignal(int vi, short line);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#215", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#215", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viAssertIntrSignal(int vi, short mode, int statusID);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#216", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#216", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viMapTrigger(int vi, short trigSrc, short trigDest, short mode);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#217", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#217", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viUnmapTrigger(int vi, short trigSrc, short trigDest);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#293", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#293", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viUsbControlOut(int vi, short bmRequestType, short bRequest, short wValue, short wIndex, short wLength, byte[] buf);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#294", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#294", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viUsbControlIn(int vi, short bmRequestType, short bRequest, short wValue, short wIndex, short wLength, byte[] buf, out short retCnt);
-        [DllImportAttribute("VISA32.DLL", EntryPoint = "#295", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
+        [DllImport("VISA32.DLL", EntryPoint = "#295", ExactSpelling = true, CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern int viPxiReserveTriggers(int vi, short cnt, short[] trigBusses, short[] trigLines, out short failureIndex);
         #endregion
 

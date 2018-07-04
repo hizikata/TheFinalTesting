@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace TheFinalTesting.Model
 {
@@ -18,5 +19,17 @@ namespace TheFinalTesting.Model
         {
 
         }
+        /// <summary>
+        /// 读取电压
+        /// </summary>
+        public string GetVoltage()
+        {
+            string command = "INIT\n";
+            WriteCommand(command);
+            Thread.Sleep(200); 
+            command = "READ?\n";
+            return WriteAndRead(command);
+        }
+        //READ?
     }
 }

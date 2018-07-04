@@ -1,0 +1,25 @@
+﻿<Window x:Class="TheFinalTesting.View.FrmEthernet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheFinalTesting.View"
+        mc:Ignorable="d"
+        Title="FrmEthernet" Height="450" Width="800">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <TextBlock Text="Address"/>
+            <ComboBox Name="cmbConnStr" Width="240" VerticalAlignment="Top"/>
+            <Button Name="btnInitialize" Width="80" VerticalAlignment="Top" Content="初始化" Click="btnInitialize_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBox Name="tbcommand" Width="200">
+                
+            </TextBox>
+            <Button Name="btnsend"  Content="sendcommand" Click="btnsend_Click"/>
+            <Button Name="btnread"  Content="readcommand" Click="btnread_Click"/>
+            <Button Name="btnsendandsend" Content="sendandread" Click="btnsendandsend_Click"/>
+        </StackPanel>
+    </StackPanel>
+
+</Window>

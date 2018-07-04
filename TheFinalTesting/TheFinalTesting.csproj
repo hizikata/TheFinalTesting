@@ -32,6 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TheFinalTesting.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>bitbug_favicon%281%29.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net40\CommonServiceLocator.dll</HintPath>
@@ -69,6 +75,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\DeviceInfo.cs" />
+    <Compile Include="Model\Devices\Agilent86100A.cs" />
     <Compile Include="Model\Devices\Aglient3440A.cs" />
     <Compile Include="Model\Devices\AglientE3631A.cs" />
     <Compile Include="Model\Base\DeviceBase.cs" />
@@ -84,6 +91,9 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\FrmDebug.xaml.cs">
       <DependentUpon>FrmDebug.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FrmEthernet.xaml.cs">
+      <DependentUpon>FrmEthernet.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FrmMain.xaml.cs">
       <DependentUpon>FrmMain.xaml</DependentUpon>
@@ -130,6 +140,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\FrmEthernet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FrmMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -143,6 +157,9 @@
       <Project>{3dadfb0b-afd5-46b2-87af-c6d94f99a2d0}</Project>
       <Name>XuxzLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bitbug_favicon%281%29.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
