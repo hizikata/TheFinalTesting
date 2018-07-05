@@ -7,12 +7,77 @@ using System.Text;
 using XuxzLib.Communication;
 using System.Threading;
 using System.Diagnostics;
-
+using System.IO.Ports;
 
 namespace ConsoleApp1
 {
     class Program
     {
+        static SerialPort _serialPort;
+        static bool _continue;
+        public static void Main()
+        {
+            string name;
+            string message;
+            StringComparer stringComparer = StringComparer.OrdinalIgnoreCase;
+            Thread readThread = new Thread(Read);
+
+            // Create a new SerialPort object with default settings.
+            _serialPort = new SerialPort();
+
+            // Allow the user to set the appropriate properties.
+            //_serialPort.PortName = SetPortName(_serialPort.PortName);
+            //_serialPort.BaudRate = SetPortBaudRate(_serialPort.BaudRate);
+            //_serialPort.Parity = SetPortParity(_serialPort.Parity);
+            //_serialPort.DataBits = SetPortDataBits(_serialPort.DataBits);
+            //_serialPort.StopBits = SetPortStopBits(_serialPort.StopBits);
+            //_serialPort.Handshake = SetPortHandshake(_serialPort.Handshake);
+
+            // Set the read/write timeouts
+            _serialPort.ReadTimeout = 500;
+            _serialPort.WriteTimeout = 500;
+
+            _serialPort.Open();
+            _continue = true;
+            readThread.Start();
+
+            Console.Write("Name: ");
+            name = Console.ReadLine();
+
+            Console.WriteLine("Type QUIT to exit");
+
+            while (_continue)
+            {
+                message = Console.ReadLine();
+
+                if (stringComparer.Equals("quit", message))
+                {
+                    _continue = false;
+                }
+                else
+                {
+                    _serialPort.WriteLine(
+                        String.Format("<{0}>: {1}", name, message));
+                }
+            }
+
+            readThread.Join();
+            _serialPort.Close();
+        }
+
+        public static void Read()
+        {
+            while (_continue)
+            {
+                try
+                {
+                    string message = _serialPort.ReadLine();
+                    Console.WriteLine(message);
+                }
+                catch (TimeoutException) { }
+            }
+        }
+#if FullTest
         static SenParas SenPara;
         static bool IsCountChanged = false;
         //static string Sensitivity;
@@ -32,17 +97,6 @@ namespace ConsoleApp1
         static AglientE3631A AgE3631;
         static Aglient34401A Ag34401;
         static void Main(string[] args)
-        {
-            Ag34401 = new Aglient34401A("10");
-            Console.WriteLine(Ag34401.GetIdn());
-            Ag34401.WriteCommand("INIT");
-            string msg=Ag34401.WriteAndRead("READ?");
-            Console.WriteLine(msg);
-            Console.ReadKey();
-            Dispose();
-        }
-
-        static void Mai(string[] args)
         {
             string supplyCurrent;
             string outputPower;
@@ -75,8 +129,8 @@ namespace ConsoleApp1
                 Hp8156.Open();
                 supplyCurrent = AgE3631.GetCurrent();
                 outputPower = Hp8153.ReadPower("2");
-                Console.WriteLine("Supply Current:{0}",supplyCurrent);
-                Console.WriteLine("Output Power:{0}",outputPower);
+                Console.WriteLine("Supply Current:{0}", supplyCurrent);
+                Console.WriteLine("Output Power:{0}", outputPower);
                 Console.WriteLine();
 
                 Mp.AutoScale();
@@ -130,23 +184,23 @@ namespace ConsoleApp1
 
                 Hp8156.SetAtt("28");
                 Thread.Sleep(2000);
-                #region Mp2100
+        #region Mp2100
                 crossing = Mp.GetCrossing();
                 extiRatio = Mp.GetER();
-              
 
-                Console.WriteLine("Crossing:{0}",crossing);
-                Console.WriteLine("Extinction Ratio:{0}",extiRatio);
+
+                Console.WriteLine("Crossing:{0}", crossing);
+                Console.WriteLine("Extinction Ratio:{0}", extiRatio);
                 jitter = Mp.GetJitter();
                 maskMargin = Mp.GetMaskMargin();
-                Console.WriteLine("Jitter:{0}",jitter);
-                Console.WriteLine("Mask Margin:{0}",maskMargin);
+                Console.WriteLine("Jitter:{0}", jitter);
+                Console.WriteLine("Mask Margin:{0}", maskMargin);
                 Console.WriteLine();
                 //Sensitivity
                 GetSensitivity();
                 sensitivity = SenPara.Sensitive.ToString();
-                Console.WriteLine("Sensitivity:{0}",sensitivity);
-                #endregion
+                Console.WriteLine("Sensitivity:{0}", sensitivity);
+        #endregion
 
                 //Saturation
                 Hp8156.SetAtt("9");
@@ -154,12 +208,12 @@ namespace ConsoleApp1
                 Console.WriteLine();
                 for (int i = 0; i < 5; i++)
                 {
-                    Console.WriteLine("Saturation:{0}",Mp.GetErrorRate());
+                    Console.WriteLine("Saturation:{0}", Mp.GetErrorRate());
                     Thread.Sleep(1000);
-                }               
+                }
                 Hp8156.Close();
                 Hp8156.SetAtt("28");
-                AgE3631.SetOutput("25","2.0","0.5");
+                AgE3631.SetOutput("25", "2.0", "0.5");
                 Thread.Sleep(1000);
                 Console.WriteLine("TxDisable:{0}", Hp8153.ReadPower("2"));
 
@@ -340,5 +394,6 @@ namespace ConsoleApp1
             if (AgE3631 != null)
                 AgE3631.Dispose();
         }
+#endif
     }
 }

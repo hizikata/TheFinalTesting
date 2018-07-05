@@ -13,7 +13,7 @@ namespace PssInstrument
         static void Main(string[] args)
         {
             char[] buffer = new char[256];
-            int count = 0;
+            //int count = 0;
             try
             {
                 Port.PortName = "COM7";
@@ -34,7 +34,7 @@ namespace PssInstrument
                 //{
                 //    count=Port.Read(buffer, i, 1);
                 //}
-                string msg = ReadData(Port, buffer);
+                string msg = ReadData(Port, buffer);//尝试使用SerialPort.ReadLine();
                 Console.WriteLine(msg);
 
             }
