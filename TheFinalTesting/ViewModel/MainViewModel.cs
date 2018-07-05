@@ -55,6 +55,7 @@ namespace TheFinalTesting.ViewModel
         /// 频谱分析仪
         /// </summary>
         internal AQ6317B Aq6317B;
+        internal Keithley Keith;
         #endregion
         #region Properties
         /// <summary>
@@ -74,7 +75,8 @@ namespace TheFinalTesting.ViewModel
             new DeviceInfo(true,"HP8156A",22,"光衰减器(地址:22)"),
             new DeviceInfo(true,"MP2100A",16,"眼图仪(地址:2)"),
             new DeviceInfo(true,"PST3202",15,"电源供应器(地址:15)"),
-            new DeviceInfo(true,"AQ6317B",2,"频谱分析仪(地址未知)")
+            new DeviceInfo(true,"AQ6317B",2,"频谱分析仪(地址未知)"),
+            new DeviceInfo(true,"Keithley",24,"Keithley")
 
         };
         /// <summary>
@@ -308,6 +310,17 @@ namespace TheFinalTesting.ViewModel
                 return new RelayCommand(() => ExecuteTest());
             }
         }
+        public RelayCommand ForTest
+        {
+            get
+            {
+                return new RelayCommand(() => ExecuteForTest());
+            }
+        }
+        void ExecuteForTest()
+        {
+            MessageBox.Show(Keith.GetData());
+        }
         #endregion
         #region CommandMethods
         private void ExecuteInitialize()
@@ -316,39 +329,39 @@ namespace TheFinalTesting.ViewModel
             try
             {
                 //串口初始化
-                if (!string.IsNullOrEmpty(SelectedCom.Trim()))
-                {
-                    info.Append("串口初始化中。。。");
-                    if (Port.IsOpen == true)
-                        Port.Close();
-                    Port.PortName = SelectedCom.Trim();
-                    Port.Parity = 0;
-                    Port.BaudRate = 19200;
-                    Port.StopBits = StopBits.Two;
-                    Port.DataBits = 8;
-                    Port.ReadTimeout = 100;
-                    Port.WriteTimeout = 100;
+                //if (!string.IsNullOrEmpty(SelectedCom.Trim()))
+                //{
+                //    info.Append("串口初始化中。。。");
+                //    if (Port.IsOpen == true)
+                //        Port.Close();
+                //    Port.PortName = SelectedCom.Trim();
+                //    Port.Parity = 0;
+                //    Port.BaudRate = 19200;
+                //    Port.StopBits = StopBits.Two;
+                //    Port.DataBits = 8;
+                //    Port.ReadTimeout = 100;
+                //    Port.WriteTimeout = 100;
 
-                    Port.Open();
-                    string msg = TranBase.IsPortReady(Port, SerBuf) + DateTime.Now.ToShortTimeString();
-                    if (msg == null)
-                    {
-                        info.Append("I2C通信失败！");
-                        InitializationInfo = info.ToString();
-                    }
-                    else
-                    {
-                        info.Append("初始化成功 \r\n");
-                        info.Append("msg");
-                        InitializationInfo = info.ToString();
-                    }
-                }
-                else
-                {
-                    info.Append("请选择串口号！\r\n");
-                    InitializationInfo = info.ToString();
-                    return;
-                }
+                //    Port.Open();
+                //    string msg = TranBase.IsPortReady(Port, SerBuf) + DateTime.Now.ToShortTimeString();
+                //    if (msg == null)
+                //    {
+                //        info.Append("I2C通信失败！");
+                //        InitializationInfo = info.ToString();
+                //    }
+                //    else
+                //    {
+                //        info.Append("初始化成功 \r\n");
+                //        info.Append("msg");
+                //        InitializationInfo = info.ToString();
+                //    }
+                //}
+                //else
+                //{
+                //    info.Append("请选择串口号！\r\n");
+                //    InitializationInfo = info.ToString();
+                //    return;
+                //}
                 //设备初始化
                 foreach (var item in Devices)
                 {
@@ -357,7 +370,8 @@ namespace TheFinalTesting.ViewModel
                         if (item.Address != 0)
                         {
                             string address = item.Address.ToString();
-                            switch (Array.IndexOf(Devices, item))
+                            int index = Array.IndexOf(Devices, item);
+                            switch (index)
                             {
                                 case 0:
                                     info.Append("Aglient34401A初始化中。。。");
@@ -366,6 +380,10 @@ namespace TheFinalTesting.ViewModel
                                     Ag34401A = new Aglient34401A(address);
                                     if (Ag34401A != null)
                                         info.Append("初始化OK \r\n");
+                                    else
+                                    {
+                                        info.Append("初始化失败 \r\n");
+                                    }
                                     InitializationInfo = info.ToString();
 
                                     break;
@@ -376,6 +394,10 @@ namespace TheFinalTesting.ViewModel
                                     AgE3631A = new AglientE3631A(address);
                                     if (AgE3631A != null)
                                         info.Append("初始化OK \r\n");
+                                    else
+                                    {
+                                        info.Append("初始化失败 \r\n");
+                                    }
                                     InitializationInfo = info.ToString();
 
                                     break;
@@ -384,7 +406,12 @@ namespace TheFinalTesting.ViewModel
                                     if (Hp8153A != null)
                                         Hp8153A.Dispose();
                                     Hp8153A = new HP8153A(address);
-                                    info.Append("初始化OK \r\n");
+                                    if (Hp8153A != null)
+                                        info.Append("初始化OK \r\n");
+                                    else
+                                    {
+                                        info.Append("初始化失败 \r\n");
+                                    }
                                     InitializationInfo = info.ToString();
 
                                     break;
@@ -393,7 +420,15 @@ namespace TheFinalTesting.ViewModel
                                     if (Hp8156A != null)
                                         Hp8156A.Dispose();
                                     Hp8156A = new HP8156A(address);
-                                    info.Append("初始化OK \r\n");
+                                    if (Hp8156A != null)
+                                    {
+                                        info.Append("初始化OK \r\n");
+                                    }
+                                    else
+                                    {
+                                        info.Append("hp8156A初始化失败\r\n");
+                                        
+                                    }
                                     InitializationInfo = info.ToString();
 
                                     break;
@@ -402,11 +437,17 @@ namespace TheFinalTesting.ViewModel
                                     if (Mp2100A != null)
                                         Mp2100A.Dispose();
                                     Mp2100A = new MP2100A(address);
-                                    //Mp2100A = new MP2100A("TCPIP::192.168.100.101::5001::SOCKET", ConnectionType.Ethernet);
+                                    //Mp2100A = new MP2100A("TCPIP::192.168.100.102::5001::SOCKET", ConnectionType.Ethernet);
+                                    if (Mp2100A != null)
+                                    {
+                                        info.Append("初始化OK \r\n");
 
-                                    info.Append("初始化OK \r\n");
+                                    }
+                                    else
+                                    {
+                                        info.Append(Mp2100A.DeviceName + "初始化失败");
+                                    }
                                     InitializationInfo = info.ToString();
-
                                     break;
                                 case 5:
                                     info.Append("P3202初始化中。。。");
@@ -424,7 +465,21 @@ namespace TheFinalTesting.ViewModel
                                     Aq6317B = new AQ6317B(address);
                                     info.Append("初始化OK \r\n");
                                     InitializationInfo = info.ToString();
-
+                                    break;
+                                case 7:
+                                    info.Append("Keithley初始化中。。。");
+                                    //if (Keith != null)
+                                        //Keith.Dispose();
+                                    Keith = new Keithley(address);
+                                    if (Keith != null)
+                                    {
+                                        info.Append("初始化成功");
+                                    }
+                                    else
+                                    {
+                                        info.Append("初始化失败");
+                                    }
+                                    InitializationInfo = info.ToString();
                                     break;
                                 default:
                                     throw new Exception("该设备不存在");
@@ -451,9 +506,9 @@ namespace TheFinalTesting.ViewModel
                 {
                     //Initialize
                     AgE3631A.Open();
-                    P3202.Open();
+                    //P3202.Open();
                     Thread.Sleep(200);
-                    Mp2100A.AutoScale();
+                    //Mp2100A.AutoScale();
                     //Asserted,Desserted sdlow sdhigh
                     GetHighAndLow();
                     Thread.Sleep(200);
@@ -461,7 +516,7 @@ namespace TheFinalTesting.ViewModel
                     GetSensitivity();
                     Hp8156A.SetAtt("28");
                     //ExtiRatois Crossing
-                    GetTxParas();
+                    //GetTxParas();
                     //Sensitivity
                     //Temp,Vcc,Bias,TxPower,RxPoint 1/2/3
                     I2CTest();
@@ -629,7 +684,7 @@ namespace TheFinalTesting.ViewModel
                     SDHigh = volage.ToString();
                     break;
                 }
-                att += 0.2;
+                att += span;
             }
             for (int i = 0; i < 20; i++)
             {
@@ -642,7 +697,7 @@ namespace TheFinalTesting.ViewModel
                     SDLow = volage.ToString();
                     break;
                 }
-                att -= 0.2;
+                att -= span;
             }
             if (!string.IsNullOrEmpty(SdAsserted) && !string.IsNullOrEmpty(SdDesserted))
             {

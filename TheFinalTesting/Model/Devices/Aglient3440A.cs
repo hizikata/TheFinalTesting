@@ -24,10 +24,10 @@ namespace TheFinalTesting.Model
         /// </summary>
         public string GetVoltage()
         {
-            string command = "INIT\n";
+            string command = "INIT";
             WriteCommand(command);
             Thread.Sleep(200); 
-            command = "READ?\n";
+            command = "READ?";
             return WriteAndRead(command);
         }
         //READ?

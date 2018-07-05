@@ -11,18 +11,18 @@ namespace TheFinalTesting.Model
         GPIB,
         Ethernet
     }
-    internal class DeviceBase : IDisposable,IDeviceCommonMethods
+    public class DeviceBase : IDisposable, IDeviceCommonMethods
     {
         #region Fields
         /// <summary>
         /// 设备名称
         /// </summary>
-        protected string DeviceName;
+        public string DeviceName;
         /// <summary>
         /// 设备连接字符串
         /// </summary>
-        protected readonly string DeviceConn;
-        protected int DefRM, Status, Vi;
+        protected string DeviceConn;
+        protected int DefRM = 0, Status, Vi = 0;
         #endregion
         #region Constructors
         /// <summary>
@@ -31,14 +31,14 @@ namespace TheFinalTesting.Model
         /// <param name="add"></param>
         public DeviceBase(string add)
         {
-            DeviceConn = string.Format(@"GPIB0::{0}::INSTR", add);
+            DeviceConn = string.Format("GPIB0::{0}::INSTR", add.Trim());
             Status = visa32.viOpenDefaultRM(out DefRM);
             //timeout 设置为10 (超时时间)
-            Status = visa32.viOpen(DefRM, DeviceConn, visa32.VI_NO_LOCK, 10, out Vi);
+            Status = visa32.viOpen(DefRM, DeviceConn, visa32.VI_NO_LOCK, visa32.VI_TMO_IMMEDIATE, out Vi);
 #warning 现场测试请取消下一行的注释
             CheckStatus(Vi, Status);
         }
-        public DeviceBase(string addStr,ConnectionType type)
+        public DeviceBase(string addStr, ConnectionType type)
         {
             switch (type)
             {
@@ -62,9 +62,9 @@ namespace TheFinalTesting.Model
         /// <param name="status"></param>
         protected void CheckStatus(int vi, int status)
         {
-            if (status != visa32.VI_SUCCESS)
+            if ((status < visa32.VI_SUCCESS))
             {
-                StringBuilder err = new StringBuilder(256);
+                System.Text.StringBuilder err = new System.Text.StringBuilder(256);
                 visa32.viStatusDesc(vi, status, err);
                 throw new Exception(err.ToString());
             }
@@ -125,10 +125,12 @@ namespace TheFinalTesting.Model
         /// <returns></returns>
         public virtual string WriteAndRead(string command)
         {
-            string strCmd = command + "\n";
-            Status = visa32.viPrintf(Vi, strCmd);
-            CheckStatus(Vi, Status);
-            return ReadCommand();
+            if (WriteCommand(command))
+                return ReadCommand();
+            else
+            {
+                return string.Empty;
+            }
         }
         /// <summary>
         /// 释放VISA资源

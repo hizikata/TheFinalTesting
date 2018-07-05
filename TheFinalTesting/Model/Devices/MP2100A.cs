@@ -11,7 +11,7 @@ namespace TheFinalTesting.Model
     /// </summary>
     internal class MP2100A : DeviceBase
     {
-        #region Fields
+        #region Constructors
         /// <summary>
         /// 构造函数
         /// </summary>

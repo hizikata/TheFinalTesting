@@ -15,6 +15,7 @@
                 <MenuItem Header="Aglient 3440A"/>
                 <MenuItem Header="Aglient E3631A"/>
                 <MenuItem Header="PST 3202"/>
+                <MenuItem Header="Keithley" Command="{Binding ForTest}"/>
             </MenuItem>
             <MenuItem Header="测试" Command="{Binding TestCommand}"/>
             <MenuItem Header="测试页面" Click="MenuItem_Click_2"/>
@@ -41,7 +42,9 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="参数"></TabItem>
+            <TabItem Header="参数">
+                <Button Content="测试" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding ForTest}"/>
+            </TabItem>
             <TabItem Header="测试" IsSelected="True">
                 <StackPanel Orientation="Horizontal">
                     <GroupBox Header="TX参数" Width="300" BorderThickness="3" BorderBrush="Gray">
