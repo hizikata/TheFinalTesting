@@ -629,7 +629,7 @@ namespace TheFinalTesting.ViewModel
                     SDHigh = volage.ToString();
                     break;
                 }
-                att += 0.2;
+                att += span;
             }
             for (int i = 0; i < 20; i++)
             {
@@ -642,7 +642,7 @@ namespace TheFinalTesting.ViewModel
                     SDLow = volage.ToString();
                     break;
                 }
-                att -= 0.2;
+                att -= span;
             }
             if (!string.IsNullOrEmpty(SdAsserted) && !string.IsNullOrEmpty(SdDesserted))
             {
