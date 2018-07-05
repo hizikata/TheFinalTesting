@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using XuxzLib.Communication;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
     /// <summary>
     /// HP8153A光功率计
     /// </summary>
-    internal class HP8153A : DeviceBase
+    public class HP8153A : DeviceBase
     {
         /// <summary>
         /// hp8153A构造函数

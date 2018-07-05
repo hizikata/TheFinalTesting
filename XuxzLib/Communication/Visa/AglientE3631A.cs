@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using XuxzLib.Communication;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
     /// <summary>
     /// 电源供应器
     /// </summary>
-    internal class AglientE3631A:DeviceBase
+    public class AglientE3631A:DeviceBase
     {
         /// <summary>
         /// 构造函数

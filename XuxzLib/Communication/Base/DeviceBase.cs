@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using XuxzLib.Communication;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
     public enum ConnectionType
     {
@@ -35,7 +35,6 @@ namespace TheFinalTesting.Model
             Status = visa32.viOpenDefaultRM(out DefRM);
             //timeout 设置为10 (超时时间)
             Status = visa32.viOpen(DefRM, DeviceConn, visa32.VI_NO_LOCK, visa32.VI_TMO_IMMEDIATE, out Vi);
-#warning 现场测试请取消下一行的注释
             CheckStatus(Vi, Status);
         }
         public DeviceBase(string addStr, ConnectionType type)

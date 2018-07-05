@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using XuxzLib.Communication;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
     /// <summary>
     /// MP2100A眼图仪
     /// </summary>
-    internal class MP2100A : DeviceBase
+    public class MP2100A : DeviceBase
     {
         #region Constructors
         /// <summary>

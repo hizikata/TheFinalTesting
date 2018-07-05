@@ -57,9 +57,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Communication\TransmitBase.cs" />
-    <Compile Include="Communication\visa32.cs" />
+    <Compile Include="Communication\Base\DeviceBase.cs" />
+    <Compile Include="Communication\Base\IDeviceMethods.cs" />
+    <Compile Include="Communication\Visa\Agilent86100A.cs" />
+    <Compile Include="Communication\Visa\Aglient3440A.cs" />
+    <Compile Include="Communication\Visa\AglientE3631A.cs" />
+    <Compile Include="Communication\Visa\AQ6317B.cs" />
+    <Compile Include="Communication\Base\TransmitBase.cs" />
+    <Compile Include="Communication\Base\visa32.cs" />
+    <Compile Include="Communication\Visa\HP8153A.cs" />
+    <Compile Include="Communication\Visa\HP8156A.cs" />
+    <Compile Include="Communication\Visa\Keithley.cs" />
+    <Compile Include="Communication\Visa\MP2100A.cs" />
+    <Compile Include="Communication\Visa\PST3202.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

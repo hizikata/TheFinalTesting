@@ -310,17 +310,6 @@ namespace TheFinalTesting.ViewModel
                 return new RelayCommand(() => ExecuteTest());
             }
         }
-        public RelayCommand ForTest
-        {
-            get
-            {
-                return new RelayCommand(() => ExecuteForTest());
-            }
-        }
-        void ExecuteForTest()
-        {
-            MessageBox.Show(Keith.GetData());
-        }
         #endregion
         #region CommandMethods
         private void ExecuteInitialize()
@@ -574,7 +563,7 @@ namespace TheFinalTesting.ViewModel
             else
             {
                 //AOH 读取SN
-                string sn;
+                //string sn;
 
                 //A2H
                 double temp, vcc, txPower, bais;
@@ -598,10 +587,6 @@ namespace TheFinalTesting.ViewModel
                 ucache = UDigitTransform(data[6], data[7]);
                 txPower = (double)ucache / 10000; //mW
                 TxPower = (Math.Log10(txPower) * 10).ToString();
-                //RxPower 104,105
-                //ucache = UDigitTransform(data[8], data[9]);
-                //rxPower = (double)ucache / 10000; //mW
-                //RxPower = (float)(Math.Log10(rxPower) * 10);
             }
         }
         //I2C获取RxPower

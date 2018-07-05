@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
     public class Agilent86100A:DeviceBase
     {

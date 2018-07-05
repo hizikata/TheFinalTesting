@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
     /// <summary>
     /// 测高低压万用表
     /// </summary>
-    internal class Aglient34401A:DeviceBase
+    public class Aglient34401A:DeviceBase
     {
         /// <summary>
         /// 构造函数

@@ -15,7 +15,7 @@
                 <MenuItem Header="Aglient 3440A"/>
                 <MenuItem Header="Aglient E3631A"/>
                 <MenuItem Header="PST 3202"/>
-                <MenuItem Header="Keithley" Command="{Binding ForTest}"/>
+                <MenuItem Header="Keithley"/>
             </MenuItem>
             <MenuItem Header="测试" Command="{Binding TestCommand}"/>
             <MenuItem Header="测试页面" Click="MenuItem_Click_2"/>
@@ -33,7 +33,6 @@
                             <StackPanel Margin="5">
                                 <!--仪器列表-->
                                 <ListView ItemsSource="{Binding Devices}" ItemTemplate="{Binding Source={StaticResource deviceInfo}}"/>
-                                <!--<ContentControl Content="{Binding Devices}" ContentTemplate="{StaticResource deviceInfo}"/>-->
                                 <Button Content="初始化" Command="{Binding InitializeCommand}" HorizontalAlignment="Left" Margin="100,5"/>
                                 <TextBox IsHitTestVisible="False" Height="150" Width="600" HorizontalAlignment="Left" Text="{Binding InitializationInfo, Mode=OneWay}"/>
                             </StackPanel>
@@ -43,7 +42,6 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="参数">
-                <Button Content="测试" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding ForTest}"/>
             </TabItem>
             <TabItem Header="测试" IsSelected="True">
                 <StackPanel Orientation="Horizontal">

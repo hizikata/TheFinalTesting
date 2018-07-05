@@ -93,17 +93,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\DeviceInfo.cs" />
-    <Compile Include="Model\Devices\Agilent86100A.cs" />
-    <Compile Include="Model\Devices\Aglient3440A.cs" />
-    <Compile Include="Model\Devices\AglientE3631A.cs" />
-    <Compile Include="Model\Base\DeviceBase.cs" />
-    <Compile Include="Model\Devices\AQ6317B.cs" />
-    <Compile Include="Model\Devices\HP8153A.cs" />
-    <Compile Include="Model\Devices\HP8156A.cs" />
-    <Compile Include="Model\Base\IDeviceMethods.cs" />
-    <Compile Include="Model\Devices\Keithley.cs" />
-    <Compile Include="Model\Devices\MP2100A.cs" />
-    <Compile Include="Model\Devices\PST3202.cs" />
     <Compile Include="Model\SenParas.cs" />
     <Compile Include="ViewModel\LocatorViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

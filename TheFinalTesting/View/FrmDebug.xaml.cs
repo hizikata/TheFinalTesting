@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TheFinalTesting.Model;
+using XuxzLib.Communication;
 
 namespace TheFinalTesting.View
 {

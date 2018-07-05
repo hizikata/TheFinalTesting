@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using XuxzLib.Communication;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
     /// <summary>
     /// HP衰减器 8156A
     /// </summary>
-    internal class HP8156A:DeviceBase
+    public class HP8156A:DeviceBase
     {
         
         /// <summary>

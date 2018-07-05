@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using XuxzLib.Communication;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
-    class AQ6317B:DeviceBase
+    public class AQ6317B:DeviceBase
     {
         public AQ6317B(string add):base(add)
         {

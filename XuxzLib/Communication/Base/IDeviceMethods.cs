@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TheFinalTesting.Model
+namespace XuxzLib.Communication
 {
-    interface IDeviceCommonMethods
+    public interface IDeviceCommonMethods
     {
         void Reset();
         string GetIdn();
