@@ -7,7 +7,7 @@ using XuxzLib.Communication;
 namespace XuxzLib.Communication
 {
     /// <summary>
-    /// PST3202 三通道电源供应器
+    /// PST3202 三通道电源供应器(15)
     /// </summary>
     public class PST3202:DeviceBase
     {
@@ -56,7 +56,7 @@ namespace XuxzLib.Communication
         /// <returns></returns>
         public string GetCurrent(string channelNum)
         {
-            string command = string.Format(":CHAN{0}:MEAS:VOLT?\n", channelNum);
+            string command = string.Format(":CHAN{0}:MEAS:CURR?\n", channelNum);
             return WriteAndRead(command);
         }
         /// <summary>

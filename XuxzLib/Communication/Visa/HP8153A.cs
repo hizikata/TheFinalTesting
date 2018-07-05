@@ -7,7 +7,7 @@ using XuxzLib.Communication;
 namespace XuxzLib.Communication
 {
     /// <summary>
-    /// HP8153A光功率计
+    /// HP8153A光功率计(5)
     /// </summary>
     public class HP8153A : DeviceBase
     {
@@ -64,7 +64,7 @@ namespace XuxzLib.Communication
         /// <summary>
         /// 读取光功率计数据
         /// </summary>
-        public string ReadData(string modelNum)
+        public string ReadPower(string modelNum)
         {
             switch (modelNum)
             {

@@ -1,0 +1,2 @@
+﻿Card3 Read:Power  //衰减器读取功率
+Card3 Configure:Atten? //查询衰减器目前衰减

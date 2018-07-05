@@ -9,7 +9,7 @@ namespace XuxzLib.Communication
     {
         public Agilent86100A(string add):base(add)
         {
-
+            DeviceName = "Agilent86100A";
         }
         //crossing :MEAS:CGR:CROS? CHAN3  (选择channle)
         //average power :MEAS:APOW? DEC|WATT,CHAN3  单位：分贝|uW

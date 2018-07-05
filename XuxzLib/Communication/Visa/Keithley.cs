@@ -7,7 +7,7 @@ using XuxzLib.Communication;
 namespace XuxzLib.Communication
 {
     /// <summary>
-    /// 电源供应器Keithley
+    /// 电源供应器Keithley(24)
     /// </summary>
     public class Keithley:DeviceBase
     {

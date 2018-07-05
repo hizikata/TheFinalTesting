@@ -7,7 +7,7 @@ using XuxzLib.Communication;
 namespace XuxzLib.Communication
 {
     /// <summary>
-    /// MP2100A眼图仪
+    /// MP2100A眼图仪(16)
     /// </summary>
     public class MP2100A : DeviceBase
     {
@@ -74,10 +74,12 @@ namespace XuxzLib.Communication
         public string GetJitter()
         {
             SelectMod("5");
-            string command = string.Format(":FETCh:TIME:JITTer:RMS?\n");
-            //string command = string.Format(":FETCh:TIME:JITTer:PPeak?\n");
+            //Jitter RMS
+            //string command = string.Format(":FETCh:TIME:JITT:RMS?");
+            //Jitter P-P
+            string command = string.Format(":FETCh:TIME:JITTer:PPeak?");
             return WriteAndRead(command);
-            
+
         }
         /// <summary>
         /// 获取MaskMargin
@@ -86,7 +88,7 @@ namespace XuxzLib.Communication
         public string GetMaskMargin()
         {
             SelectMod("5");
-            string command = string.Format(":MEAS:MASK:MARG?\n");
+            string command = string.Format(":MEAS:MASK:MARG?");
             return WriteAndRead(command);
         }
         public bool SetSampRun()
@@ -101,14 +103,14 @@ namespace XuxzLib.Communication
         /// <param name="modelNum"></param>
         public void SelectMod(string modelNum)
         {
-            Status = visa32.viPrintf(Vi, ":MOD:ID?\n");
+            //Status = visa32.viPrintf(Vi, ":MOD:ID?\n");
+            //CheckStatus(Vi, Status);
+            //string result = ReadCommand();
+            //if (result != modelNum)
+            //{
+            Status = visa32.viPrintf(Vi, string.Format(":MOD:ID {0}\n", modelNum));
             CheckStatus(Vi, Status);
-            string result = ReadCommand();
-            if (result != modelNum)
-            {
-                Status = visa32.viPrintf(Vi, string.Format(":MOD:ID {0}\n", modelNum));
-                CheckStatus(Vi, Status);
-            }              
+            //}              
         }
         /***
          * 如何判定AutoScale 已经完成？

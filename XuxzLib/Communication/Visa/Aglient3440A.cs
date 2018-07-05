@@ -7,7 +7,7 @@ using System.Threading;
 namespace XuxzLib.Communication
 {
     /// <summary>
-    /// 测高低压万用表
+    /// 测高低压万用表(10)
     /// </summary>
     public class Aglient34401A:DeviceBase
     {

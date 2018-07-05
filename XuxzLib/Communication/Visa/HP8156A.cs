@@ -7,7 +7,7 @@ using XuxzLib.Communication;
 namespace XuxzLib.Communication
 {
     /// <summary>
-    /// HP衰减器 8156A
+    /// HP衰减器 8156A(22)
     /// </summary>
     public class HP8156A:DeviceBase
     {

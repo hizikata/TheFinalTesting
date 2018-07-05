@@ -7,7 +7,7 @@ using XuxzLib.Communication;
 namespace XuxzLib.Communication
 {
     /// <summary>
-    /// 电源供应器
+    /// 电源供应器(9)
     /// </summary>
     public class AglientE3631A:DeviceBase
     {
@@ -25,7 +25,7 @@ namespace XuxzLib.Communication
         /// <returns></returns>
         public string GetCurrent()
         {
-            string command = " MEAS:CURR? P6V\n";
+            string command = "MEAS:CURR? P6V";
             return WriteAndRead(command);
         }
         /// <summary>
@@ -34,7 +34,7 @@ namespace XuxzLib.Communication
         /// <returns></returns>
         public string GetVoltage()
         {
-            string command = " MEAS:VOLT? P6V\n";
+            string command = "MEAS:VOLT? P6V";
             return WriteAndRead(command);
         }
         /// <summary>
