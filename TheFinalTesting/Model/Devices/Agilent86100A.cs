@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TheFinalTesting.Model
 {
-    internal class Agilent86100A:DeviceBase
+    public class Agilent86100A:DeviceBase
     {
         public Agilent86100A(string add):base(add)
         {

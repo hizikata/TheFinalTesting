@@ -44,7 +44,7 @@ namespace TheFinalTesting.View
 
         private void btnsend_Click(object sender, RoutedEventArgs e)
         {
-            Mp2100A.GetIdn();
+            MessageBox.Show(Mp2100A.GetIdn());
         }
 
         private void btnread_Click(object sender, RoutedEventArgs e)
