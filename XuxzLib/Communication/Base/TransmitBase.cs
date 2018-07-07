@@ -110,8 +110,8 @@ namespace XuxzLib.Communication
         /// </summary>
         /// <param name="SerBuf">指定字节数组</param>
         /// <param name="port">通信COM口</param>
-        /// <param name="count">要读取的字节数</param>
         /// <param name="add">读取的开始地址</param>
+        /// <param name="count">要读取的字节数</param>
         /// <returns></returns>
         public List<byte> MyI2C_ReadA2HByte(byte[] SerBuf, SerialPort port,byte add,byte count)  
         {

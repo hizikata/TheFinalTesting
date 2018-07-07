@@ -1,4 +1,6 @@
-﻿//#define FullTest
+﻿#define FullTest
+//#define SimpleTest
+//#define SerialPortTest
 using System;
 using System.Windows;
 using System.Collections.Generic;
@@ -13,6 +15,32 @@ namespace ConsoleApp1
 {
     class Program
     {
+#if SimpleTest
+        static void Main()
+        {
+            try
+            {
+                Aglient34401A ag34401 = new Aglient34401A("10");
+                HP8156A hp8156A = new HP8156A("22");
+                Console.WriteLine(ag34401.GetIdn());
+                Console.WriteLine(hp8156A.GetIdn());
+                hp8156A.SetAtt("28");
+                Thread.Sleep(200);
+                Console.WriteLine(ag34401.GetVoltage());
+                hp8156A.SetAtt("30");
+                Console.WriteLine(ag34401.GetVoltage());
+                hp8156A.SetAtt("28");
+                Console.ReadKey();
+            }
+            catch (Exception ee)
+            {
+                Console.WriteLine(ee.Message);
+                Console.ReadKey();
+            }
+
+        }
+#endif
+#if SerialPortTest
         static SerialPort _serialPort;
         static bool _continue;
         public static void Main()
@@ -77,6 +105,8 @@ namespace ConsoleApp1
                 catch (TimeoutException) { }
             }
         }
+#endif
+
 #if FullTest
         static SenParas SenPara;
         static bool IsCountChanged = false;
@@ -94,7 +124,13 @@ namespace ConsoleApp1
         /// 衰减器
         /// </summary>
         static HP8156A Hp8156;
+        /// <summary>
+        /// 电源供应器
+        /// </summary>
         static AglientE3631A AgE3631;
+        /// <summary>
+        /// 高低压万用表
+        /// </summary>
         static Aglient34401A Ag34401;
         static void Main(string[] args)
         {
@@ -184,7 +220,7 @@ namespace ConsoleApp1
 
                 Hp8156.SetAtt("28");
                 Thread.Sleep(2000);
-        #region Mp2100
+#region Mp2100
                 crossing = Mp.GetCrossing();
                 extiRatio = Mp.GetER();
 
@@ -200,7 +236,7 @@ namespace ConsoleApp1
                 GetSensitivity();
                 sensitivity = SenPara.Sensitive.ToString();
                 Console.WriteLine("Sensitivity:{0}", sensitivity);
-        #endregion
+#endregion
 
                 //Saturation
                 Hp8156.SetAtt("9");

@@ -17,7 +17,7 @@ namespace XuxzLib.Communication
         /// <param name="add">GPIB地址</param>
         public AglientE3631A(string add) : base(add)
         {
-
+            DeviceName = "AglientE3631A"; 
         }
         /// <summary>
         /// 读取电压

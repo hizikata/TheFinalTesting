@@ -17,18 +17,26 @@ namespace XuxzLib.Communication
         /// <param name="add">GPIB地址</param>
         public  Aglient34401A(string add) : base(add)
         {
-
+            DeviceName = "Aglient34401A";
         }
         /// <summary>
         /// 读取电压
         /// </summary>
-        public string GetVoltage()
+        public double GetVoltage()
         {
             string command = "INIT";
             WriteCommand(command);
             Thread.Sleep(200); 
             command = "READ?";
-            return WriteAndRead(command);
+            string data= WriteAndRead(command);
+            if(double.TryParse(data,out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0.00;
+            }
         }
         //READ?
     }

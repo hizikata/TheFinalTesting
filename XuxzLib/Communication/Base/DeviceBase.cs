@@ -14,10 +14,14 @@ namespace XuxzLib.Communication
     public class DeviceBase : IDisposable, IDeviceCommonMethods
     {
         #region Fields
-        /// <summary>
-        /// 设备名称
-        /// </summary>
-        public string DeviceName;
+        private string _deviceName="Unknown Device";
+
+        public string DeviceName
+        {
+            get { return _deviceName; }
+            set { _deviceName = value; }
+        }
+
         /// <summary>
         /// 设备连接字符串
         /// </summary>

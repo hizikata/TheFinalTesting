@@ -17,7 +17,7 @@ namespace XuxzLib.Communication
         /// <param name="add"></param>
         public PST3202(string add):base(add)
         {
-            DeviceName = "PST3202";
+            DeviceName = "PST-3202";
         }
         /// <summary>
         /// 打开设备

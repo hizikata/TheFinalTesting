@@ -14,11 +14,12 @@ namespace TheFinalTesting.ViewModel
 {
     internal class MainViewModel : ViewModelBase
     {
-        #region Fields
+        #region Fields       
         /// <summary>
         /// 指示设备等的初始化是否完成
         /// </summary>
         private bool IsReady = false;
+        private bool IsPortReady = false;
         SenParas SenPara = new SenParas();
         bool IsCountChanged;
         /// <summary>
@@ -58,6 +59,31 @@ namespace TheFinalTesting.ViewModel
         internal Keithley Keith;
         #endregion
         #region Properties
+        private bool _isTestEnable;
+
+        public bool IsTestEnable
+        {
+            get { return _isTestEnable; }
+            set { _isTestEnable = value; RaisePropertyChanged(() => IsTestEnable); }
+        }
+
+        private string _alarms;
+
+        public string Alarms
+        {
+            get { return _alarms; }
+            set { _alarms = value;RaisePropertyChanged(() => Alarms); }
+        }
+
+        private string _warnings;
+
+        public string Warnings
+        {
+            get { return _warnings; }
+            set { _warnings = value; RaisePropertyChanged(() => Warnings); }
+        }
+
+
         /// <summary>
         /// 窗口列表
         /// </summary>
@@ -70,13 +96,13 @@ namespace TheFinalTesting.ViewModel
         public DeviceInfo[] Devices { get; } = new DeviceInfo[]
         {
             new DeviceInfo(true,"Aglient34401A",10,"高低压万用表(地址:10)"),
-            new DeviceInfo(true,"AglientE3631A",9,"基板电源供应器(地址:9)"),
-            new DeviceInfo(true,"HP8153A",5,"光功率计(地址:5)"),
+            new DeviceInfo(false,"AglientE3631A",9,"基板电源供应器(地址:9)"),
+            new DeviceInfo(false,"HP8153A",5,"光功率计(地址:5)"),
             new DeviceInfo(true,"HP8156A",22,"光衰减器(地址:22)"),
             new DeviceInfo(true,"MP2100A",16,"眼图仪(地址:2)"),
-            new DeviceInfo(true,"PST3202",15,"电源供应器(地址:15)"),
-            new DeviceInfo(true,"AQ6317B",2,"频谱分析仪(地址未知)"),
-            new DeviceInfo(true,"Keithley",24,"Keithley")
+            new DeviceInfo(false,"PST3202",15,"电源供应器(地址:15)"),
+            new DeviceInfo(false,"AQ6317B",2,"频谱分析仪(地址:2)"),
+            new DeviceInfo(false,"Keithley",24,"Keithley")
 
         };
         /// <summary>
@@ -228,6 +254,14 @@ namespace TheFinalTesting.ViewModel
             get { return _sdLow; }
             set { _sdLow = value; RaisePropertyChanged(() => SDLow); }
         }
+        private bool _saturation;
+
+        public bool Saturation
+        {
+            get { return _saturation; }
+            set { _saturation = value; RaisePropertyChanged(() => Saturation); }
+        }
+
 
         #endregion
         #region DDMI/A0H Parameters
@@ -290,6 +324,7 @@ namespace TheFinalTesting.ViewModel
         public MainViewModel()
         {
             _strCom = SerialPort.GetPortNames();
+            IsTestEnable = true;
         }
         #endregion
         #region Commands
@@ -318,39 +353,40 @@ namespace TheFinalTesting.ViewModel
             try
             {
                 //串口初始化
-                //if (!string.IsNullOrEmpty(SelectedCom.Trim()))
-                //{
-                //    info.Append("串口初始化中。。。");
-                //    if (Port.IsOpen == true)
-                //        Port.Close();
-                //    Port.PortName = SelectedCom.Trim();
-                //    Port.Parity = 0;
-                //    Port.BaudRate = 19200;
-                //    Port.StopBits = StopBits.Two;
-                //    Port.DataBits = 8;
-                //    Port.ReadTimeout = 100;
-                //    Port.WriteTimeout = 100;
+                if (!string.IsNullOrEmpty(SelectedCom.Trim()))
+                {
+                    info.Append("串口初始化中。。。");
+                    if (Port.IsOpen == true)
+                        Port.Close();
+                    Port.PortName = SelectedCom.Trim();
+                    Port.Parity = 0;
+                    Port.BaudRate = 19200;
+                    Port.StopBits = StopBits.Two;
+                    Port.DataBits = 8;
+                    Port.ReadTimeout = 100;
+                    Port.WriteTimeout = 100;
 
-                //    Port.Open();
-                //    string msg = TranBase.IsPortReady(Port, SerBuf) + DateTime.Now.ToShortTimeString();
-                //    if (msg == null)
-                //    {
-                //        info.Append("I2C通信失败！");
-                //        InitializationInfo = info.ToString();
-                //    }
-                //    else
-                //    {
-                //        info.Append("初始化成功 \r\n");
-                //        info.Append("msg");
-                //        InitializationInfo = info.ToString();
-                //    }
-                //}
-                //else
-                //{
-                //    info.Append("请选择串口号！\r\n");
-                //    InitializationInfo = info.ToString();
-                //    return;
-                //}
+                    Port.Open();
+                    string msg = TranBase.IsPortReady(Port, SerBuf) + DateTime.Now.ToShortTimeString();
+                    if (msg == null)
+                    {
+                        info.Append("I2C通信失败！");
+                        InitializationInfo = info.ToString();
+                    }
+                    else
+                    {
+                        IsPortReady = true;
+                        info.Append("初始化成功 \r\n");
+                        info.Append("msg");
+                        InitializationInfo = info.ToString();
+                    }
+                }
+                else
+                {
+                    info.Append("请选择串口号！\r\n");
+                    info.Append("串口初始化失败！\r\n");
+                    InitializationInfo = info.ToString();
+                }
                 //设备初始化
                 foreach (var item in Devices)
                 {
@@ -363,110 +399,127 @@ namespace TheFinalTesting.ViewModel
                             switch (index)
                             {
                                 case 0:
-                                    info.Append("Aglient34401A初始化中。。。");
                                     if (Ag34401A != null)
                                         Ag34401A.Dispose();
+                                    info.Append("Aglient34401A初始化中。。。\r\n");
                                     Ag34401A = new Aglient34401A(address);
+                                    info.Append(Ag34401A.GetIdn());
                                     if (Ag34401A != null)
-                                        info.Append("初始化OK \r\n");
+                                        info.Append(Ag34401A.DeviceName + "初始化OK \r\n");
                                     else
                                     {
-                                        info.Append("初始化失败 \r\n");
+                                        info.Append(Ag34401A.DeviceName + "初始化失败 \r\n");
                                     }
                                     InitializationInfo = info.ToString();
 
                                     break;
                                 case 1:
-                                    info.Append("AglientE3631A初始化中。。。");
                                     if (AgE3631A != null)
                                         AgE3631A.Dispose();
+                                    info.Append("AglientE3631A初始化中。。。\r\n");
                                     AgE3631A = new AglientE3631A(address);
+                                    info.Append(AgE3631A.GetIdn());
                                     if (AgE3631A != null)
-                                        info.Append("初始化OK \r\n");
+                                        info.Append(AgE3631A.DeviceName + "初始化OK \r\n");
                                     else
                                     {
-                                        info.Append("初始化失败 \r\n");
+                                        info.Append(AgE3631A.DeviceName + "初始化失败 \r\n");
                                     }
                                     InitializationInfo = info.ToString();
 
                                     break;
                                 case 2:
-                                    info.Append("Hp8153A初始化中。。。");
                                     if (Hp8153A != null)
                                         Hp8153A.Dispose();
+                                    info.Append("Hp8153A初始化中。。。\r\n");
                                     Hp8153A = new HP8153A(address);
+                                    info.Append(Hp8153A.GetIdn());
                                     if (Hp8153A != null)
-                                        info.Append("初始化OK \r\n");
+                                        info.Append(Hp8153A.DeviceName + "初始化OK \r\n");
                                     else
                                     {
-                                        info.Append("初始化失败 \r\n");
+                                        info.Append(Hp8153A.DeviceName + "初始化失败 \r\n");
                                     }
                                     InitializationInfo = info.ToString();
 
                                     break;
                                 case 3:
-                                    info.Append("Hp8156A初始化中。。。");
                                     if (Hp8156A != null)
                                         Hp8156A.Dispose();
+                                    info.Append("Hp8156A初始化中。。。\r\n");
                                     Hp8156A = new HP8156A(address);
+                                    info.Append(Hp8156A.GetIdn());
                                     if (Hp8156A != null)
                                     {
-                                        info.Append("初始化OK \r\n");
+                                        info.Append(Hp8156A.DeviceName + "初始化OK \r\n");
                                     }
                                     else
                                     {
-                                        info.Append("hp8156A初始化失败\r\n");
-                                        
+                                        info.Append(Hp8156A.DeviceName + "hp8156A初始化失败\r\n");
+
                                     }
                                     InitializationInfo = info.ToString();
 
                                     break;
                                 case 4:
-                                    info.Append("MP2100A初始化中。。。");
                                     if (Mp2100A != null)
                                         Mp2100A.Dispose();
+                                    info.Append("MP2100A初始化中。。。\r\n");
                                     Mp2100A = new MP2100A(address);
-                                    //Mp2100A = new MP2100A("TCPIP::192.168.100.102::5001::SOCKET", ConnectionType.Ethernet);
+                                    info.Append(Mp2100A.GetIdn());
                                     if (Mp2100A != null)
                                     {
-                                        info.Append("初始化OK \r\n");
+                                        info.Append(Mp2100A.DeviceName + "初始化OK \r\n");
 
                                     }
                                     else
                                     {
-                                        info.Append(Mp2100A.DeviceName + "初始化失败");
+                                        info.Append(Mp2100A.DeviceName + "初始化失败\r\n");
                                     }
                                     InitializationInfo = info.ToString();
                                     break;
                                 case 5:
-                                    info.Append("P3202初始化中。。。");
                                     if (P3202 != null)
                                         P3202.Dispose();
+                                    info.Append("P3202初始化中。。。\r\n");
                                     P3202 = new PST3202(address);
-                                    info.Append("初始化OK \r\n");
+                                    info.Append(P3202.GetIdn());
+                                    if (P3202 != null)
+                                        info.Append(P3202.DeviceName + "初始化OK \r\n");
+                                    else
+                                    {
+                                        info.Append(P3202.DeviceName + "初始化失败");
+                                    }
                                     InitializationInfo = info.ToString();
 
                                     break;
                                 case 6:
-                                    info.Append("AQ6317B初始化中。。。");
                                     if (Aq6317B != null)
                                         Aq6317B.Dispose();
+                                    info.Append("AQ6317B初始化中。。。\r\n");
                                     Aq6317B = new AQ6317B(address);
-                                    info.Append("初始化OK \r\n");
+                                    info.Append(Aq6317B.GetIdn());
+                                    if (Aq6317B != null)
+                                        info.Append(Aq6317B.DeviceName + "初始化OK \r\n");
+                                    else
+                                    {
+                                        info.Append(Aq6317B.DeviceName + "初始化失败");
+                                    }
                                     InitializationInfo = info.ToString();
                                     break;
                                 case 7:
-                                    info.Append("Keithley初始化中。。。");
-                                    //if (Keith != null)
-                                        //Keith.Dispose();
+                                    if (Keith != null)
+                                        Keith.Dispose();
+                                    info.Append("Keithley初始化中。。。\r\n");
                                     Keith = new Keithley(address);
+                                    info.Append(Keith.GetIdn());
                                     if (Keith != null)
                                     {
-                                        info.Append("初始化成功");
+                                        info.Append(Keith.DeviceName + "初始化成功\r\n");
                                     }
                                     else
                                     {
-                                        info.Append("初始化失败");
+                                        info.Append(Keith.DeviceName + "初始化失败\r\n");
                                     }
                                     InitializationInfo = info.ToString();
                                     break;
@@ -489,32 +542,111 @@ namespace TheFinalTesting.ViewModel
         /// </summary>
         private void ExecuteTest()
         {
+            IsTestEnable = false;
             try
             {
-                if (IsReady)
-                {
-                    //Initialize
-                    AgE3631A.Open();
-                    //P3202.Open();
-                    Thread.Sleep(200);
-                    //Mp2100A.AutoScale();
-                    //Asserted,Desserted sdlow sdhigh
-                    GetHighAndLow();
-                    Thread.Sleep(200);
-                    //sensitivity
-                    GetSensitivity();
-                    Hp8156A.SetAtt("28");
-                    //ExtiRatois Crossing
-                    //GetTxParas();
-                    //Sensitivity
-                    //Temp,Vcc,Bias,TxPower,RxPoint 1/2/3
-                    I2CTest();
+                //另一线程执行该方法
+                Thread thread = new Thread(() =>
+                  {
+                      if (IsReady)
+                      {
+                          double ini = 28.0;
+                          double span = 0.2;
+                          double voltage;
+                          double sdDesserted = 0, sdAsserted = 0;
+                          double saturation = 0;
+                          Hp8156A.Open();
+                          Mp2100A.AutoScale();
 
-                }
-                else
-                {
-                    MessageBox.Show("初始化未完成", "系统提示");
-                }
+                          for (int i = 0; i < 40; i++)
+                          {
+                              Hp8156A.SetAtt(ini.ToString());
+                              Thread.Sleep(300);
+                              voltage = Ag34401A.GetVoltage();
+                              Thread.Sleep(100);
+                              if (voltage >= 2.0)
+                              {
+                                  sdDesserted = ini;
+                                  SdDesserted = sdDesserted.ToString();
+                                  SDHigh = voltage.ToString();
+                                  break;
+                              }
+                              else
+                              {
+                                  ini += span;
+                              }
+
+                          };
+                          for (int i = 0; i < 30; i++)
+                          {
+                              Hp8156A.SetAtt(ini.ToString());
+                              Thread.Sleep(300);
+                              voltage = Ag34401A.GetVoltage();
+                              Thread.Sleep(100);
+                              if (voltage < 0.5)
+                              {
+                                  sdAsserted = ini;
+                                  SdAsserted = SdAsserted.ToString();
+                                  SDHigh = voltage.ToString();
+                                  break;
+                              }
+                              else
+                              {
+                                  ini -= span;
+                              }
+
+                          }
+                          #region MP2100
+                          Hp8156A.SetAtt("28");
+                          //Exit.Ratio
+                          ExtiRatio = Mp2100A.GetER();
+                          //Crossing
+                          CrossingRate = Mp2100A.GetCrossing();
+                          //MaskMargin
+                          MaskMargin = Mp2100A.GetMaskMargin();
+                          //Jitter
+                          Jitter = Mp2100A.GetJitter();
+                          //Sensitivity
+                          Sensitivity = GetSensitivity().ToString();
+                          #endregion
+                          //MP2100
+                          Hp8156A.SetAtt("9");
+                          for (int i = 0; i < 5; i++)
+                          {
+                              string errorRate = Mp2100A.GetErrorRate();
+                              string str = errorRate.Substring(2);
+                              double.TryParse(str.Trim(), out double result);
+                              if (result < 0)
+                              {
+                                  saturation = Math.Log10(result);
+                                  if (saturation >= -9)
+                                  {
+                                      Saturation = false;
+                                      break;
+                                  }
+                              }
+                              else
+                              {
+                                  MessageBox.Show("读取眼图仪误码率发生错误", "系统设置");
+                                  break;
+                              }
+                              Saturation = true;
+                          }
+
+                      }
+                      //IIC通信参数
+                      if (IsPortReady)
+                      {
+                          I2CTest();
+
+                      }
+                      else
+                      {
+                          MessageBox.Show("初始化未完成", "系统提示");
+                      }
+                      IsTestEnable = true;
+                  });
+                thread.Start();
             }
             catch (Exception ex)
             {
@@ -530,13 +662,12 @@ namespace TheFinalTesting.ViewModel
         /// </summary>
         private void I2CTest()
         {
-            P3202.Open();
             Thread.Sleep(200);
             Hp8156A.SetAtt("28");
-            Thread.Sleep(1000);
+            Thread.Sleep(200);
             //Temp，Vcc,Bias,TxPower
             this.GetParas();
-            Thread.Sleep(1000);
+            Thread.Sleep(200);
             //RxPoint 1
             Hp8156A.SetAtt("10");
             Thread.Sleep(1000);
@@ -548,46 +679,49 @@ namespace TheFinalTesting.ViewModel
             //RxPoint 3
             Hp8156A.SetAtt("28");
             Thread.Sleep(1000);
-
             RxPoint3 = GetRxPower().ToString();
+
+            //A/W
+            GetAlarmAndWarning();
+        }
+        void GetAlarmAndWarning()
+        {
+            List<byte> alarms = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 112, 2);
+            Alarms = Convert.ToString((ushort)(alarms[0] * 256 + alarms[1]),2);
+            List<byte> warnings = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 116, 2);
+            Warnings = Convert.ToString((ushort)(warnings[0] * 256 + alarms[1]), 2);
         }
         /// <summary>
         /// 通过I2C获取温度，Vcc,Bias,TxPower
         /// </summary>
         void GetParas()
         {
-            if (Port == null || Port.IsOpen == false)
-            {
-                MessageBox.Show("请先初始化COM口", "系统提示");
-            }
-            else
-            {
-                //AOH 读取SN
-                //string sn;
+            //AOH 读取SN
+            //string sn;
 
-                //A2H
-                double temp, vcc, txPower, bais;
-                short cache = 0;
-                ushort ucache = 0;
-                List<byte> data = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 96, 10);
-                //温度计算 96，97
-                cache = DigitTransform(data[0], data[1]);
-                temp = (double)cache / 256;
-                Temp = (temp).ToString();
-                //Vcc 98，99
-                ucache = UDigitTransform(data[2], data[3]);
-                vcc = (double)ucache / 10000; //V
-                Vcc = vcc.ToString();
+            //A2H
+            double temp, vcc, txPower, bais;
+            short cache = 0;
+            ushort ucache = 0;
+            List<byte> data = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 96, 10);
+            //温度计算 96，97
+            cache = DigitTransform(data[0], data[1]);
+            temp = (double)cache / 256;
+            Temp = (temp).ToString();
+            //Vcc 98，99
+            ucache = UDigitTransform(data[2], data[3]);
+            vcc = (double)ucache / 10000; //V
+            Vcc = vcc.ToString();
 
-                //Bais 100,101
-                ucache = UDigitTransform(data[4], data[5]);
-                bais = (double)ucache / 500;
-                Bias = bais.ToString();
-                //TxPower 102,103
-                ucache = UDigitTransform(data[6], data[7]);
-                txPower = (double)ucache / 10000; //mW
-                TxPower = (Math.Log10(txPower) * 10).ToString();
-            }
+            //Bais 100,101
+            ucache = UDigitTransform(data[4], data[5]);
+            bais = (double)ucache / 500;
+            Bias = bais.ToString();
+            //TxPower 102,103
+            ucache = UDigitTransform(data[6], data[7]);
+            txPower = (double)ucache / 10000; //mW
+            TxPower = (Math.Log10(txPower) * 10).ToString();
+
         }
         //I2C获取RxPower
         float GetRxPower()
@@ -650,104 +784,55 @@ namespace TheFinalTesting.ViewModel
         #endregion TxMethods
         #region RxMethods
         /// <summary>
-        /// 获取Asserted/Desserted等
-        /// </summary>
-        bool GetHighAndLow()
-        {
-            double att = 28.5;
-            double span = 0.2;
-            double volage = 0;
-
-            for (int i = 0; i < 40; i++)
-            {
-                Hp8156A.SetAtt(att.ToString());
-                Thread.Sleep(200);
-                volage = Convert.ToDouble(Ag34401A.GetVoltage().Trim());
-                if (volage > 3.0)
-                {
-                    SdDesserted = att.ToString();
-                    SDHigh = volage.ToString();
-                    break;
-                }
-                att += span;
-            }
-            for (int i = 0; i < 20; i++)
-            {
-                Hp8156A.SetAtt(att.ToString());
-                Thread.Sleep(200);
-                volage = Convert.ToDouble(Ag34401A.GetVoltage().Trim());
-                if (volage < 0.5)
-                {
-                    SdAsserted = att.ToString();
-                    SDLow = volage.ToString();
-                    break;
-                }
-                att -= span;
-            }
-            if (!string.IsNullOrEmpty(SdAsserted) && !string.IsNullOrEmpty(SdDesserted))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-        /// <summary>
         /// 计算灵敏度
         /// </summary>
-        void GetSensitivity()
+        double GetSensitivity()
         {
             StringBuilder sb = new StringBuilder();
             List<Point> listPoint = new List<Point>();
             try
             {
-                if (Hp8156A != null && Mp2100A != null)
+
+                //测量数量 衰减初始值 步进
+                int testCount = 10;
+                double initialValue = 26;
+                double interval = 0.5;
+
+                Point point = new Point();
+                for (int i = 0; i < testCount; i++)
                 {
-                    //测量数量 衰减初始值 步进
-                    int testCount = 10;
-                    double initialValue = 26;
-                    double interval = 0.5;
-
-                    Point point = new Point();
-                    for (int i = 0; i < testCount; i++)
+                    Hp8156A.SetAtt(initialValue.ToString());
+                    point.X = initialValue;
+                    initialValue += interval;
+                    //sb.Append(point.X.ToString());
+                    Thread.Sleep(1000);
+                    string errorRate = Mp2100A.GetErrorRate();
+                    string str = errorRate.Substring(2);
+                    //Error rate
+                    double.TryParse(str.Trim(), out double result);
+                    //判定当结果不为0时
+                    if (result < 0)
                     {
-                        Hp8156A.Open();
-                        Hp8156A.SetAtt(initialValue.ToString());
-                        point.X = initialValue;
-                        initialValue += interval;
-                        //sb.Append(point.X.ToString());
-                        Thread.Sleep(1000);
-                        string errorRate = Mp2100A.GetErrorRate();
-                        string str = errorRate.Substring(2);
-                        //Error rate
-                        double.TryParse(str.Trim(), out double result);
-                        //判定当结果不为0时
-                        if (result > 0)
-                        {
-                            //取对数
-                            point.Y = Math.Log10(result);
-                            listPoint.Add(point);
-                        }
+                        //取对数
+                        point.Y = Math.Log10(result);
+                        listPoint.Add(point);
                     }
-                    //噪声过滤
-                    while (IsCountChanged && listPoint.Count > 5)
-                    {
-                        listPoint = PointFilter(listPoint);
-                    }
-
-                    //计算灵敏度
-                    SenPara = this.LinearRegression(listPoint);
-                    //灵敏度计算条件：Error rate@E-3
-                    SenPara.Sensitive = (-3 - SenPara.RCA) / SenPara.RCB;
-                    Sensitivity = SenPara.Sensitive.ToString();
-
                 }
+                //噪声过滤
+                while (IsCountChanged && listPoint.Count > 5)
+                {
+                    listPoint = PointFilter(listPoint);
+                }
+
+                //计算灵敏度
+                SenPara = this.LinearRegression(listPoint);
+                //灵敏度计算条件：Error rate@E-3
+                SenPara.Sensitive = (-3 - SenPara.RCA) / SenPara.RCB;
+                return SenPara.Sensitive;
             }
             catch
             {
-
+                return 0;
             }
         }
         /// <summary>
