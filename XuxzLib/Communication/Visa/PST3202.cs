@@ -26,7 +26,7 @@ namespace XuxzLib.Communication
         {
             this.WriteCommand("OUTP:STAT?\n");
             string result = this.ReadCommand();
-            if (result == "0")
+            if (result == "0\n")
                 this.WriteCommand("OUTP:STAT 1\n");
             
         }

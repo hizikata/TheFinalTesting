@@ -10,6 +10,7 @@ using XuxzLib.Communication;
 using System.Threading;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.IO;
 
 namespace ConsoleApp1
 {
@@ -20,12 +21,13 @@ namespace ConsoleApp1
         {
             try
             {
-                
-                ushort a=0x0028;
-                string binary = Convert.ToString(a, 2);
-                
-                Console.WriteLine(binary.PadLeft(16, '0'));
-                Console.ReadKey();
+                string msg = "hello";
+                byte[] msgAsByteArray = Encoding.Default.GetBytes(msg);
+
+                using(FileStream fs= File.Open(@"D:\Test.txt", FileMode.OpenOrCreate))
+                {
+                    
+                }
             }
             catch (Exception ee)
             {

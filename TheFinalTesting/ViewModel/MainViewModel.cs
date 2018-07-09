@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define Common
+using System;
 using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,18 @@ namespace TheFinalTesting.ViewModel
         internal Keithley Keith;
         #endregion
         #region Properties
+        #region Initialize Paras
+        private double _iniAtt;
+        /// <summary>
+        /// 初始衰减
+        /// </summary>
+        public double IniAtt
+        {
+            get { return _iniAtt; }
+            set { _iniAtt = value; RaisePropertyChanged(() => IniAtt); }
+        }
+
+        #endregion
         private bool _isTestEnable;
 
         public bool IsTestEnable
@@ -145,7 +158,7 @@ namespace TheFinalTesting.ViewModel
         public bool TxDisable
         {
             get { return _txDisable; }
-            set { _txDisable = value;RaisePropertyChanged(() => TxDisable); }
+            set { _txDisable = value; RaisePropertyChanged(() => TxDisable); }
         }
 
         private string _extiRatio;
@@ -332,6 +345,7 @@ namespace TheFinalTesting.ViewModel
         {
             _strCom = SerialPort.GetPortNames();
             IsTestEnable = true;
+            IniAtt = 28.0;
         }
         #endregion
         #region Commands
@@ -366,7 +380,7 @@ namespace TheFinalTesting.ViewModel
         private void ExecuteInitialize()
         {
             StringBuilder info = new StringBuilder();
-            info.Append("程序正在初始化。。" + DateTime.Now.ToShortTimeString()+"\r\n");
+            info.Append("程序正在初始化。。" + DateTime.Now.ToShortTimeString() + "\r\n");
             try
             {
                 //串口初始化
@@ -458,7 +472,7 @@ namespace TheFinalTesting.ViewModel
                                     {
                                         info.Append(Hp8153A.DeviceName + "初始化OK \r\n");
                                     }
-                                        
+
                                     else
                                     {
                                         info.Append(Hp8153A.DeviceName + "初始化失败 \r\n");
@@ -513,7 +527,7 @@ namespace TheFinalTesting.ViewModel
                                         P3202.Open();
                                         info.Append(P3202.DeviceName + "初始化OK \r\n");
                                     }
-                                        
+
                                     else
                                     {
                                         info.Append(P3202.DeviceName + "初始化失败");
@@ -580,7 +594,7 @@ namespace TheFinalTesting.ViewModel
                       //GPIB通信
                       if (IsReady)
                       {
-                          double ini = 28.0;
+                          double ini = IniAtt;
                           double span = 0.2;
                           double voltage;
                           double sdDesserted = 0, sdAsserted = 0;
@@ -589,6 +603,8 @@ namespace TheFinalTesting.ViewModel
                           Mp2100A.AutoScale();
                           Aq6317B.SetSingle();
 
+                          SupplyCurrent = AgE3631A.GetCurrent();
+                          OutputPower = Hp8153A.ReadPower("2");
                           for (int i = 0; i <= 40; i++)
                           {
                               Hp8156A.SetAtt(ini.ToString());
@@ -614,7 +630,7 @@ namespace TheFinalTesting.ViewModel
                                       strBuild.Append("获取SdDesserted失败！");
                                       DisplayInfo = strBuild.ToString();
                                   }
-                              } 
+                              }
                           };
                           for (int i = 0; i <= 30; i++)
                           {
@@ -645,7 +661,7 @@ namespace TheFinalTesting.ViewModel
 
                           }
                           #region MP2100
-                          Hp8156A.SetAtt("28");
+                          Hp8156A.SetAtt(IniAtt.ToString());
                           //Exit.Ratio
                           ExtiRatio = Mp2100A.GetER();
                           strBuild.Append(string.Format("Extinction Ratio:{0}", ExtiRatio));
@@ -673,8 +689,10 @@ namespace TheFinalTesting.ViewModel
                           DisplayInfo = strBuild.ToString();
                           #endregion
                           Thread.Sleep(300);
+
                           //Saturation
-                          Hp8156A.SetAtt("9");
+                          //测试饱和度 设置 衰减
+                          Hp8156A.SetAtt("3");
                           Thread.Sleep(3000);
                           for (int i = 0; i < 5; i++)
                           {
@@ -712,7 +730,7 @@ namespace TheFinalTesting.ViewModel
                           double.TryParse(power.Trim(), out double txDisablePower);
                           strBuild.Append(string.Format("Power@TxDisable:{0}", power));
                           DisplayInfo = strBuild.ToString();
-                          if (txDisablePower < -20.0||Math.Log10(txDisablePower)>10)
+                          if (txDisablePower < -20.0 || Math.Log10(txDisablePower) > 10)
                           {
                               TxDisable = true;
                           }
@@ -770,7 +788,7 @@ namespace TheFinalTesting.ViewModel
         {
 
             Thread.Sleep(200);
-            Hp8156A.SetAtt("28");
+            Hp8156A.SetAtt(IniAtt.ToString());
             Thread.Sleep(300);
             Hp8156A.Open();
             Thread.Sleep(200);
@@ -781,6 +799,7 @@ namespace TheFinalTesting.ViewModel
             Hp8156A.SetAtt("10");
             Thread.Sleep(1000);
             RxPoint1 = GetRxPower().ToString();
+#if Common
             //RxPoint 2
             Hp8156A.SetAtt("19");
             Thread.Sleep(1000);
@@ -794,8 +813,8 @@ namespace TheFinalTesting.ViewModel
             Hp8156A.SetAtt("25");
             Thread.Sleep(300);
             GetAlarmAndWarning();
-            
-            Hp8156A.SetAtt("28");
+#endif
+            Hp8156A.SetAtt(IniAtt.ToString());
         }
         /// <summary>
         /// 获取Alarms和Warnings 信息
@@ -804,9 +823,9 @@ namespace TheFinalTesting.ViewModel
         {
             List<byte> alarms = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 112, 2);
             //转换为二进制
-            Alarms = Convert.ToString((ushort)(alarms[0] * 256 + alarms[1]), 2).PadLeft(16,'0');
+            Alarms = Convert.ToString((ushort)(alarms[0] * 256 + alarms[1]), 2).PadLeft(16, '0');
             List<byte> warnings = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 116, 2);
-            Warnings = (Convert.ToString((ushort)(warnings[0] * 256 + alarms[1]), 2)).PadLeft(16,'0');
+            Warnings = (Convert.ToString((ushort)(warnings[0] * 256 + alarms[1]), 2)).PadLeft(16, '0');
         }
         /// <summary>
         /// 通过I2C获取温度，Vcc,Bias,TxPower
@@ -884,9 +903,9 @@ namespace TheFinalTesting.ViewModel
             return num;
         }
 
-        #endregion
+#endregion
         //GPIB通信
-        #region TxMethods
+#region TxMethods
         /// <summary>
         /// 获取ExtioRatio和Crossing
         /// </summary>
@@ -898,8 +917,8 @@ namespace TheFinalTesting.ViewModel
             Jitter = Mp2100A.GetJitter();
             MaskMargin = Mp2100A.GetMaskMargin();
         }
-        #endregion TxMethods
-        #region RxMethods
+#endregion TxMethods
+#region RxMethods
         /// <summary>
         /// 计算灵敏度
         /// </summary>
@@ -911,9 +930,10 @@ namespace TheFinalTesting.ViewModel
             {
 
                 //测量数量 衰减初始值 步进
-                int testCount = 10;
-                double initialValue = 26;
-                double interval = 0.5;
+                int testCount = 12;
+                //灵敏度
+                double initialValue = IniAtt - 2;
+                double interval = 0.4;
 
                 Point point = new Point();
                 for (int i = 0; i < testCount; i++)
@@ -926,14 +946,18 @@ namespace TheFinalTesting.ViewModel
                     string errorRate = Mp2100A.GetErrorRate();
                     string str = errorRate.Substring(2);
                     //Error rate
-                    double.TryParse(str.Trim(), out double result);
-                    //判定当结果不为0时
-                    if (result > 0)
+                    if(double.TryParse(str.Trim(), out double result))
                     {
-                        //取对数
-                        point.Y = Math.Log10(result);
-                        listPoint.Add(point);
+                        double s = Math.Log10(result);
+                        //判定当结果不为0时
+                        if (s > -9)
+                        {
+                            //取对数
+                            point.Y = s;
+                            listPoint.Add(point);
+                        }
                     }
+                    
                 }
                 //噪声过滤
                 while (IsCountChanged && listPoint.Count > 5)
@@ -944,7 +968,7 @@ namespace TheFinalTesting.ViewModel
                 //计算灵敏度
                 SenPara = this.LinearRegression(listPoint);
                 //灵敏度计算条件：Error rate@E-3
-                SenPara.Sensitive = (-3 - SenPara.RCA) / SenPara.RCB;
+                SenPara.Sensitive = (-9 - SenPara.RCA) / SenPara.RCB;
                 return SenPara.Sensitive;
             }
             catch
@@ -1045,7 +1069,7 @@ namespace TheFinalTesting.ViewModel
             //拟合误差越接近1则表示越准确
             return para;
         }
-        #endregion RxMethods
-        #endregion Methods
+#endregion RxMethods
+#endregion Methods
     }
 }

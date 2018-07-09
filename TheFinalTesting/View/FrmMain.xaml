@@ -49,6 +49,12 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="参数">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="初始衰减:"/>
+                        <TextBox Width="100" Text="{Binding IniAtt}"/>
+                    </StackPanel>
+                </StackPanel>
             </TabItem>
             <TabItem Header="测试" IsSelected="True">
                 <StackPanel>
