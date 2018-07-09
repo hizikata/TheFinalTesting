@@ -72,7 +72,7 @@ namespace TheFinalTesting.ViewModel
         public string Alarms
         {
             get { return _alarms; }
-            set { _alarms = value;RaisePropertyChanged(() => Alarms); }
+            set { _alarms = value; RaisePropertyChanged(() => Alarms); }
         }
 
         private string _warnings;
@@ -108,16 +108,16 @@ namespace TheFinalTesting.ViewModel
         /// <summary>
         /// 设备初始化信息展示
         /// </summary>
-        public String InitializationInfo
+        public String DisplayInfo
         {
-            get { return _initializationInfo; }
+            get { return _DisplayInfo; }
             set
             {
-                _initializationInfo = value;
-                RaisePropertyChanged(() => InitializationInfo);
+                _DisplayInfo = value;
+                RaisePropertyChanged(() => DisplayInfo);
             }
         }
-        private String _initializationInfo;
+        private String _DisplayInfo;
         #region TX Parameters
 
         private string _supplyCurrent;
@@ -139,6 +139,13 @@ namespace TheFinalTesting.ViewModel
         {
             get { return _outputPower; }
             set { _outputPower = value; RaisePropertyChanged(() => OutputPower); }
+        }
+        private bool _txDisable;
+
+        public bool TxDisable
+        {
+            get { return _txDisable; }
+            set { _txDisable = value;RaisePropertyChanged(() => TxDisable); }
         }
 
         private string _extiRatio;
@@ -345,15 +352,25 @@ namespace TheFinalTesting.ViewModel
                 return new RelayCommand(() => ExecuteTest());
             }
         }
+        public RelayCommand ClosedCommand
+        {
+            get
+            {
+                return new RelayCommand(() => ExecuteClosed());
+            }
+
+        }
+
         #endregion
         #region CommandMethods
         private void ExecuteInitialize()
         {
             StringBuilder info = new StringBuilder();
+            info.Append("程序正在初始化。。" + DateTime.Now.ToShortTimeString()+"\r\n");
             try
             {
                 //串口初始化
-                if (!string.IsNullOrEmpty(SelectedCom.Trim()))
+                if (!string.IsNullOrEmpty(SelectedCom))
                 {
                     info.Append("串口初始化中。。。");
                     if (Port.IsOpen == true)
@@ -371,21 +388,21 @@ namespace TheFinalTesting.ViewModel
                     if (msg == null)
                     {
                         info.Append("I2C通信失败！");
-                        InitializationInfo = info.ToString();
+                        DisplayInfo = info.ToString();
                     }
                     else
                     {
                         IsPortReady = true;
                         info.Append("初始化成功 \r\n");
                         info.Append("msg");
-                        InitializationInfo = info.ToString();
+                        DisplayInfo = info.ToString();
                     }
                 }
                 else
                 {
-                    info.Append("请选择串口号！\r\n");
+                    info.Append("未选择串口号！\r\n");
                     info.Append("串口初始化失败！\r\n");
-                    InitializationInfo = info.ToString();
+                    DisplayInfo = info.ToString();
                 }
                 //设备初始化
                 foreach (var item in Devices)
@@ -410,7 +427,7 @@ namespace TheFinalTesting.ViewModel
                                     {
                                         info.Append(Ag34401A.DeviceName + "初始化失败 \r\n");
                                     }
-                                    InitializationInfo = info.ToString();
+                                    DisplayInfo = info.ToString();
 
                                     break;
                                 case 1:
@@ -420,12 +437,15 @@ namespace TheFinalTesting.ViewModel
                                     AgE3631A = new AglientE3631A(address);
                                     info.Append(AgE3631A.GetIdn());
                                     if (AgE3631A != null)
+                                    {
+                                        AgE3631A.Open();
                                         info.Append(AgE3631A.DeviceName + "初始化OK \r\n");
+                                    }
                                     else
                                     {
                                         info.Append(AgE3631A.DeviceName + "初始化失败 \r\n");
                                     }
-                                    InitializationInfo = info.ToString();
+                                    DisplayInfo = info.ToString();
 
                                     break;
                                 case 2:
@@ -435,12 +455,15 @@ namespace TheFinalTesting.ViewModel
                                     Hp8153A = new HP8153A(address);
                                     info.Append(Hp8153A.GetIdn());
                                     if (Hp8153A != null)
+                                    {
                                         info.Append(Hp8153A.DeviceName + "初始化OK \r\n");
+                                    }
+                                        
                                     else
                                     {
                                         info.Append(Hp8153A.DeviceName + "初始化失败 \r\n");
                                     }
-                                    InitializationInfo = info.ToString();
+                                    DisplayInfo = info.ToString();
 
                                     break;
                                 case 3:
@@ -451,6 +474,7 @@ namespace TheFinalTesting.ViewModel
                                     info.Append(Hp8156A.GetIdn());
                                     if (Hp8156A != null)
                                     {
+                                        Hp8156A.Open();
                                         info.Append(Hp8156A.DeviceName + "初始化OK \r\n");
                                     }
                                     else
@@ -458,7 +482,7 @@ namespace TheFinalTesting.ViewModel
                                         info.Append(Hp8156A.DeviceName + "hp8156A初始化失败\r\n");
 
                                     }
-                                    InitializationInfo = info.ToString();
+                                    DisplayInfo = info.ToString();
 
                                     break;
                                 case 4:
@@ -476,7 +500,7 @@ namespace TheFinalTesting.ViewModel
                                     {
                                         info.Append(Mp2100A.DeviceName + "初始化失败\r\n");
                                     }
-                                    InitializationInfo = info.ToString();
+                                    DisplayInfo = info.ToString();
                                     break;
                                 case 5:
                                     if (P3202 != null)
@@ -485,12 +509,16 @@ namespace TheFinalTesting.ViewModel
                                     P3202 = new PST3202(address);
                                     info.Append(P3202.GetIdn());
                                     if (P3202 != null)
+                                    {
+                                        P3202.Open();
                                         info.Append(P3202.DeviceName + "初始化OK \r\n");
+                                    }
+                                        
                                     else
                                     {
                                         info.Append(P3202.DeviceName + "初始化失败");
                                     }
-                                    InitializationInfo = info.ToString();
+                                    DisplayInfo = info.ToString();
 
                                     break;
                                 case 6:
@@ -505,7 +533,7 @@ namespace TheFinalTesting.ViewModel
                                     {
                                         info.Append(Aq6317B.DeviceName + "初始化失败");
                                     }
-                                    InitializationInfo = info.ToString();
+                                    DisplayInfo = info.ToString();
                                     break;
                                 case 7:
                                     if (Keith != null)
@@ -521,7 +549,7 @@ namespace TheFinalTesting.ViewModel
                                     {
                                         info.Append(Keith.DeviceName + "初始化失败\r\n");
                                     }
-                                    InitializationInfo = info.ToString();
+                                    DisplayInfo = info.ToString();
                                     break;
                                 default:
                                     throw new Exception("该设备不存在");
@@ -542,12 +570,14 @@ namespace TheFinalTesting.ViewModel
         /// </summary>
         private void ExecuteTest()
         {
+            StringBuilder strBuild = new StringBuilder();
             IsTestEnable = false;
             try
             {
                 //另一线程执行该方法
                 Thread thread = new Thread(() =>
                   {
+                      //GPIB通信
                       if (IsReady)
                       {
                           double ini = 28.0;
@@ -555,10 +585,11 @@ namespace TheFinalTesting.ViewModel
                           double voltage;
                           double sdDesserted = 0, sdAsserted = 0;
                           double saturation = 0;
-                          Hp8156A.Open();
+                          //Hp8156A.Open();
                           Mp2100A.AutoScale();
+                          Aq6317B.SetSingle();
 
-                          for (int i = 0; i < 40; i++)
+                          for (int i = 0; i <= 40; i++)
                           {
                               Hp8156A.SetAtt(ini.ToString());
                               Thread.Sleep(300);
@@ -569,30 +600,47 @@ namespace TheFinalTesting.ViewModel
                                   sdDesserted = ini;
                                   SdDesserted = sdDesserted.ToString();
                                   SDHigh = voltage.ToString();
+                                  //SdDesserted SdHigh
+                                  strBuild.Append(string.Format("SdDesserted:{0}", SdDesserted));
+                                  strBuild.Append(string.Format("SdHigh:{0}", SDHigh));
+                                  DisplayInfo = strBuild.ToString();
                                   break;
                               }
                               else
                               {
                                   ini += span;
-                              }
-
+                                  if (i == 40)
+                                  {
+                                      strBuild.Append("获取SdDesserted失败！");
+                                      DisplayInfo = strBuild.ToString();
+                                  }
+                              } 
                           };
-                          for (int i = 0; i < 30; i++)
+                          for (int i = 0; i <= 30; i++)
                           {
                               Hp8156A.SetAtt(ini.ToString());
-                              Thread.Sleep(300);
+                              Thread.Sleep(200);
                               voltage = Ag34401A.GetVoltage();
                               Thread.Sleep(100);
                               if (voltage < 0.5)
                               {
                                   sdAsserted = ini;
-                                  SdAsserted = SdAsserted.ToString();
-                                  SDHigh = voltage.ToString();
+                                  SdAsserted = sdAsserted.ToString();
+                                  SDLow = voltage.ToString();
+                                  //SdAsserted,SdLow
+                                  strBuild.Append(string.Format("SdAsserted:{0}", SdAsserted));
+                                  strBuild.Append(string.Format("SdLow:{0}", SDLow));
+                                  DisplayInfo = strBuild.ToString();
                                   break;
                               }
                               else
                               {
                                   ini -= span;
+                                  if (i == 30)
+                                  {
+                                      strBuild.Append("获取SdAsserted失败");
+                                      DisplayInfo = strBuild.ToString();
+                                  }
                               }
 
                           }
@@ -600,26 +648,46 @@ namespace TheFinalTesting.ViewModel
                           Hp8156A.SetAtt("28");
                           //Exit.Ratio
                           ExtiRatio = Mp2100A.GetER();
+                          strBuild.Append(string.Format("Extinction Ratio:{0}", ExtiRatio));
+                          DisplayInfo = strBuild.ToString();
                           //Crossing
                           CrossingRate = Mp2100A.GetCrossing();
+                          strBuild.Append(string.Format("CrossingRate:{0}", CrossingRate));
+                          DisplayInfo = strBuild.ToString();
                           //MaskMargin
                           MaskMargin = Mp2100A.GetMaskMargin();
+                          strBuild.Append(string.Format("Mask Margin:{0}", MaskMargin));
+                          DisplayInfo = strBuild.ToString();
                           //Jitter
                           Jitter = Mp2100A.GetJitter();
+                          strBuild.Append(string.Format("Jitter:{0}", Jitter));
+                          DisplayInfo = strBuild.ToString();
+                          Thread.Sleep(2000);
+                          //OSA
+                          string osa = Aq6317B.GetData();
+                          strBuild.Append(osa);
+                          DisplayInfo = strBuild.ToString();
                           //Sensitivity
                           Sensitivity = GetSensitivity().ToString();
+                          strBuild.Append(string.Format("Sensitivity:{0}", Sensitivity));
+                          DisplayInfo = strBuild.ToString();
                           #endregion
-                          //MP2100
+                          Thread.Sleep(300);
+                          //Saturation
                           Hp8156A.SetAtt("9");
+                          Thread.Sleep(3000);
                           for (int i = 0; i < 5; i++)
                           {
+                              Thread.Sleep(1000);
                               string errorRate = Mp2100A.GetErrorRate();
+                              
                               string str = errorRate.Substring(2);
+                              strBuild.Append(str);
                               double.TryParse(str.Trim(), out double result);
-                              if (result < 0)
+                              if (result >= 0)
                               {
                                   saturation = Math.Log10(result);
-                                  if (saturation >= -9)
+                                  if (saturation > -9)
                                   {
                                       Saturation = false;
                                       break;
@@ -632,7 +700,23 @@ namespace TheFinalTesting.ViewModel
                               }
                               Saturation = true;
                           }
+                          strBuild.Append(string.Format("Saturation:{0}", Saturation));
+                          DisplayInfo = strBuild.ToString();
 
+                          //TxDisable
+                          Thread.Sleep(200);
+                          Hp8156A.Close();
+                          P3202.SetVolage("1", "2.0");
+                          Thread.Sleep(3000);
+                          string power = Hp8153A.ReadPower("2");
+                          double.TryParse(power.Trim(), out double txDisablePower);
+                          strBuild.Append(string.Format("Power@TxDisable:{0}", power));
+                          DisplayInfo = strBuild.ToString();
+                          if (txDisablePower < -20.0||Math.Log10(txDisablePower)>10)
+                          {
+                              TxDisable = true;
+                          }
+                          P3202.SetVolage("1", "0.8");
                       }
                       //IIC通信参数
                       if (IsPortReady)
@@ -642,16 +726,38 @@ namespace TheFinalTesting.ViewModel
                       }
                       else
                       {
-                          MessageBox.Show("初始化未完成", "系统提示");
+                          MessageBox.Show("串口初始化未完成", "系统提示");
                       }
+                      MessageBox.Show("测试完成");
                       IsTestEnable = true;
                   });
+                thread.IsBackground = true;
                 thread.Start();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "系统提示");
             }
+        }
+        private void ExecuteClosed()
+        {
+            //Dispose resources
+            if (Ag34401A != null)
+                Ag34401A.Dispose();
+            if (AgE3631A != null)
+                AgE3631A.Dispose();
+            if (Hp8153A != null)
+                Hp8153A.Dispose();
+            if (Hp8156A != null)
+                Hp8156A.Dispose();
+            if (Mp2100A != null)
+                Mp2100A.Dispose();
+            if (Aq6317B != null)
+                Aq6317B.Dispose();
+            if (P3202 != null)
+                P3202.Dispose();
+            if (Keith != null)
+                Keith.Dispose();
         }
         #endregion
         #region Methods
@@ -662,8 +768,11 @@ namespace TheFinalTesting.ViewModel
         /// </summary>
         private void I2CTest()
         {
+
             Thread.Sleep(200);
             Hp8156A.SetAtt("28");
+            Thread.Sleep(300);
+            Hp8156A.Open();
             Thread.Sleep(200);
             //Temp，Vcc,Bias,TxPower
             this.GetParas();
@@ -682,14 +791,22 @@ namespace TheFinalTesting.ViewModel
             RxPoint3 = GetRxPower().ToString();
 
             //A/W
+            Hp8156A.SetAtt("25");
+            Thread.Sleep(300);
             GetAlarmAndWarning();
+            
+            Hp8156A.SetAtt("28");
         }
+        /// <summary>
+        /// 获取Alarms和Warnings 信息
+        /// </summary>
         void GetAlarmAndWarning()
         {
             List<byte> alarms = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 112, 2);
-            Alarms = Convert.ToString((ushort)(alarms[0] * 256 + alarms[1]),2);
+            //转换为二进制
+            Alarms = Convert.ToString((ushort)(alarms[0] * 256 + alarms[1]), 2).PadLeft(16,'0');
             List<byte> warnings = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 116, 2);
-            Warnings = Convert.ToString((ushort)(warnings[0] * 256 + alarms[1]), 2);
+            Warnings = (Convert.ToString((ushort)(warnings[0] * 256 + alarms[1]), 2)).PadLeft(16,'0');
         }
         /// <summary>
         /// 通过I2C获取温度，Vcc,Bias,TxPower
@@ -811,7 +928,7 @@ namespace TheFinalTesting.ViewModel
                     //Error rate
                     double.TryParse(str.Trim(), out double result);
                     //判定当结果不为0时
-                    if (result < 0)
+                    if (result > 0)
                     {
                         //取对数
                         point.Y = Math.Log10(result);

@@ -62,10 +62,11 @@ namespace XuxzLib.Communication
         /// <summary>
         /// 设置电压
         /// </summary>
-        /// <param name="volage"></param>
+        /// <param name="channelNum">选择通道</param>
+        /// <param name="volage">电压值</param>
         public bool SetVolage(string channelNum,string volage)
         {
-            string command = string.Format(":CHAN{0}:CURR {1}", channelNum, volage);
+            string command = string.Format(":CHAN{0}:VOLT {1}", channelNum, volage);
             return WriteCommand(command);
         }
         /// <summary>
@@ -74,7 +75,7 @@ namespace XuxzLib.Communication
         /// <param name="current"></param>
         public bool SetCurrent(string channelNum,string current)
         {
-            string command = string.Format(":CHAN{0}:VOLT {1}", channelNum, current);
+            string command = string.Format(":CHAN{0}:CURR {1}", channelNum, current);
             return WriteCommand(command);
         }
     }

@@ -15,5 +15,26 @@ namespace XuxzLib.Communication
         {
             DeviceName = "AQ6317B Optical Specturm Analyzer";
         } 
+        public void SetSingle()
+        {
+            WriteCommand("SGL");
+        }
+        public string GetData()
+        {
+            return WriteAndRead("ANA?");
+        }
+        /// <summary>
+        /// OSA初始化
+        /// </summary>
+        /// <param name="ldType">光源类型</param>
+        /// <param name="centerLength">中心波长</param>
+        /// <param name="span">扫描范围</param>
+        public void Initialize(string ldType,string centerLength,string span)
+        {
+            
+        }
+        //SWEEP?   SWEEP AUTO|RPT|SGL   SWEEP SMEAS
+        //SGL ANA?  命令格式一
+        //:init:smode 1 :init :calc:data?  命令格式二
     }
 }

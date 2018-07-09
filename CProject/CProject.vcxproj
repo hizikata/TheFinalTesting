@@ -18,6 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Test.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dll_demo.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{77756187-01AD-42CC-8F4C-9EBFBFAFCD6D}</ProjectGuid>

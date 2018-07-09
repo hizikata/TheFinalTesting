@@ -1,5 +1,5 @@
-﻿#define FullTest
-//#define SimpleTest
+﻿//#define FullTest
+#define SimpleTest
 //#define SerialPortTest
 using System;
 using System.Windows;
@@ -20,16 +20,11 @@ namespace ConsoleApp1
         {
             try
             {
-                Aglient34401A ag34401 = new Aglient34401A("10");
-                HP8156A hp8156A = new HP8156A("22");
-                Console.WriteLine(ag34401.GetIdn());
-                Console.WriteLine(hp8156A.GetIdn());
-                hp8156A.SetAtt("28");
-                Thread.Sleep(200);
-                Console.WriteLine(ag34401.GetVoltage());
-                hp8156A.SetAtt("30");
-                Console.WriteLine(ag34401.GetVoltage());
-                hp8156A.SetAtt("28");
+                
+                ushort a=0x0028;
+                string binary = Convert.ToString(a, 2);
+                
+                Console.WriteLine(binary.PadLeft(16, '0'));
                 Console.ReadKey();
             }
             catch (Exception ee)
