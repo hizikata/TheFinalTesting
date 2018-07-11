@@ -93,6 +93,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\DeviceInfo.cs" />
+    <Compile Include="Model\FinalTestingParas.cs" />
     <Compile Include="Model\SenParas.cs" />
     <Compile Include="ViewModel\LocatorViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

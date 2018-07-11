@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:TheFinalTesting.View"
         mc:Ignorable="d" WindowState="Maximized" Background="{StaticResource MainBrush}"
         DataContext="{Binding Source={StaticResource locator}, Path=Main}"
-        Title="终测系统" Height="519.483" Width="822.31"  >
+        Title="终测系统" Height="519.483" Width="822.31" FontSize="15" >
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
             <i:InvokeCommandAction Command="{Binding ClosedCommand}"/>
@@ -50,16 +50,39 @@
             </TabItem>
             <TabItem Header="参数">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock Text="初始衰减:"/>
-                        <TextBox Width="100" Text="{Binding IniAtt}"/>
+                        <TextBox  Width="60" Text="{Binding IniAtt}" />
+                        <CheckBox  Margin="3"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="Att@Sa:"/>
+                        <TextBox  Width="60" Text="{Binding AttInSaturation}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="ER@Sen:"/>
+                        <TextBox  Width="60" Text="{Binding ErrorRateInSensitivity}" />
+                    </StackPanel>
+                    <StackPanel>
+                        <Button Content="确定" HorizontalAlignment="Left" Margin="20,0"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="测试" IsSelected="True">
                 <StackPanel>
-                    <Button Content="开始测试" HorizontalAlignment="Left" Width="100" Height="30" Margin="5"
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="SN:" Padding="10"/>
+                        <TextBox Width="200" Height="30" VerticalAlignment="Center"
+                                 Text="{Binding SN, Mode=TwoWay}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="KeyUp">
+                                    <i:InvokeCommandAction Command="{Binding TestCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <Button Content="开始测试" HorizontalAlignment="Left" Width="100" Height="30" Margin="5"
                             IsEnabled="{Binding IsTestEnable}" Command="{Binding TestCommand}"/>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <GroupBox Header="TX参数" Width="300" BorderThickness="3" BorderBrush="Gray">
                             <StackPanel Orientation="Horizontal" Margin="3">
@@ -183,67 +206,19 @@
                         </GroupBox>
                         <GroupBox Header="A/W" BorderBrush="Gray" BorderThickness="3">
                             <StackPanel Margin="3">
-                                <GroupBox Header="Temp A/w Display" Margin="5">
+                                <GroupBox Header="A/w Display" Margin="5">
                                     <StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="High"/>
-                                            <TextBox Width="50" Text="{Binding Alarms}"/>
+                                        <StackPanel Margin="3">
+                                            <TextBlock Text="Alarm:"/>
+                                            <TextBox Width="100" Text="{Binding Alarms}" HorizontalAlignment="Left"/>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Low"/>
-                                            <TextBox Width="50" Text="{Binding Warnings}"/>
+                                        <StackPanel Margin="3">
+                                            <TextBlock Text="Warning:"/>
+                                            <TextBox Width="100" Text="{Binding Warnings}" HorizontalAlignment="Left"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>
-                                <GroupBox Header="Bias A/w Display" Margin="5">
-                                    <StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="High"/>
-                                            <TextBox Width="50"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Low "/>
-                                            <TextBox Width="50"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </GroupBox>
-                                <GroupBox Header="Vcc A/w Display" Margin="5">
-                                    <StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="High"/>
-                                            <TextBox Width="50"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Low "/>
-                                            <TextBox Width="50"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </GroupBox>
-                                <GroupBox Header="TxPower A/w Display" Margin="5">
-                                    <StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="High"/>
-                                            <TextBox Width="50"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Low "/>
-                                            <TextBox Width="50"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </GroupBox>
-                                <GroupBox Header="RxPower A/w Display" Margin="5">
-                                    <StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="High"/>
-                                            <TextBox Width="50"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Low "/>
-                                            <TextBox Width="50"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </GroupBox>
-
+                                <TextBlock FontSize="20" Text="{Binding IsAWPass}"/>
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>

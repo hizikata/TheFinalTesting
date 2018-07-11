@@ -23,19 +23,35 @@ namespace XuxzLib.Communication
         /// 读取电压
         /// </summary>
         /// <returns></returns>
-        public string GetCurrent()
+        public double GetCurrent()
         {
             string command = "MEAS:CURR? P6V";
-            return WriteAndRead(command);
+            string data= WriteAndRead(command);
+            if(double.TryParse(data,out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
         }
         /// <summary>
         /// 读取电压
         /// </summary>
         /// <returns></returns>
-        public string GetVoltage()
+        public double GetVoltage()
         {
             string command = "MEAS:VOLT? P6V";
-            return WriteAndRead(command);
+            string data= WriteAndRead(command);
+            if (double.TryParse(data, out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
         }
         /// <summary>
         /// 打开设备

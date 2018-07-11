@@ -64,7 +64,7 @@ namespace XuxzLib.Communication
         /// <summary>
         /// 读取光功率计数据
         /// </summary>
-        public string ReadPower(string modelNum)
+        public double ReadPower(string modelNum)
         {
             switch (modelNum)
             {
@@ -78,7 +78,15 @@ namespace XuxzLib.Communication
                     throw new Exception("光功率计模块选择错误");
             }
             CheckStatus(Vi, Status);
-            return ReadCommand();
+            string data= ReadCommand();
+            if(double.TryParse(data.Trim(),out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
         }
         /*
          * READ1:POW? //读取数据

@@ -1,4 +1,4 @@
-﻿//#define Common
+﻿#define Common
 using System;
 using System.Windows;
 using System.Collections.Generic;
@@ -10,12 +10,15 @@ using GalaSoft.MvvmLight.Command;
 using TheFinalTesting.Model;
 using System.IO.Ports;
 using XuxzLib.Communication;
+using System.IO;
 
 namespace TheFinalTesting.ViewModel
 {
     internal class MainViewModel : ViewModelBase
     {
-        #region Fields       
+        #region Fields
+        private string SavePath = @"E:\Xu\Test.txt";
+        private FinalTestingParas TestingPara = new FinalTestingParas();
         /// <summary>
         /// 指示设备等的初始化是否完成
         /// </summary>
@@ -60,6 +63,13 @@ namespace TheFinalTesting.ViewModel
         internal Keithley Keith;
         #endregion
         #region Properties
+        private string _sn;
+
+        public string SN
+        {
+            get { return _sn; }
+            set { _sn = value; RaisePropertyChanged(() => SN); }
+        }
         #region Initialize Paras
         private double _iniAtt;
         /// <summary>
@@ -69,6 +79,20 @@ namespace TheFinalTesting.ViewModel
         {
             get { return _iniAtt; }
             set { _iniAtt = value; RaisePropertyChanged(() => IniAtt); }
+        }
+        private string _attInSaturation;
+
+        public string AttInSaturation
+        {
+            get { return _attInSaturation; }
+            set { _attInSaturation = value;RaisePropertyChanged(() => AttInSaturation); }
+        }
+        private double _errorRateInSensitivity;
+
+        public double ErrorRateInSensitivity
+        {
+            get { return _errorRateInSensitivity; }
+            set { _errorRateInSensitivity = value; RaisePropertyChanged(() => ErrorRateInSensitivity); }
         }
 
         #endregion
@@ -95,12 +119,14 @@ namespace TheFinalTesting.ViewModel
             get { return _warnings; }
             set { _warnings = value; RaisePropertyChanged(() => Warnings); }
         }
+        private bool _isAWPass;
 
+        public bool IsAWPass
+        {
+            get { return _isAWPass; }
+            set { _isAWPass = value; RaisePropertyChanged(() => IsAWPass); }
+        }
 
-        /// <summary>
-        /// 窗口列表
-        /// </summary>
-        public string[] StrCom { get { return _strCom; } }
         private readonly string[] _strCom;
         public string SelectedCom { get; set; }
         /// <summary>
@@ -121,7 +147,7 @@ namespace TheFinalTesting.ViewModel
         /// <summary>
         /// 设备初始化信息展示
         /// </summary>
-        public String DisplayInfo
+        public string DisplayInfo
         {
             get { return _DisplayInfo; }
             set
@@ -130,25 +156,25 @@ namespace TheFinalTesting.ViewModel
                 RaisePropertyChanged(() => DisplayInfo);
             }
         }
-        private String _DisplayInfo;
+        private string _DisplayInfo;
         #region TX Parameters
 
-        private string _supplyCurrent;
+        private double _supplyCurrent;
 
         /// <summary>
         /// E3631 供应电流
         /// </summary>
-        public string SupplyCurrent
+        public double SupplyCurrent
         {
             get { return _supplyCurrent; }
             set { _supplyCurrent = value; RaisePropertyChanged(() => SupplyCurrent); }
         }
 
-        private string _outputPower;
+        private double _outputPower;
         /// <summary>
         /// 8153A 光功率
         /// </summary>
-        public string OutputPower
+        public double OutputPower
         {
             get { return _outputPower; }
             set { _outputPower = value; RaisePropertyChanged(() => OutputPower); }
@@ -161,77 +187,63 @@ namespace TheFinalTesting.ViewModel
             set { _txDisable = value; RaisePropertyChanged(() => TxDisable); }
         }
 
-        private string _extiRatio;
+        private double _extiRatio;
         /// <summary>
         /// MP2100A
         /// </summary>
-        public string ExtiRatio
+        public double ExtiRatio
         {
             get { return _extiRatio; }
             set { _extiRatio = value; RaisePropertyChanged(() => ExtiRatio); }
         }
-        private string _crossingRate;
+        private double _crossingRate;
         /// <summary>
         /// MP2100A
         /// </summary>
-        public string CrossingRate
+        public double CrossingRate
         {
             get { return _crossingRate; }
             set { _crossingRate = value; RaisePropertyChanged(() => CrossingRate); }
         }
-        private string _centerWavelength;
+        private double _centerWavelength;
         /// <summary>
         /// 中心波长
         /// </summary>
-        public string CenterWavelength
+        public double CenterWavelength
         {
             get { return _centerWavelength; }
             set { _centerWavelength = value; RaisePropertyChanged(() => CenterWavelength); }
         }
-        private string _differenceWavelength;
+        private double _differenceWavelength;
         /// <summary>
         /// 频谱仪 波长差
         /// </summary>
-        public string DifferenceWavelength
+        public double DifferenceWavelength
         {
             get { return _differenceWavelength; }
             set { _differenceWavelength = value; RaisePropertyChanged(() => DifferenceWavelength); }
         }
 
-        private string _SMSR;
+        private double _SMSR;
 
-        public string SMSR
+        public double SMSR
         {
             get { return _SMSR; }
             set { _SMSR = value; RaisePropertyChanged(() => SMSR); }
         }
-        private string _jitter;
+        private double _jitter;
         /// <summary>
         /// MP2100A 
         /// </summary>
-        public string Jitter
+        public double Jitter
         {
             get { return _jitter; }
             set { _jitter = value; RaisePropertyChanged(() => Jitter); }
         }
-        private string _riseingTime;
 
-        public string RisingTime
-        {
-            get { return _riseingTime; }
-            set { _riseingTime = value; RaisePropertyChanged(() => RisingTime); }
-        }
-        private string _fallingTime;
+        private double _maskMargin;
 
-        public string FallingTime
-        {
-            get { return _fallingTime; }
-            set { _fallingTime = value; RaisePropertyChanged(() => FallingTime); }
-        }
-
-        private string _maskMargin;
-
-        public string MaskMargin
+        public double MaskMargin
         {
             get { return _maskMargin; }
             set { _maskMargin = value; RaisePropertyChanged(() => MaskMargin); }
@@ -239,41 +251,49 @@ namespace TheFinalTesting.ViewModel
 
         #endregion
         #region Rx Parameters
-        private string _sensitivity;
+        private double _sensitivity;
 
-        public string Sensitivity
+        public double Sensitivity
         {
             get { return _sensitivity; }
             set { _sensitivity = value; RaisePropertyChanged(() => Sensitivity); }
         }
-        private string _sdAsserted;
+        private double _sdAsserted;
 
-        public string SdAsserted
+        public double SdAsserted
         {
             get { return _sdAsserted; }
             set { _sdAsserted = value; RaisePropertyChanged(() => SdAsserted); }
         }
-        private string _sdDesserted;
+        private double _sdDesserted;
 
-        public string SdDesserted
+        public double SdDesserted
         {
             get { return _sdDesserted; }
             set { _sdDesserted = value; RaisePropertyChanged(() => SdDesserted); }
         }
-        private string _sdHigh;
+        private double _sdHigh;
 
-        public string SDHigh
+        public double SDHigh
         {
             get { return _sdHigh; }
             set { _sdHigh = value; RaisePropertyChanged(() => SDHigh); }
         }
-        private string _sdLow;
+        private double _sdLow;
 
-        public string SDLow
+        public double SDLow
         {
             get { return _sdLow; }
             set { _sdLow = value; RaisePropertyChanged(() => SDLow); }
         }
+        private double _hysteresis;
+
+        public double Hysteresis
+        {
+            get { return _hysteresis; }
+            set { _hysteresis = value;RaisePropertyChanged(() => Hysteresis); }
+        }
+
         private bool _saturation;
 
         public bool Saturation
@@ -285,51 +305,51 @@ namespace TheFinalTesting.ViewModel
 
         #endregion
         #region DDMI/A0H Parameters
-        private string _rxPoint1;
+        private double _rxPoint1;
 
-        public string RxPoint1
+        public double RxPoint1
         {
             get { return _rxPoint1; }
             set { _rxPoint1 = value; RaisePropertyChanged(() => RxPoint1); }
         }
-        private string _rxPoint2;
+        private double _rxPoint2;
 
-        public string RxPoint2
+        public double RxPoint2
         {
             get { return _rxPoint2; }
             set { _rxPoint2 = value; RaisePropertyChanged(() => RxPoint2); }
         }
-        private string _rxPoint3;
+        private double _rxPoint3;
 
-        public string RxPoint3
+        public double RxPoint3
         {
             get { return _rxPoint3; }
             set { _rxPoint3 = value; RaisePropertyChanged(() => RxPoint3); }
         }
-        private string _txPower;
+        private double _txPower;
 
-        public string TxPower
+        public double TxPower
         {
             get { return _txPower; }
             set { _txPower = value; RaisePropertyChanged(() => TxPower); }
         }
-        private string _vcc;
+        private double _vcc;
 
-        public string Vcc
+        public double Vcc
         {
             get { return _vcc; }
             set { _vcc = value; RaisePropertyChanged(() => Vcc); }
         }
-        private string _temp;
+        private double _temp;
 
-        public string Temp
+        public double Temp
         {
             get { return _temp; }
             set { _temp = value; RaisePropertyChanged(() => Temp); }
         }
-        private string _bias;
+        private double _bias;
 
-        public string Bias
+        public double Bias
         {
             get { return _bias; }
             set { _bias = value; RaisePropertyChanged(() => Bias); }
@@ -345,7 +365,9 @@ namespace TheFinalTesting.ViewModel
         {
             _strCom = SerialPort.GetPortNames();
             IsTestEnable = true;
-            IniAtt = 28.0;
+            IniAtt = 16.0;
+            AttInSaturation = "9";
+            ErrorRateInSensitivity = -3;
         }
         #endregion
         #region Commands
@@ -584,6 +606,7 @@ namespace TheFinalTesting.ViewModel
         /// </summary>
         private void ExecuteTest()
         {
+            bool isSaveData = false;
             StringBuilder strBuild = new StringBuilder();
             IsTestEnable = false;
             try
@@ -591,31 +614,48 @@ namespace TheFinalTesting.ViewModel
                 //另一线程执行该方法
                 Thread thread = new Thread(() =>
                   {
+                      //SN
+                      if (!string.IsNullOrEmpty(SN))
+                      {
+                          TestingPara.SN = SN;
+                      }
                       //GPIB通信
                       if (IsReady)
                       {
                           double ini = IniAtt;
                           double span = 0.2;
                           double voltage;
-                          double sdDesserted = 0, sdAsserted = 0;
                           double saturation = 0;
                           //Hp8156A.Open();
                           Mp2100A.AutoScale();
                           Aq6317B.SetSingle();
 
+                          //Supply Current
                           SupplyCurrent = AgE3631A.GetCurrent();
+                          TestingPara.SupplyCurrent = SupplyCurrent.ToString("F3");
+                          //OutputPower
                           OutputPower = Hp8153A.ReadPower("2");
+                          TestingPara.OutputPower = OutputPower.ToString("F3");
+
+                          //SD_Desserted SD_High
                           for (int i = 0; i <= 40; i++)
                           {
+                              
                               Hp8156A.SetAtt(ini.ToString());
                               Thread.Sleep(300);
                               voltage = Ag34401A.GetVoltage();
                               Thread.Sleep(100);
+                              if (i == 0 && voltage >= 2.0)
+                              {
+                                  MessageBox.Show("初始即为高电压，请检查设备连接！", "系统提示");
+                                  return;
+                              }
                               if (voltage >= 2.0)
                               {
-                                  sdDesserted = ini;
-                                  SdDesserted = sdDesserted.ToString();
-                                  SDHigh = voltage.ToString();
+                                  SdDesserted = ini;
+                                  TestingPara.SD_Desserted = SdDesserted.ToString();
+                                  SDHigh = voltage;
+                                  TestingPara.SD_High = SDHigh.ToString("F3");
                                   //SdDesserted SdHigh
                                   strBuild.Append(string.Format("SdDesserted:{0}", SdDesserted));
                                   strBuild.Append(string.Format("SdHigh:{0}", SDHigh));
@@ -632,6 +672,7 @@ namespace TheFinalTesting.ViewModel
                                   }
                               }
                           };
+                          //SD_Asserted,SD_Low
                           for (int i = 0; i <= 30; i++)
                           {
                               Hp8156A.SetAtt(ini.ToString());
@@ -640,10 +681,10 @@ namespace TheFinalTesting.ViewModel
                               Thread.Sleep(100);
                               if (voltage < 0.5)
                               {
-                                  sdAsserted = ini;
-                                  SdAsserted = sdAsserted.ToString();
-                                  SDLow = voltage.ToString();
-                                  //SdAsserted,SdLow
+                                  SdAsserted = ini;
+                                  TestingPara.SD_Asserted = SdAsserted.ToString();
+                                  SDLow = voltage;
+                                  TestingPara.SD_Low = SDLow.ToString();
                                   strBuild.Append(string.Format("SdAsserted:{0}", SdAsserted));
                                   strBuild.Append(string.Format("SdLow:{0}", SDLow));
                                   DisplayInfo = strBuild.ToString();
@@ -660,31 +701,73 @@ namespace TheFinalTesting.ViewModel
                               }
 
                           }
+                          //Hysteresis
+                          Hysteresis = SdDesserted = SdAsserted;
+                          TestingPara.Hysteresis = Hysteresis.ToString();
                           #region MP2100
                           Hp8156A.SetAtt(IniAtt.ToString());
                           //Exit.Ratio
-                          ExtiRatio = Mp2100A.GetER();
+                          ExtiRatio = Mp2100A.GetExRatio();
+                          TestingPara.ExtioRatio = ExtiRatio.ToString("F3");
                           strBuild.Append(string.Format("Extinction Ratio:{0}", ExtiRatio));
                           DisplayInfo = strBuild.ToString();
                           //Crossing
                           CrossingRate = Mp2100A.GetCrossing();
+                          TestingPara.Crossing = CrossingRate.ToString("F3");
                           strBuild.Append(string.Format("CrossingRate:{0}", CrossingRate));
                           DisplayInfo = strBuild.ToString();
                           //MaskMargin
                           MaskMargin = Mp2100A.GetMaskMargin();
+                          TestingPara.MaskMargin = MaskMargin.ToString("F3");
                           strBuild.Append(string.Format("Mask Margin:{0}", MaskMargin));
                           DisplayInfo = strBuild.ToString();
                           //Jitter
                           Jitter = Mp2100A.GetJitter();
+                          TestingPara.Jitter = Jitter.ToString("F3");
                           strBuild.Append(string.Format("Jitter:{0}", Jitter));
                           DisplayInfo = strBuild.ToString();
                           Thread.Sleep(2000);
                           //OSA
-                          string osa = Aq6317B.GetData();
-                          strBuild.Append(osa);
+                          string osaData = Aq6317B.GetData();
+                          string[] data = osaData.Split(',');
+                          //CenterWavelength
+                          if (double.TryParse(data[1].Trim(), out double data1))
+                          {
+                              CenterWavelength = data1;
+                          }
+                          else
+                          {
+                              CenterWavelength = 0;
+                          }
+                          TestingPara.CenterWavelength = CenterWavelength.ToString();
+                          //SMSR
+                          if (double.TryParse(data[4].Trim(), out double data4))
+                          {
+                              SMSR = data4;
+                          }
+                          else
+                          {
+                              SMSR = 0;
+                          }
+                          TestingPara.SMSR = SMSR.ToString();
+                          //WavelengthDiff
+                          if (double.TryParse(data[0].Trim(), out double data0))
+                          {
+                              DifferenceWavelength = data0;
+                          }
+                          else
+                          {
+                              DifferenceWavelength = 0;
+                          }
+                          TestingPara.WavelengthDiff = DifferenceWavelength.ToString();
+
+                          strBuild.AppendLine(string.Format("中心波长:{0}", CenterWavelength));
+                          strBuild.AppendLine(string.Format("Δλ:{0}", DifferenceWavelength));
+                          strBuild.AppendLine(string.Format("SMSR:{0}", SMSR));
                           DisplayInfo = strBuild.ToString();
                           //Sensitivity
-                          Sensitivity = GetSensitivity().ToString();
+                          Sensitivity = Math.Round(GetSensitivity(), 2);
+                          TestingPara.Sensitivity = Sensitivity.ToString();
                           strBuild.Append(string.Format("Sensitivity:{0}", Sensitivity));
                           DisplayInfo = strBuild.ToString();
                           #endregion
@@ -692,19 +775,15 @@ namespace TheFinalTesting.ViewModel
 
                           //Saturation
                           //测试饱和度 设置 衰减
-                          Hp8156A.SetAtt("3");
+                          Hp8156A.SetAtt(AttInSaturation);
                           Thread.Sleep(3000);
                           for (int i = 0; i < 5; i++)
                           {
-                              Thread.Sleep(1000);
-                              string errorRate = Mp2100A.GetErrorRate();
-                              
-                              string str = errorRate.Substring(2);
-                              strBuild.Append(str);
-                              double.TryParse(str.Trim(), out double result);
-                              if (result >= 0)
+                              Thread.Sleep(300);
+                              double r = Mp2100A.GetErrorRate();
+                              if (r >= 0)
                               {
-                                  saturation = Math.Log10(result);
+                                  saturation = Math.Log10(r);
                                   if (saturation > -9)
                                   {
                                       Saturation = false;
@@ -718,6 +797,7 @@ namespace TheFinalTesting.ViewModel
                               }
                               Saturation = true;
                           }
+                          TestingPara.Saturation = Saturation;
                           strBuild.Append(string.Format("Saturation:{0}", Saturation));
                           DisplayInfo = strBuild.ToString();
 
@@ -726,31 +806,81 @@ namespace TheFinalTesting.ViewModel
                           Hp8156A.Close();
                           P3202.SetVolage("1", "2.0");
                           Thread.Sleep(3000);
-                          string power = Hp8153A.ReadPower("2");
-                          double.TryParse(power.Trim(), out double txDisablePower);
-                          strBuild.Append(string.Format("Power@TxDisable:{0}", power));
+                          double txDisablePower = Hp8153A.ReadPower("2");
+                          strBuild.Append(string.Format("Power@TxDisable:{0}", txDisablePower));
                           DisplayInfo = strBuild.ToString();
                           if (txDisablePower < -20.0 || Math.Log10(txDisablePower) > 10)
                           {
                               TxDisable = true;
+                              TestingPara.TxDisable = true;
                           }
                           P3202.SetVolage("1", "0.8");
+                          isSaveData = true;
+                      }
+                      else
+                      {
+                          MessageBox.Show("设备初始化未完成,将无法进行GPIB测试", "系统提示");
                       }
                       //IIC通信参数
                       if (IsPortReady)
                       {
                           I2CTest();
+                          isSaveData = true;
 
                       }
                       else
                       {
                           MessageBox.Show("串口初始化未完成", "系统提示");
                       }
-                      MessageBox.Show("测试完成");
+                      if (isSaveData)
+                      {
+                          //将数据存储到本地
+                          MessageBoxResult result = MessageBox.Show("测试完成，是否储存数据？", "系统提示", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                          if (result == MessageBoxResult.OK)
+                          {
+                              bool isEmpty = false;
+                              if (!Directory.Exists(@"E:\Xu"))
+                              {
+                                  Directory.CreateDirectory(@"E:\Xu");
+                              }
+                              using (FileStream fs = new FileStream(SavePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None))
+                              {
+                                  using (StreamReader sr = new StreamReader(fs))
+                                  {
+                                      string output = null;
+                                      if ((output = sr.ReadLine()) == null)
+                                      {
+                                          isEmpty = true;
+                                      }
+                                      else
+                                      {
+                                          isEmpty = false;
+                                      }
+                                  }
+                              }
+                              using (FileStream fs = new FileStream(SavePath, FileMode.Append, FileAccess.Write, FileShare.None))
+                              {
+                                  using (StreamWriter sw = new StreamWriter(fs))
+                                  {
+                                      if (isEmpty == true)
+                                      {
+                                          sw.WriteLine("SN,SupplyCurrent,OutputPower,ExRatio,Crossing,Jitter,MaskMargin," +
+                                              "CenterWavelength,SMSR,WavelengthDiff,TxDisable,Sensitivity,SD_Asserted,SD_Desserted," +
+                                              "Hysteresis,SD_High,SD_Low,Saturation,RxPoint1,RxPoint2,RxPoint3,TxPower," +
+                                              "Vcc,Temp,Bias,IsAwPass,Date");
+                                      }
+                                      sw.WriteLine(TestingPara.ToString());
+                                  }
+                              }
+
+                          }
+                      }
                       IsTestEnable = true;
                   });
                 thread.IsBackground = true;
                 thread.Start();
+
+
             }
             catch (Exception ex)
             {
@@ -798,34 +928,53 @@ namespace TheFinalTesting.ViewModel
             //RxPoint 1
             Hp8156A.SetAtt("10");
             Thread.Sleep(1000);
-            RxPoint1 = GetRxPower().ToString();
+            RxPoint1 = Math.Round(GetRxPower());
+            TestingPara.RxPoint1 = RxPoint1.ToString();
 #if Common
             //RxPoint 2
             Hp8156A.SetAtt("19");
             Thread.Sleep(1000);
-            RxPoint2 = GetRxPower().ToString();
+            RxPoint2 = Math.Round(GetRxPower());
+            TestingPara.RxPoint2 = RxPoint2.ToString();
             //RxPoint 3
             Hp8156A.SetAtt("28");
             Thread.Sleep(1000);
-            RxPoint3 = GetRxPower().ToString();
+            RxPoint3 = Math.Round(GetRxPower());
+            TestingPara.RxPoint3 = RxPoint3.ToString();
 
             //A/W
             Hp8156A.SetAtt("25");
             Thread.Sleep(300);
-            GetAlarmAndWarning();
+            IsAWPass= GetAlarmAndWarning();
+            TestingPara.IsAwPass = IsAWPass;
 #endif
             Hp8156A.SetAtt(IniAtt.ToString());
         }
         /// <summary>
         /// 获取Alarms和Warnings 信息
         /// </summary>
-        void GetAlarmAndWarning()
+        bool GetAlarmAndWarning()
         {
             List<byte> alarms = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 112, 2);
             //转换为二进制
-            Alarms = Convert.ToString((ushort)(alarms[0] * 256 + alarms[1]), 2).PadLeft(16, '0');
+            string dataAlarm = Convert.ToString((ushort)(alarms[0] * 256 + alarms[1]), 2).PadLeft(16, '0');
+            Alarms = dataAlarm.Substring(0, 10);
+            foreach (char item in Alarms)
+            {
+                if (item == '1')
+                    return false;
+            }
             List<byte> warnings = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 116, 2);
-            Warnings = (Convert.ToString((ushort)(warnings[0] * 256 + alarms[1]), 2)).PadLeft(16, '0');
+            string dataWarning = (Convert.ToString((ushort)(warnings[0] * 256 + alarms[1]), 2)).PadLeft(16, '0');
+            Warnings = dataWarning.Substring(0, 10);
+            foreach (char item in Warnings)
+            {
+                if (item == '1')
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         /// <summary>
         /// 通过I2C获取温度，Vcc,Bias,TxPower
@@ -833,34 +982,36 @@ namespace TheFinalTesting.ViewModel
         void GetParas()
         {
             //AOH 读取SN
-            //string sn;
-
             //A2H
             double temp, vcc, txPower, bais;
             short cache = 0;
             ushort ucache = 0;
             List<byte> data = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 96, 10);
-            //温度计算 96，97
+            //Temp 96，97
             cache = DigitTransform(data[0], data[1]);
             temp = (double)cache / 256;
-            Temp = (temp).ToString();
+            Temp = temp;
+            TestingPara.Temp = Temp.ToString();
             //Vcc 98，99
             ucache = UDigitTransform(data[2], data[3]);
             vcc = (double)ucache / 10000; //V
-            Vcc = vcc.ToString();
+            Vcc = vcc;
+            TestingPara.Vcc = Vcc.ToString();
 
             //Bais 100,101
             ucache = UDigitTransform(data[4], data[5]);
             bais = (double)ucache / 500;
-            Bias = bais.ToString();
+            Bias = bais;
+            TestingPara.Bias = Bias.ToString();
             //TxPower 102,103
             ucache = UDigitTransform(data[6], data[7]);
             txPower = (double)ucache / 10000; //mW
-            TxPower = (Math.Log10(txPower) * 10).ToString();
-
+            //取两位有效数字
+            TxPower = Math.Round((Math.Log10(txPower) * 10), 2);
+            TestingPara.TxPower = TxPower.ToString();
         }
         //I2C获取RxPower
-        float GetRxPower()
+        double GetRxPower()
         {
             if (Port == null || Port.IsOpen == false)
             {
@@ -875,7 +1026,7 @@ namespace TheFinalTesting.ViewModel
                 data = TranBase.MyI2C_ReadA2HByte(SerBuf, Port, 104, 2);
                 ucache = UDigitTransform(data[0], data[1]);
                 rxPower = (double)ucache / 10000;
-                return (float)(Math.Log10(rxPower) * 10);
+                return Math.Round((Math.Log10(rxPower) * 10), 2);
 
             }
 
@@ -903,22 +1054,22 @@ namespace TheFinalTesting.ViewModel
             return num;
         }
 
-#endregion
+        #endregion
         //GPIB通信
-#region TxMethods
+        #region TxMethods
         /// <summary>
         /// 获取ExtioRatio和Crossing
         /// </summary>
         void GetTxParas()
         {
             //等待AutoScale完成
-            ExtiRatio = Mp2100A.GetER();
+            ExtiRatio = Mp2100A.GetExRatio();
             CrossingRate = Mp2100A.GetCrossing();
             Jitter = Mp2100A.GetJitter();
             MaskMargin = Mp2100A.GetMaskMargin();
         }
-#endregion TxMethods
-#region RxMethods
+        #endregion TxMethods
+        #region RxMethods
         /// <summary>
         /// 计算灵敏度
         /// </summary>
@@ -943,10 +1094,9 @@ namespace TheFinalTesting.ViewModel
                     initialValue += interval;
                     //sb.Append(point.X.ToString());
                     Thread.Sleep(1000);
-                    string errorRate = Mp2100A.GetErrorRate();
-                    string str = errorRate.Substring(2);
+                    double result = Mp2100A.GetErrorRate();
                     //Error rate
-                    if(double.TryParse(str.Trim(), out double result))
+                    if (result >= 0)
                     {
                         double s = Math.Log10(result);
                         //判定当结果不为0时
@@ -957,7 +1107,8 @@ namespace TheFinalTesting.ViewModel
                             listPoint.Add(point);
                         }
                     }
-                    
+
+
                 }
                 //噪声过滤
                 while (IsCountChanged && listPoint.Count > 5)
@@ -968,7 +1119,7 @@ namespace TheFinalTesting.ViewModel
                 //计算灵敏度
                 SenPara = this.LinearRegression(listPoint);
                 //灵敏度计算条件：Error rate@E-3
-                SenPara.Sensitive = (-9 - SenPara.RCA) / SenPara.RCB;
+                SenPara.Sensitive = (ErrorRateInSensitivity - SenPara.RCA) / SenPara.RCB;
                 return SenPara.Sensitive;
             }
             catch
@@ -1069,7 +1220,7 @@ namespace TheFinalTesting.ViewModel
             //拟合误差越接近1则表示越准确
             return para;
         }
-#endregion RxMethods
-#endregion Methods
+        #endregion RxMethods
+        #endregion Methods
     }
 }

@@ -11,23 +11,27 @@ using System.Threading;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ConsoleApp1
 {
     class Program
     {
 #if SimpleTest
-        static void Main()
+        static void Main(string[]args)
         {
             try
             {
-                string msg = "hello";
-                byte[] msgAsByteArray = Encoding.Default.GetBytes(msg);
-
-                using(FileStream fs= File.Open(@"D:\Test.txt", FileMode.OpenOrCreate))
+                using (FileStream fs = File.Open(@"D:\Test.txt", FileMode.Append,
+                    FileAccess.Write, FileShare.None))
                 {
-                    
+                    using(StreamWriter sw=new StreamWriter(fs))
+                    {
+                        sw.WriteLine("hello world!");
+                        sw.WriteLine("nice to meet you !");
+                    }
                 }
+                Console.ReadKey();
             }
             catch (Exception ee)
             {
