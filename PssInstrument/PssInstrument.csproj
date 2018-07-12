@@ -67,5 +67,11 @@
   <ItemGroup>
     <Resource Include="bitbug_favicon%281%29.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XuxzLib\XuxzLib.csproj">
+      <Project>{3dadfb0b-afd5-46b2-87af-c6d94f99a2d0}</Project>
+      <Name>XuxzLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
