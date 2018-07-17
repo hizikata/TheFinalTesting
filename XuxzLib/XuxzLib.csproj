@@ -60,7 +60,11 @@
     <Compile Include="Communication\Base\DeviceBase.cs" />
     <Compile Include="Communication\Base\IDeviceMethods.cs" />
     <Compile Include="Communication\Base\PssBase.cs" />
-    <Compile Include="Communication\Pss_Doa.cs" />
+    <Compile Include="Communication\Base\PssRS232Driver.cs" />
+    <Compile Include="Communication\PSS\PssBert.cs" />
+    <Compile Include="Communication\PSS\PssDOA.cs" />
+    <Compile Include="Communication\PSS\PssOPM.cs" />
+    <Compile Include="Communication\PSS\PssPPG.cs" />
     <Compile Include="Communication\Visa\Agilent86100A.cs" />
     <Compile Include="Communication\Visa\Aglient3440A.cs" />
     <Compile Include="Communication\Visa\AglientE3631A.cs" />
