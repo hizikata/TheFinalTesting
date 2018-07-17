@@ -111,6 +111,30 @@ namespace PssInstrument
             {
                 Console.WriteLine("temp:{0}", temp);
             }
+            uint count = 0xC;
+            state = PssDOA.ReadDDM(PssBase.CARDID_3, PssBase.ENDSIGN_1, 0xA1, 0x00, count, SerBuf);
+            if (state != 0)
+            {
+                Console.WriteLine("查询SN失败");
+            }
+            else
+            {
+                string sn = Encoding.ASCII.GetString(SerBuf);
+                sn = sn.Substring(0, 35);
+                Console.WriteLine(sn);
+
+                string[]datas = sn.Split(' ');
+
+
+                byte[] byteSn = new byte[count];
+                for (int i = 0; i < count; i++)
+                {
+                    byteSn[i] = Convert.ToByte(datas[i].Trim(),16); 
+                }
+                Console.WriteLine(Encoding.ASCII.GetString(byteSn));
+                
+
+            }
 #endif
 
 

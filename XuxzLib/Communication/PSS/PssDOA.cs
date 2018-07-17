@@ -134,6 +134,8 @@ namespace XuxzLib.Communication
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAConfPower", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
         public static extern int DOAConfPower(uint cardId, uint endSign,double configPower, ref double readPower);
 
+
+        #region DDM Methods
         /// <summary>
         /// 查询DDM温度
         /// </summary>
@@ -144,6 +146,14 @@ namespace XuxzLib.Communication
         /// <returns></returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "ReadDDM_Temperature", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
         public static extern uint ReadDDM_Temperature(uint cardId, uint endSign, byte slaveAdd, ref double temp);
+
+        [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "ReadDDM", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
+        public static extern uint ReadDDM(uint cardId, uint endSign, byte slaveAdd,byte dateAdd,uint dataLength, byte[] data);
+
+
+        #endregion
+
+
 
 
 
