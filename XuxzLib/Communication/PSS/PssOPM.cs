@@ -126,7 +126,7 @@ namespace XuxzLib.Communication
         /// <param name="powerUnit"></param>
         /// <returns></returns>
         [DllImport("PSS_OPM-C_DLL.dll", EntryPoint = "OPMReadPower", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int OPMReadPower(uint cardId, uint endSign, uint channelNum, ref double power);
+        public static extern uint OPMReadPower(uint cardId, uint endSign, uint channelNum, ref double power);
         #endregion
     }
 }

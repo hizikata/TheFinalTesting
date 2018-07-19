@@ -1,0 +1,32 @@
+﻿<Window x:Class="PssHighLowTemperature.View.FrmSet"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PssHighLowTemperature.View"
+        mc:Ignorable="d" DataContext="{Binding Source={StaticResource locator},Path=Main}"
+        Title="FrmSet" Height="450" Width="800">
+    <StackPanel Margin="5">
+        <GroupBox Header="普赛斯设备设置">
+            
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="串口:"/>
+                    <ComboBox Width="100" ItemsSource="{Binding ComArray}" SelectedIndex="{Binding CurrentCom, Mode=OneWayToSource}"/>
+                    <Button Content="打开" Command="{Binding Initialize}"/>
+                </StackPanel>
+                <StackPanel>
+                    <ListBox/>
+                </StackPanel>
+            </StackPanel>
+            
+        </GroupBox>
+        <GroupBox Header="GPIB设备设置">
+            
+        </GroupBox>
+        <GroupBox Header="信息窗口">
+            <TextBox MinWidth="400" MinHeight="200" HorizontalAlignment="Left" Margin="5"
+                     Text="{Binding DisplayInfo}"/>
+        </GroupBox>
+    </StackPanel>
+</Window>

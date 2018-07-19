@@ -1,7 +1,7 @@
 ﻿#define UseDll
 #define DOA
-//#define OPM
-//#define BERT
+#define OPM
+#define BERT
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -9,7 +9,7 @@ namespace XuxzLib.Communication
     /// <summary>
     /// 普赛斯光衰减模块
     /// </summary>
-    public class PssDOA:PssBase
+    public class PssDOA : PssBase
     {
         #region DllImport
         /// <summary>
@@ -61,7 +61,7 @@ namespace XuxzLib.Communication
         /// <param name="wavelength"></param>
         /// <returns>函数执行的错误信息</returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAConfWavelength", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DOAConfWavelength(uint cardId, uint endSign,uint wavelength);
+        public static extern int DOAConfWavelength(uint cardId, uint endSign, uint wavelength);
 
         /// <summary>
         /// 获取当前波长
@@ -71,7 +71,7 @@ namespace XuxzLib.Communication
         /// <param name="wavelength"></param>
         /// <returns>函数执行的错误信息</returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAReadWavelength", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DOAReadWavelength(uint cardId, uint endSign,ref uint wavelength);
+        public static extern int DOAReadWavelength(uint cardId, uint endSign, ref uint wavelength);
 
         /// <summary>
         /// 配置衰减量
@@ -132,7 +132,7 @@ namespace XuxzLib.Communication
         /// <param name="readPower">存储返回的实际光功率</param>
         /// <returns></returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAConfPower", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DOAConfPower(uint cardId, uint endSign,double configPower, ref double readPower);
+        public static extern int DOAConfPower(uint cardId, uint endSign, double configPower, ref double readPower);
 
 
         #region DDM Methods
@@ -147,10 +147,40 @@ namespace XuxzLib.Communication
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "ReadDDM_Temperature", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
         public static extern uint ReadDDM_Temperature(uint cardId, uint endSign, byte slaveAdd, ref double temp);
 
+        /// <summary>
+        /// 读取DDM
+        /// </summary>
+        /// <param name="cardId"></param>
+        /// <param name="endSign"></param>
+        /// <param name="slaveAdd"></param>
+        /// <param name="dateAdd"></param>
+        /// <param name="dataLength"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "ReadDDM", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint ReadDDM(uint cardId, uint endSign, byte slaveAdd,byte dateAdd,uint dataLength, byte[] data);
+        public static extern uint ReadDDM(uint cardId, uint endSign, byte slaveAdd, byte dateAdd, uint dataLength, byte[] data);
 
+        /// <summary>
+        /// 读取Tx端Bias
+        /// </summary>
+        /// <param name="cardId"></param>
+        /// <param name="endSign"></param>
+        /// <param name="slaveAdd"></param>
+        /// <param name="temp"></param>
+        /// <returns></returns>
+        [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "ReadDDM_BiasTx", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
+        public static extern uint ReadDDM_BiasTx(uint cardId, uint endSign, byte slaveAdd, ref double data);
 
+        /// <summary>
+        /// 读取Rx端收功率
+        /// </summary>
+        /// <param name="cardId"></param>
+        /// <param name="endSign"></param>
+        /// <param name="slaveAdd"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "ReadDDM_RxPower", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
+        public static extern uint ReadDDM_RxPower(uint cardId, uint endSign, byte slaveAdd, ref double data);
         #endregion
 
 

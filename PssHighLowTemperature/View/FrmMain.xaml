@@ -1,0 +1,70 @@
+﻿<Window x:Class="PssHighLowTemperature.View.FrmMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ex="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:PssHighLowTemperature.View"
+        mc:Ignorable="d" DataContext="{Binding Source={StaticResource locator}, Path=Main}"
+        Title="高低温测试" Height="450" Width="800">
+    <StackPanel>
+        <ToolBar>
+            <Button Name="btnSet" Click="btnSet_Click">
+                <TextBlock Text="设置"/>
+            </Button>
+        </ToolBar>
+        <StackPanel Margin="8">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="SN:"/>
+                <TextBox Width="200"/>
+                <Button Content="开始测试" Command="{Binding Test}"/>
+            </StackPanel>
+        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="280*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Margin="8">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Pf:"/>
+                    <TextBox Text="{Binding Power, Mode=OneWay}"  IsHitTestVisible="False"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="ER:"/>
+                    <TextBox  IsHitTestVisible="False" Text="{Binding ExRatio, Mode=OneWay}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="CROS:"/>
+                    <TextBox  IsHitTestVisible="False" Text="{Binding Crossing, Mode=OneWay}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="SEN:"/>
+                    <TextBox  IsHitTestVisible="False" Text="{Binding Sen, Mode= OneWay}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Rx1:"/>
+                    <TextBox  IsHitTestVisible="False" Text="{Binding RxPoint1,Mode=OneWay}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Rx2:"/>
+                    <TextBox  IsHitTestVisible="False" Text="{Binding RxPoint2,Mode=OneWay}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Rx3:"/>
+                    <TextBox  IsHitTestVisible="False" Text="{Binding RxPoint3,Mode=OneWay}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Temp:"/>
+                    <TextBox  IsHitTestVisible="False" Text="{Binding Temp, Mode=OneWay}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Bias:"/>
+                    <TextBox  IsHitTestVisible="False" Text="{Binding Bias,Mode=OneWay}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Window>
