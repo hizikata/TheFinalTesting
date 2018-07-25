@@ -585,9 +585,10 @@ namespace PssHighLowTemperature.ViewModel
             };
             //读取opm/doa 修正系数
             XDoc = XDocument.Load("Configure.xml");
-            XElement xEle = XDoc.Element("CalOfOpm");
+            XElement xEle = XDoc.Root.Element("CalOfOpm");
+            XElement xEleOpm = XDoc.Root.Element("CalOfDoa");
             Coefficient = Convert.ToDouble(xEle.Value.Trim());
-            
+            CalOfDOA = Convert.ToDouble(xEleOpm.Value.Trim());
             //获取Com列表
             ComArray = SerialPort.GetPortNames();
             if (ComArray.Length > 0)
@@ -886,6 +887,33 @@ namespace PssHighLowTemperature.ViewModel
                     State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
                     Thread.Sleep(200);
 
+                    //获取SN 12位
+                    uint count = 0xC;
+                    State = PssDOA.ReadDDM(PssBase.CARDID_3, PssBase.ENDSIGN_1, 0xA1, 0x00, count, Serbuf);
+                    if (State != 0)
+                    {
+                        MessageBox.Show("查询SN失败,请重试！", "系统提示");
+                        return;
+                    }
+                    else
+                    {
+                        string sn = Encoding.ASCII.GetString(Serbuf);
+                        sn = sn.Substring(0, 35);
+                        Console.WriteLine(sn);
+
+                        string[] datas = sn.Split(' ');
+
+
+                        byte[] byteSn = new byte[count];
+                        for (int i = 0; i < count; i++)
+                        {
+                            byteSn[i] = Convert.ToByte(datas[i].Trim(), 16);
+                        }
+                        SN=(Encoding.ASCII.GetString(byteSn));
+                        TestParas.SN = SN;
+                        RaisePropertyChanged(() => TestParas);
+
+                    }
 
                     //pf power
                     State = PssOPM.OPMReadPower(PssBase.CARDID_4, PssBase.ENDSIGN_1, PssOPM.OPM_CHANNEL_1, ref _power);
@@ -1122,7 +1150,7 @@ namespace PssHighLowTemperature.ViewModel
                 return;
             }
             Coefficient = diff;
-            XDoc.Element("CalOfOpm").SetValue(Coefficient);
+            XDoc.Root.Element("CalOfOpm").SetValue(Coefficient);
         }
 
 
@@ -1200,6 +1228,7 @@ namespace PssHighLowTemperature.ViewModel
             }
             State = PssDOA.DOAReadCalibration(PssBase.CARDID_3, ENDSIGN, ref _calOfDOA);
             CalOfDOA = _calOfDOA;
+            XDoc.Root.Element("CalOfDoa").SetValue(CalOfDOA);
         }
         /// <summary>
         /// 系统校验命令

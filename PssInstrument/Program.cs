@@ -111,6 +111,7 @@ namespace PssInstrument
             {
                 Console.WriteLine("temp:{0}", temp);
             }
+            //查询SN  12位
             uint count = 0xC;
             state = PssDOA.ReadDDM(PssBase.CARDID_3, PssBase.ENDSIGN_1, 0xA1, 0x00, count, SerBuf);
             if (state != 0)
