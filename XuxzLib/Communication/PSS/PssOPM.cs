@@ -70,7 +70,7 @@ namespace XuxzLib.Communication
         /// <param name="endSign"></param>
         /// <returns>函数执行的错误信息</returns>
         [DllImport("PSS_OPM-C_DLL.dll", EntryPoint = "OPMReset", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int OPMReset(uint cardId, uint endSign);
+        public static extern uint OPMReset(uint cardId, uint endSign);
 
         /// <summary>
         /// 配置波长
@@ -81,7 +81,7 @@ namespace XuxzLib.Communication
         /// <param name="wavelength"></param>
         /// <returns></returns>
         [DllImport("PSS_OPM-C_DLL.dll", EntryPoint = "OPMConfWavelength", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int OPMConfWavelength(uint cardId, uint endSign,uint channelNum,uint wavelength);
+        public static extern uint OPMConfWavelength(uint cardId, uint endSign,uint channelNum,uint wavelength);
 
         
         /// <summary>
@@ -93,7 +93,7 @@ namespace XuxzLib.Communication
         /// <param name="wavelength"></param>
         /// <returns></returns>
         [DllImport("PSS_OPM-C_DLL.dll", EntryPoint = "OPMReadWavelength", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int OPMReadWavelength(uint cardId, uint endSign, uint channelNum, uint wavelength);
+        public static extern uint OPMReadWavelength(uint cardId, uint endSign, uint channelNum,ref uint wavelength);
 
         /// <summary>
         /// 配置功率单位
@@ -104,7 +104,7 @@ namespace XuxzLib.Communication
         /// <param name="powerUnit"></param>
         /// <returns></returns>
         [DllImport("PSS_OPM-C_DLL.dll", EntryPoint = "OPMConfUnit", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int OPMConfUnit(uint cardId, uint endSign, uint channelNum, byte[] powerUnit);
+        public static extern uint OPMConfUnit(uint cardId, uint endSign, uint channelNum, byte[] powerUnit);
 
         /// <summary>
         /// 获取当前功率单位
@@ -115,7 +115,7 @@ namespace XuxzLib.Communication
         /// <param name="powerUnit"></param>
         /// <returns></returns>
         [DllImport("PSS_OPM-C_DLL.dll", EntryPoint = "OPMReadUnit", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int OPMReadUnit(uint cardId, uint endSign, uint channelNum, byte[] powerUnit);
+        public static extern uint OPMReadUnit(uint cardId, uint endSign, uint channelNum, byte[] powerUnit);
 
         /// <summary>
         /// 读取功率值

@@ -7,9 +7,60 @@ namespace XuxzLib.Communication
 {
     public class Agilent86100A:DeviceBase
     {
+        /// <summary>
+        /// 安捷伦眼图仪(地址:7)
+        /// </summary>
+        /// <param name="add"></param>
         public Agilent86100A(string add):base(add)
         {
             DeviceName = "Agilent86100A";
+        }
+        public double GetCrossing(string chanNum)
+        {
+            string command = string.Format(":MEAS:CGR:CROS? CHAN{0}", chanNum);
+            string msg= WriteAndRead(command);
+            if(double.TryParse(msg.Trim(),out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public double GetPower(string chanNum)
+        {
+            string command = string.Format(":MEAS:APOW? DEC,CHAN{0}", chanNum);
+            string msg = WriteAndRead(command);
+            if (double.TryParse(msg.Trim(), out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public double GetExRatio(string chanNum)
+        {
+            string command = string.Format(":MEAS:CGR:ERAT? DEC,CHAN{0}", chanNum);
+            string msg = WriteAndRead(command);
+            if (double.TryParse(msg.Trim(), out double result))
+            {
+                return result;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 开始AutoScale
+        /// </summary>
+        public void AutoScale()
+        {
+            string command = ":AUT";
+            WriteCommand(command);
         }
         //crossing :MEAS:CGR:CROS? CHAN3  (选择channle)
         //average power :MEAS:APOW? DEC|WATT,CHAN3  单位：分贝|uW

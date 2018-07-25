@@ -61,7 +61,7 @@ namespace XuxzLib.Communication
         /// <param name="wavelength"></param>
         /// <returns>函数执行的错误信息</returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAConfWavelength", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DOAConfWavelength(uint cardId, uint endSign, uint wavelength);
+        public static extern uint DOAConfWavelength(uint cardId, uint endSign, uint wavelength);
 
         /// <summary>
         /// 获取当前波长
@@ -71,7 +71,7 @@ namespace XuxzLib.Communication
         /// <param name="wavelength"></param>
         /// <returns>函数执行的错误信息</returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAReadWavelength", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DOAReadWavelength(uint cardId, uint endSign, ref uint wavelength);
+        public static extern uint DOAReadWavelength(uint cardId, uint endSign, ref uint wavelength);
 
         /// <summary>
         /// 配置衰减量
@@ -101,7 +101,7 @@ namespace XuxzLib.Communication
         /// <param name="calibration"></param>
         /// <returns></returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAConfCalibration", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DOAConfCalibration(uint cardId, uint endSign, double calibration);
+        public static extern uint DOAConfCalibration(uint cardId, uint endSign, double calibration);
 
         /// <summary>
         /// 获取当前校准值(cal)
@@ -111,7 +111,7 @@ namespace XuxzLib.Communication
         /// <param name="atten"></param>
         /// <returns></returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAReadCalibration", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DOAReadCalibration(uint cardId, uint endSign, ref double atten);
+        public static extern uint DOAReadCalibration(uint cardId, uint endSign, ref double atten);
 
         /// <summary>
         /// 读取输出端功率
@@ -121,7 +121,7 @@ namespace XuxzLib.Communication
         /// <param name="power"></param>
         /// <returns></returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "DOAReadPower", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern int DOAReadPower(uint cardId, uint endSign, ref double power);
+        public static extern uint DOAReadPower(uint cardId, uint endSign, ref double power);
 
         /// <summary>
         ///设置输出光功率

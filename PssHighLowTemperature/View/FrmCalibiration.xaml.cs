@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace PssHighLowTemperature.View
 {
     /// <summary>
-    /// FrmSet.xaml 的交互逻辑
+    /// FrmCalibiration.xaml 的交互逻辑
     /// </summary>
-    public partial class FrmSet : Window
+    public partial class FrmCalibiration : Window
     {
-        public FrmSet()
+        public FrmCalibiration()
         {
             InitializeComponent();
         }

@@ -23,10 +23,9 @@ namespace PssHighLowTemperature.View
             InitializeComponent();
         }
 
-
-        private void btnSet_Click(object sender, RoutedEventArgs e)
+        private void btnCalibration_Click(object sender, RoutedEventArgs e)
         {
-            new FrmSet().ShowDialog();
+            new FrmCalibiration().ShowDialog();
         }
     }
 }

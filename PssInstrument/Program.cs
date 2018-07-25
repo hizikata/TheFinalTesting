@@ -39,7 +39,7 @@ namespace PssInstrument
             //Bert
             PssBert.BertWRRegist(ptrTx, ptrRx);
             //串口初始化
-            Rs232LinkInitial("COM9", 115200);
+            Rs232LinkInitial("COM7", 115200);
             Thread.Sleep(100);
 
 #if OPM
@@ -67,10 +67,10 @@ namespace PssInstrument
 
 
             //cal
-            double cal = 3.16;
-            PssDOA.DOAConfCalibration(PssBase.CARDID_3, PssBase.ENDSIGN_1, cal);
-            PssDOA.DOAReadCalibration(PssBase.CARDID_3, PssBase.ENDSIGN_1, ref cal);
-            Console.WriteLine("更改后cal:{0}", cal);
+            //double cal = 3.16;
+            //PssDOA.DOAConfCalibration(PssBase.CARDID_3, PssBase.ENDSIGN_1, cal);
+            //PssDOA.DOAReadCalibration(PssBase.CARDID_3, PssBase.ENDSIGN_1, ref cal);
+            //Console.WriteLine("更改后cal:{0}", cal);
             //波长
             uint wavelength = PssBase.AVELENGTH_1310NM;
             PssDOA.DOAConfWavelength(PssDOA.CARDID_3, PssBase.ENDSIGN_1, wavelength);
@@ -265,7 +265,7 @@ namespace PssInstrument
 
             PssBert.BertClr(cardPPG, PssBase.ENDSIGN_1, channelPPG);
             Thread.Sleep(300);
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 10; i++)
             {
                 //state = PssDOA.DOAConfAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, atten);
                 //Thread.Sleep(300);
@@ -276,14 +276,15 @@ namespace PssInstrument
                 state = PssBert.BertResult(cardPPG, PssBase.ENDSIGN_1, channelPPG, ref syncState, ref errorState, ref errorCount, ref all, ref ber);
                 Thread.Sleep(300);
                 state = PssBert.BertResult(cardPPG, PssBase.ENDSIGN_1, channelPPG, ref syncState, ref errorState, ref errorCount, ref all, ref ber);
+                Thread.Sleep(3000);   
                 if (state != 0)
                 {
                     Console.WriteLine("获取误码失败:{0}", state);
                 }
                 else
                 {
-                    //state = PssDOA.DOAConfAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, -27.5);
-                    //Thread.Sleep(300);
+                    state = PssDOA.DOAConfAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, -27.5);
+                    Thread.Sleep(300);
                     state = PssDOA.DOAReadAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, ref readAtten);
                     Console.WriteLine("Atten:{0}", readAtten);
                     Console.WriteLine("syncState:{0}", syncState);
