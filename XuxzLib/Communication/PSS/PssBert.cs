@@ -286,7 +286,7 @@ namespace XuxzLib.Communication
         /// <param name="ber">误码率</param>
         /// <returns></returns>
         [DllImport("PSS_BERT_15G_DLL.dll", EntryPoint = "BertResult", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint BertResult(uint cardId, uint endSign, uint channelNum, ref uint syncState, ref uint errorState, ref double errCount, ref double all, ref double ber);
+        public static extern uint BertResult(uint cardId, uint endSign, uint channelNum, out uint syncState, out uint errorState, out double errCount, out double all, out double ber);
 
         /// <summary>
         /// 测试时间查询

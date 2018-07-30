@@ -153,12 +153,12 @@ namespace XuxzLib.Communication
         /// <param name="cardId"></param>
         /// <param name="endSign"></param>
         /// <param name="slaveAdd"></param>
-        /// <param name="dateAdd"></param>
+        /// <param name="dataAdd"></param>
         /// <param name="dataLength"></param>
         /// <param name="data"></param>
         /// <returns></returns>
         [DllImport("PSS_DOA-C_DLL.dll", EntryPoint = "ReadDDM", ExactSpelling = false, CallingConvention = CallingConvention.StdCall)]
-        public static extern uint ReadDDM(uint cardId, uint endSign, byte slaveAdd, byte dateAdd, uint dataLength, byte[] data);
+        public static extern uint ReadDDM(uint cardId, uint endSign, byte slaveAdd, byte dataAdd, uint dataLength, byte[] data);
 
         /// <summary>
         /// 读取Tx端Bias

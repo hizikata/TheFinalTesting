@@ -39,7 +39,7 @@ namespace PssInstrument
             //Bert
             PssBert.BertWRRegist(ptrTx, ptrRx);
             //串口初始化
-            Rs232LinkInitial("COM7", 115200);
+            Rs232LinkInitial("COM9", 115200);
             Thread.Sleep(100);
 
 #if OPM
@@ -72,7 +72,7 @@ namespace PssInstrument
             //PssDOA.DOAReadCalibration(PssBase.CARDID_3, PssBase.ENDSIGN_1, ref cal);
             //Console.WriteLine("更改后cal:{0}", cal);
             //波长
-            uint wavelength = PssBase.AVELENGTH_1310NM;
+            uint wavelength = PssBase.WAVELENGTH_1550NM;
             PssDOA.DOAConfWavelength(PssDOA.CARDID_3, PssBase.ENDSIGN_1, wavelength);
             PssDOA.DOAReadWavelength(PssBase.CARDID_3, PssBase.ENDSIGN_1, ref wavelength);
             Console.WriteLine("波长：{0}", wavelength);
@@ -80,7 +80,7 @@ namespace PssInstrument
             double atten = 0;
             PssDOA.DOAReadAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, ref atten);
             Console.WriteLine("更改前衰减:{0}", atten);
-            atten = -27.5; //衰减只能设置为负数
+            atten = -28; //衰减只能设置为负数
             state = PssDOA.DOAConfAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, atten);
             Thread.Sleep(300);
             if (state == 0)
@@ -113,7 +113,7 @@ namespace PssInstrument
             }
             //查询SN  12位
             uint count = 0xC;
-            state = PssDOA.ReadDDM(PssBase.CARDID_3, PssBase.ENDSIGN_1, 0xA1, 0x00, count, SerBuf);
+            state = PssDOA.ReadDDM(PssBase.CARDID_3, PssBase.ENDSIGN_1, 0xA1, 68, count, SerBuf);
             if (state != 0)
             {
                 Console.WriteLine("查询SN失败");
@@ -132,8 +132,8 @@ namespace PssInstrument
                 {
                     byteSn[i] = Convert.ToByte(datas[i].Trim(),16); 
                 }
-                Console.WriteLine(Encoding.ASCII.GetString(byteSn));
-                
+                sn=(Encoding.ASCII.GetString(byteSn));
+                Console.WriteLine(sn);
 
             }
 #endif
@@ -158,11 +158,11 @@ namespace PssInstrument
 
 
             //码型
-            uint patter = PssBert.STYLE_PRB7;
+            uint patter = PssBert.STYLE_PRB31;
             //幅值
             uint level = PssBert.LEVEL_800;
             //速率
-            uint speed = PssBert.RATE_1G25;
+            uint speed = PssBert.RATE_9G95;
             //时间0连续  非0 设备运行时间段 在时间到达后会自动关闭？
             uint time = 0;
 
@@ -176,7 +176,37 @@ namespace PssInstrument
             uint channel4PPG = PssBert.CHANAL_1;
 
 
-
+            //PPG-15G-4
+            //4PPG配置
+            //轮询配置4通道
+            Console.WriteLine("开始配置4PPG");
+            for (uint i = 0; i < 4; i++)
+            {
+                //patter set/get
+                PssBert.BertPatterSet(card4PPG, PssBase.ENDSIGN_1, i, patter);
+                Thread.Sleep(200);
+                PssBert.BertPatterGet(card4PPG, PssBase.ENDSIGN_1, i, ref patter);
+                Thread.Sleep(200);
+                Console.WriteLine("patter:{0}", patter);
+                //level set/get
+                PssBert.BertLevelSet(card4PPG, PssBase.ENDSIGN_1, i, level);
+                Thread.Sleep(200);
+                PssBert.BertLevelGet(card4PPG, PssBase.ENDSIGN_1, i, ref level);
+                Thread.Sleep(200);
+                Console.WriteLine("level：{0}", level);
+            }
+            //速率
+            PssBert.BertSpeedSet(card4PPG, PssBase.ENDSIGN_1, channel4PPG, speed);
+            Thread.Sleep(4000);
+            PssBert.BertSpeedGet(card4PPG, PssBase.ENDSIGN_1, channel4PPG, ref speed);
+            Thread.Sleep(200);
+            Console.WriteLine("speed:{0}", speed);
+            //4通道轮询配置PG
+            for (uint i = 0; i < 4; i++)
+            {
+                PssBert.BertPGStart(card4PPG, PssBase.ENDSIGN_1, i);
+                Thread.Sleep(200);
+            }
 
 
             Console.WriteLine("开始配置BERT15G");
@@ -197,7 +227,7 @@ namespace PssInstrument
             Console.WriteLine("level：{0}", level);
             //speed set/get
             state = PssBert.BertSpeedSet(cardPPG, PssBase.ENDSIGN_1, channelPPG, speed);
-            Thread.Sleep(3000);
+            Thread.Sleep(4000);
             speed = 0;
             state = PssBert.BertSpeedGet(cardPPG, PssBase.ENDSIGN_1, channelPPG, ref speed);
             Thread.Sleep(200);
@@ -222,61 +252,31 @@ namespace PssInstrument
 
             //光衰改变了后，立即要调用clear 函数  在设置延时  例如Thread(1000)  然后读取误码率。
 
-            //PPG-15G-4
-            //4PPG配置
-            //轮询配置4通道
-            Console.WriteLine("开始配置4PPG");
-            for (uint i = 0; i < 4; i++)
-            {
-                //patter set/get
-                PssBert.BertPatterSet(card4PPG, PssBase.ENDSIGN_1, i, patter);
-                Thread.Sleep(200);
-                PssBert.BertPatterGet(card4PPG, PssBase.ENDSIGN_1, i, ref patter);
-                Thread.Sleep(200);
-                Console.WriteLine("patter:{0}", patter);
-                //level set/get
-                PssBert.BertLevelSet(card4PPG, PssBase.ENDSIGN_1, i, level);
-                Thread.Sleep(200);
-                PssBert.BertLevelGet(card4PPG, PssBase.ENDSIGN_1, i, ref level);
-                Thread.Sleep(200);
-                Console.WriteLine("level：{0}", level);
-            }
-            //速率
-            PssBert.BertSpeedSet(card4PPG, PssBase.ENDSIGN_1, channel4PPG, speed);
-            Thread.Sleep(3000);
-            PssBert.BertSpeedGet(card4PPG, PssBase.ENDSIGN_1, channel4PPG, ref speed);
-            Thread.Sleep(200);
-            Console.WriteLine("speed:{0}", speed);
-            //4通道轮询配置PG
-            for (uint i = 0; i < 4; i++)
-            {
-                PssBert.BertPGStart(card4PPG, PssBase.ENDSIGN_1, i);
-                Thread.Sleep(200);
-            }
+            
 
 
 
 
             double readAtten = 0;
 
-            //查询状态
+            //读取误码
             uint syncState = 0, errorState = 0;
             double all = 0, errorCount = 0, ber = 0;
 
 
-            PssBert.BertClr(cardPPG, PssBase.ENDSIGN_1, channelPPG);
-            Thread.Sleep(300);
-            for (int i = 0; i < 10; i++)
+
+            for (int i = 0; i < 3; i++)
             {
                 //state = PssDOA.DOAConfAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, atten);
                 //Thread.Sleep(300);
                 //atten -= 0.5;
 
+                PssBert.BertClr(cardPPG, PssBase.ENDSIGN_1, channelPPG);
+                Thread.Sleep(3000);
 
-
-                state = PssBert.BertResult(cardPPG, PssBase.ENDSIGN_1, channelPPG, ref syncState, ref errorState, ref errorCount, ref all, ref ber);
+                state = PssBert.BertResult(cardPPG, PssBase.ENDSIGN_1, channelPPG, out syncState, out errorState, out errorCount, out all, out ber);
                 Thread.Sleep(300);
-                state = PssBert.BertResult(cardPPG, PssBase.ENDSIGN_1, channelPPG, ref syncState, ref errorState, ref errorCount, ref all, ref ber);
+                state = PssBert.BertResult(cardPPG, PssBase.ENDSIGN_1, channelPPG, out syncState, out errorState, out errorCount, out all, out ber);
                 Thread.Sleep(3000);   
                 if (state != 0)
                 {
@@ -284,10 +284,10 @@ namespace PssInstrument
                 }
                 else
                 {
-                    state = PssDOA.DOAConfAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, -27.5);
-                    Thread.Sleep(300);
-                    state = PssDOA.DOAReadAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, ref readAtten);
-                    Console.WriteLine("Atten:{0}", readAtten);
+                    //state = PssDOA.DOAConfAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, -27.5);
+                    //Thread.Sleep(300);
+                    //state = PssDOA.DOAReadAtten(PssBase.CARDID_3, PssBase.ENDSIGN_1, ref readAtten);
+                    //Console.WriteLine("Atten:{0}", readAtten);
                     Console.WriteLine("syncState:{0}", syncState);
                     Console.WriteLine("errorState:{0}", errorState);
                     Console.WriteLine("all:{0}", all);

@@ -8,32 +8,32 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:local="clr-namespace:PssHighLowTemperature.View"
         mc:Ignorable="d" DataContext="{Binding Source={StaticResource locator}, Path=Main}"
-        WindowStartupLocation="CenterScreen"
-        Title="高低温测试" Height="575.333" Width="770">
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Title="高低温测试" Height="560" Width="803">
     <StackPanel>
         <ToolBar>
-            <Button Name="btnCalibration" Content="系统校验" Click="btnCalibration_Click"/>
+            <Button Name="btnCalibration" Content="系统校验" Click="btnCalibration_Click" FontSize="16"/>
         </ToolBar>
-        <TabControl FontSize="20">
+        <TabControl FontSize="20" FontWeight="Bold">
             <TabItem Header="设备">
                 <StackPanel>
                     <TextBlock Text="设备列表" FontSize="16"/>
                     <GroupBox Header="普赛斯设备">
                         <StackPanel>
                             <StackPanel Margin="5" Orientation="Horizontal">
-                                <TextBlock Text="COM:"/>
-                                <ComboBox Width="120" ItemsSource="{Binding ComArray}" SelectedItem="{Binding CurrentCom}"/>
-                                <Button Content="打开串口" Command="{Binding ComInit}"/>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="GPIB设备">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Ag86100"/>
-                                <Button Content="AutoScale"/>
+                                <TextBlock Text="Ag86100:"/>
+                                <TextBlock Text="地址:" Margin="10,0,5,0"/>
+                                <TextBlock Text="7"/>
+                                <TextBlock Text="通道:"  Margin="10,0,5,0"/>
+                                <ComboBox ItemsSource="{Binding DcaChannelArray}" SelectedIndex="0"
+                                          SelectedItem="{Binding DcaChannelArray, Mode=TwoWay}"/>
                                 <Button Content="CalModule"/>
-                                <Button Content=""/>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
@@ -83,14 +83,7 @@
                                     <TextBlock Text="ERMin:"/>
                                     <ex:DecimalUpDown Text="{Binding ErMin}"/>
                                 </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="RxMax:"/>
-                                    <ex:DecimalUpDown Text="{Binding RxMax}"/>
-                                </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="RxMin:"/>
-                                    <ex:DecimalUpDown Text="{Binding RxMin}"/>
-                                </StackPanel>
+
 
                             </StackPanel>
                             <StackPanel Margin="5" Grid.Column="2">
@@ -116,30 +109,29 @@
                     <GroupBox Header="测试条件">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="280"/>
                                 <ColumnDefinition Width="200*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Margin="5" Grid.Column="0">
 
                                 <StackPanel Margin="5" Orientation="Horizontal">
                                     <TextBlock Text="波长:"/>
-                                    <ComboBox Width="120" ItemsSource="{Binding WavelengthArray}" SelectedItem="{Binding RxWavelength, Mode=TwoWay}"/>
+                                    <ComboBox Width="160" ItemsSource="{Binding WavelengthArray}" SelectedItem="{Binding RxWavelength, Mode=TwoWay}"/>
                                 </StackPanel>
                                 <StackPanel Margin="5" Orientation="Horizontal">
                                     <TextBlock Text="码型:"/>
-                                    <ComboBox Width="120" ItemsSource="{Binding PatterArray}" SelectedIndex="{Binding Patter, Mode=TwoWay}"/>
+                                    <ComboBox Width="160" ItemsSource="{Binding PatterArray}" SelectedIndex="{Binding Patter, Mode=TwoWay}"/>
                                 </StackPanel>
                                 <StackPanel Margin="5" Orientation="Horizontal">
                                     <TextBlock Text="幅值:"/>
-                                    <ComboBox Width="120" ItemsSource="{Binding LevelArray}" SelectedIndex="{Binding Level, Mode=TwoWay}"/>
+                                    <ComboBox Width="160" ItemsSource="{Binding LevelArray}" SelectedIndex="{Binding Level, Mode=TwoWay}"/>
                                 </StackPanel>
                                 <StackPanel Margin="5" Orientation="Horizontal">
                                     <TextBlock Text="速率:"/>
-                                    <ComboBox Width="120" ItemsSource="{Binding SpeedArray}" SelectedIndex="{Binding Speed,Mode=TwoWay}"/>
+                                    <ComboBox Width="160" ItemsSource="{Binding SpeedArray}" SelectedIndex="{Binding Speed,Mode=TwoWay}"/>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Margin="5" Grid.Column="1">
-                                
                                 <StackPanel Margin="5" Orientation="Horizontal">
                                     <TextBlock Text="Rx Point1@"/>
                                     <ex:DecimalUpDown Text="{Binding Rx1Set}"/>
@@ -151,6 +143,14 @@
                                 <StackPanel Margin="5" Orientation="Horizontal">
                                     <TextBlock Text="Rx Point3@"/>
                                     <ex:DecimalUpDown Text="{Binding Rx3Set}"/>
+                                </StackPanel>
+                                <StackPanel Margin="5" Orientation="Horizontal">
+                                    <TextBlock Text="上限:"/>
+                                    <ex:DecimalUpDown Text="{Binding RxMax}"/>
+                                </StackPanel>
+                                <StackPanel Margin="5" Orientation="Horizontal">
+                                    <TextBlock Text="下限:"/>
+                                    <ex:DecimalUpDown Text="{Binding RxMin}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5">
                                     <TextBlock Text="Sen@"/>
@@ -167,91 +167,135 @@
             </TabItem>
             <TabItem Header="测试" IsSelected="True">
                 <StackPanel>
+                    <GroupBox Header="测试区域" BorderThickness="3">
+                        <StackPanel>
+                            <StackPanel Margin="8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="SN:"/>
+                                    <TextBox Width="200" Text="{Binding TestParas.SN, Mode=TwoWay}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding Test}" Key="Return"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                    <Button Content="开始测试" Command="{Binding Test}" IsEnabled="{Binding IsTestEnable}"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="75"/>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="75"/>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
 
-                    <StackPanel Margin="8">
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <TextBlock Text="温度:"/>
-                            <ComboBox Width="80" ItemsSource="{Binding TempLevelArray}" SelectedItem="{Binding TempLevel,Mode=TwoWay}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="COM:" Padding="0,8"/>
-                            <ComboBox Width="120" ItemsSource="{Binding ComArray}" SelectedItem="{Binding CurrentCom}"
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Pf:" Margin="5" HorizontalAlignment="Left"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="ER:" Margin="5" HorizontalAlignment="Left"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="CROS:" Margin="0,5" HorizontalAlignment="Left"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="SEN:" Margin="5" HorizontalAlignment="Left"/>
+
+
+                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                                    <TextBox Text="{Binding TestParas.Power, Mode=OneWay}"  IsHitTestVisible="False"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsPowerPass, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.ExRatio, Mode=OneWay}"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsExRatioPass, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Crossing, Mode=OneWay}"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsCrossPass, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Sensitivity, Mode= OneWay}"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsSensitivity, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+
+
+
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Rx1:" Margin="5"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="Rx2:" Margin="5"/>
+                                <TextBlock Grid.Row="2" Grid.Column="2" Text="Rx3:" Margin="5"/>
+                                <TextBlock Grid.Row="3" Grid.Column="2" Text="Temp:" Margin="0,5"/>
+                                <TextBlock Grid.Row="4" Grid.Column="2" Text="Bias:" Margin="0,5"/>
+
+
+
+                                <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal" Margin="0,5">
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.RxPoint1,Mode=OneWay}"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsRxPoint1Pass, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" Margin="0,5">
+
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.RxPoint2,Mode=OneWay}"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsRxPoint2Pass, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal" Margin="0,5">
+
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.RxPoint3,Mode=OneWay}"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsRxPoint3Pass, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal" Margin="0,5">
+
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Temperature, Mode=OneWay}"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsTempPass, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="4" Grid.Column="3" Orientation="Horizontal" Margin="0,5">
+
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Bias,Mode=OneWay}"/>
+                                    <Image Width="24" Height="24" Source="{Binding TestParas.IsBiasPass, Converter={StaticResource imageCon}}" />
+                                </StackPanel>
+
+                                <Grid Grid.Column="4">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                        <TextBlock Text="当前温度:"/>
+                                        <TextBlock Text="{Binding TempLevel}"/>
+                                    </StackPanel>
+                                    <Image Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Height="100" Width="100"
+                                       Source="{Binding TestParas.FinalResult, Converter={StaticResource imageCon}}" Margin="55,21,149,0" />
+                                </Grid>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="COM:" Padding="12,8,0,8"/>
+                                <ComboBox Width="120" ItemsSource="{Binding ComArray}" SelectedItem="{Binding CurrentCom}"
                                       VerticalAlignment="Center"/>
-                            <Button Content="初始化" HorizontalAlignment="Left" Margin="5"
+                                <Button Content="初始化" HorizontalAlignment="Left" Margin="5" IsEnabled="{Binding IsIniReady}"
                                 Command="{Binding Initialize}"/>
-                        </StackPanel>
-                      
-                        <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="温度:" Padding="8" Margin="30,0,5,0"/>
+                                <ComboBox Width="80" ItemsSource="{Binding TempLevelArray}" SelectedItem="{Binding TempLevel,Mode=TwoWay}"
+                                      VerticalAlignment="Center"/>
+                                <TextBlock Text="型号" Padding="5,8"/>
+                                <ComboBox MinWidth="200" ItemsSource="{Binding ProductTypeArray}" SelectedItem="{Binding ProductType}"
+                                          VerticalAlignment="Center"/>
 
-                            <TextBlock Text="SN:"/>
-                            <TextBox Width="200" Text="{Binding TestParas.SN, Mode=TwoWay}">
-                                <TextBox.InputBindings>
-                                    <KeyBinding Command="{Binding Test}" Key="Return"/>
-                                </TextBox.InputBindings>
-                            </TextBox>
-                            <Button Content="开始测试" Command="{Binding Test}" IsEnabled="{Binding IsTestEnable}"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="280"/>
-                            <ColumnDefinition Width="280*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Margin="8">
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Pf:"/>
-                                <TextBox Text="{Binding TestParas.Power, Mode=OneWay}"  IsHitTestVisible="False"/>
-                                <Image Width="24" Height="24" Source="{Binding IsPfPass, Converter={StaticResource imageCon}}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="ER:"/>
-                                <TextBox  IsHitTestVisible="False" Text="{Binding ExRatio, Mode=OneWay}"/>
-                                <Image Width="24" Height="24" Source="{Binding IsErPass, Converter={StaticResource imageCon}}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="CROS:"/>
-                                <TextBox  IsHitTestVisible="False" Text="{Binding Crossing, Mode=OneWay}"/>
-                                <Image Width="24" Height="24" Source="{Binding IsCrosPass, Converter={StaticResource imageCon}}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="SEN:"/>
-                                <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Sensitivity, Mode= OneWay}"/>
-                                <Image Width="24" Height="24" Source="{Binding IsSenPass, Converter={StaticResource imageCon}}" />
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Grid.Column="1">
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Rx1:"/>
-                                <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.RxPoint1,Mode=OneWay}"/>
-                                <Image Width="24" Height="24" Source="{Binding IsRx1Pass, Converter={StaticResource imageCon}}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Rx2:"/>
-                                <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.RxPoint2,Mode=OneWay}"/>
-                                <Image Width="24" Height="24" Source="{Binding IsRx2Pass, Converter={StaticResource imageCon}}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Rx3:"/>
-                                <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.RxPoint3,Mode=OneWay}"/>
-                                <Image Width="24" Height="24" Source="{Binding IsRx3Pass, Converter={StaticResource imageCon}}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Temp:"/>
-                                <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Temperature, Mode=OneWay}"/>
-                                <Image Width="24" Height="24" Source="{Binding IsTempPass, Converter={StaticResource imageCon}}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="Bias:"/>
-                                <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Bias,Mode=OneWay}"/>
-                                <Image Width="24" Height="24" Source="{Binding IsBiasPass, Converter={StaticResource imageCon}}" />
+                    </GroupBox>
+                    <GroupBox Header="参数展示">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="功率计Cal："/>
+                                <TextBlock Text="{Binding Coefficient}"/>
+                                <TextBlock Text="衰减器Cal：" Margin="18,0,0,0"/>
+                                <TextBlock Text="{Binding CalOfDOA}"/>
                             </StackPanel>
                         </StackPanel>
-                    </Grid>
-                    <StackPanel Margin="5">
-                        <TextBlock Text="信息展示"/>
-                        <TextBox Width="400" Height="160" HorizontalAlignment="Left" 
-                     Text="{Binding DisplayInfo}"/>
-                    </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
         </TabControl>
