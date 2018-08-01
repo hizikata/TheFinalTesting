@@ -490,7 +490,7 @@ namespace PssHighLowTemperature.ViewModel
             TestParas = new TestingParameters();
             ChannelArray = new string[] { "Chan0", "Chan1", "Chan2", "Chan3" };
             WavelengthArray = new uint[] { 850, 1270, 1310, 1330, 1490, 1550, 1577 };
-            TempLevelArray = new string[] { "-40", "85" };
+            TempLevelArray = new string[] { "-40","25", "85" };
             PatterArray = new string[]{ "STYLE_PRB7", "STYLE_PRB9" , "STYLE_PRB15" , "STYLE_PRB23", "STYLE_PRB31", "STYLE_PRB58", "STYLE_CJTPAT",
             "STYLE_CRPAT","STYLE_CSPAT","STYLE_USER","STYLE_CRPATL","STYLE_CRPATH"};
             LevelArray = new string[] { "LEVEL_400", "LEVEL_500", "LEVEL_600", "LEVEL_700", "LEVEL_800", "LEVEL_900", "LEVEL_1000" ,
@@ -592,6 +592,10 @@ namespace PssHighLowTemperature.ViewModel
                 MessageBox.Show("请先初始化Com", "系统提示");
                 return;
             }
+            //设置波长
+            State = PssOPM.OPMConfWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, RxWavelength);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_4);
             State = PssOPM.OPMReadPower(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref _opmAtt);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_4);
@@ -790,10 +794,9 @@ namespace PssHighLowTemperature.ViewModel
                       //眼图仪初始化
                       Ag8610 = new Agilent86100A("7");
                       string idnAg8610 = Ag8610.GetIdn();
-                      if (!string.IsNullOrEmpty(idnAg8610))
+                      if (string.IsNullOrEmpty(idnAg8610.Trim()))
                       {
-                          MessageBox.Show(idnAg8610);
-
+                          MessageBox.Show("眼图仪初始化失败", "系统提示");
                       }
 #endif
                       MessageBox.Show("初始化成功", "系统提示");
@@ -850,6 +853,7 @@ namespace PssHighLowTemperature.ViewModel
                     CheckState(State, PssBase.CARDID_3);
                     State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
                     Thread.Sleep(200);
+                    CheckState(State, PssBase.CARDID_3);
 
                     //获取SN 12位
                     uint count = 0xC;
@@ -907,76 +911,7 @@ namespace PssHighLowTemperature.ViewModel
                     }
                     RaisePropertyChanged(() => TestParas);
 
-                    //temp
-                    State = PssDOA.ReadDDM_Temperature(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _temp);
-                    Thread.Sleep(200);
-                    CheckState(State, PssBase.CARDID_3);
-                    Temp = _temp;
-                    TestParas.Temperature = Temp.ToString("f2");
-                    switch (TempLevel)
-                    {
-                        case "-40":
-                            if (Temp < -15)
-                            {
-                                TestParas.IsTempPass = true;
-                            }
-                            else
-                            {
-                                TestParas.IsTempPass = false;
-                            }
-                            break;
-                        case "85":
-                            if (Temp < 0)
-                            {
-                                MessageBox.Show("温度测试条件选择失败", "系统提示");
-                                return;
-                            }
-                            if (Temp < 80)
-                            {
-                                TestParas.IsTempPass = true;
-                            }
-                            else
-                            {
-                                TestParas.IsTempPass = false;
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                    RaisePropertyChanged(() => TestParas);
-                    //Bias
-                    State = PssDOA.ReadDDM_BiasTx(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _bias);
-                    Thread.Sleep(200);
-                    CheckState(State, PssBase.CARDID_3);
-                    Bias = _bias / 1000;
-                    TestParas.Bias = Bias.ToString("f2");
-                    if (Bias >= BiasMin && Bias <= BiasMax)
-                    {
-                        TestParas.IsBiasPass = true;
-
-                    }
-                    else
-                    {
-                        TestParas.IsBiasPass = false;
-                    }
-                    RaisePropertyChanged(() => TestParas);
-                    //Sensitivity
-
-                    double sen = GetSensitivity(PssBase.CARDID_2);
-                    Sen = sen.ToString("E");
-                    TestParas.Sensitivity = Math.Log10(sen).ToString("f2");
-                    if (Math.Log10(sen) <= (ErSet))
-                    {
-                        TestParas.IsSensitivity = true;
-
-                    }
-                    else
-                    {
-                        TestParas.IsSensitivity = false;
-                    }
-
-                    RaisePropertyChanged(() => TestParas);
+                    
 
                     //Rx Points
                     //Rx  Point1
@@ -1045,6 +980,87 @@ namespace PssHighLowTemperature.ViewModel
                     {
                         TestParas.IsRxPoint3Pass = false;
                     }
+
+                    //设置测试时衰减
+                    State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
+                    Thread.Sleep(300);
+                    CheckState(State, PssBase.CARDID_3);
+                    State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
+                    Thread.Sleep(200);
+                    CheckState(State, PssBase.CARDID_3);
+                    //temp
+                    State = PssDOA.ReadDDM_Temperature(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _temp);
+                    Thread.Sleep(200);
+                    CheckState(State, PssBase.CARDID_3);
+                    Temp = _temp;
+                    TestParas.Temperature = Temp.ToString("f2");
+                    switch (TempLevel)
+                    {
+                        case "-40":
+                            if (Temp < -15)
+                            {
+                                TestParas.IsTempPass = true;
+                            }
+                            else
+                            {
+                                TestParas.IsTempPass = false;
+                            }
+                            break;
+                        case "25":
+                            TestParas.IsTempPass = true;
+                            break;
+                        case "85":
+                            if (Temp < 0)
+                            {
+                                MessageBox.Show("温度测试条件选择失败", "系统提示");
+                                return;
+                            }
+                            if (Temp < 80)
+                            {
+                                TestParas.IsTempPass = true;
+                            }
+                            else
+                            {
+                                TestParas.IsTempPass = false;
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                    RaisePropertyChanged(() => TestParas);
+                    //Bias
+                    State = PssDOA.ReadDDM_BiasTx(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _bias);
+                    Thread.Sleep(200);
+                    CheckState(State, PssBase.CARDID_3);
+                    Bias = _bias / 1000;
+                    TestParas.Bias = Bias.ToString("f2");
+                    if (Bias >= BiasMin && Bias <= BiasMax)
+                    {
+                        TestParas.IsBiasPass = true;
+
+                    }
+                    else
+                    {
+                        TestParas.IsBiasPass = false;
+                    }
+                    RaisePropertyChanged(() => TestParas);
+                    //Sensitivity
+
+                    double sen = GetSensitivity(PssBase.CARDID_2);
+                    Sen = sen.ToString("E");
+                    TestParas.Sensitivity = Math.Log10(sen).ToString("f2");
+                    if (Math.Log10(sen) <= (ErSet))
+                    {
+                        TestParas.IsSensitivity = true;
+
+                    }
+                    else
+                    {
+                        TestParas.IsSensitivity = false;
+                    }
+
+                    RaisePropertyChanged(() => TestParas);
                     //Thread.Sleep(5000);
 #if Ag86100
                     //Crossing
@@ -1074,17 +1090,7 @@ namespace PssHighLowTemperature.ViewModel
                         TestParas.IsExRatioPass = false;
                     }
                     RaisePropertyChanged(() => TestParas);
-                    //final result
-                    if (TestParas.IsBiasPass == true && TestParas.IsCrossPass == true && TestParas.IsExRatioPass == true && TestParas.IsPowerPass == true
-                    && TestParas.IsRxPoint1Pass == true && TestParas.IsRxPoint2Pass == true && TestParas.IsRxPoint3Pass == true &&
-                    TestParas.IsSensitivity == true && TestParas.IsTempPass == true)
-                    {
-                        TestParas.FinalResult = true;
-                    }
-                    else
-                    {
-                        TestParas.FinalResult = false;
-                    }
+                    
 #endif
                     IsTestEnable = true;
                     //导出数据
@@ -1127,11 +1133,22 @@ namespace PssHighLowTemperature.ViewModel
                             {
                                 sw.WriteLine("SN,PF,ER,CROSS,SEN,RX PF10,RX PF20,RX PF30,Temp,Bias,Final,time,chtemp,producttype");
                             }
-                            sw.WriteLine(TestParas.ToString());
-                            MessageBox.Show("数据导出成功", "系统提示");
+                            sw.WriteLine(TestParas.ToString());                            
                             TestParas.SN = string.Empty;
                             RaisePropertyChanged(() => TestParas);
                         }
+                    }
+                    //final result
+                    if (TestParas.IsBiasPass == true && TestParas.IsCrossPass == true && TestParas.IsExRatioPass == true && TestParas.IsPowerPass == true
+                    && TestParas.IsRxPoint1Pass == true && TestParas.IsRxPoint2Pass == true && TestParas.IsRxPoint3Pass == true &&
+                    TestParas.IsSensitivity == true && TestParas.IsTempPass == true)
+                    {
+                        TestParas.FinalResult = true;
+                    }
+                    else
+                    {
+                        TestParas.FinalResult = false;
+                        MessageBox.Show("产品测量不合格，请重试", "系统提示");
                     }
                 });
                 thread.IsBackground = true;
@@ -1200,11 +1217,47 @@ namespace PssHighLowTemperature.ViewModel
         }
 
 
-
-
-
         /// <summary>
-        /// 光衰减模块校验
+        /// 设定衰减器Att
+        /// </summary>
+        public RelayCommand SetDoaAtt
+        {
+            get
+            {
+                return new RelayCommand(() => ExecuteSetDoaAtt());
+            }
+        }
+        private void ExecuteSetDoaAtt()
+        {
+            uint readData = 0;
+            double att = 0;
+            //设置波长
+            State = PssOPM.OPMConfWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, RxWavelength);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_4);
+            State = PssOPM.OPMReadWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref readData);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_4);
+            if (readData != RxWavelength)
+            {
+                MessageBox.Show("波长设置失败,请重新设置", "系统设置");
+                return;
+            }
+            //设置Att
+            State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, StandardAtt);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_3);
+            State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref att);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_3);
+            if (att != StandardAtt)
+            {
+                MessageBox.Show("衰减模块衰减设置失败,请重试", "系统提示");
+                return;
+            }
+        }
+        /// <summary>
+        /// 光衰减模块修正
         /// </summary>
         public RelayCommand DoaCalibration
         {
@@ -1227,13 +1280,13 @@ namespace PssHighLowTemperature.ViewModel
             uint readData = 0;
             MessageBox.Show("请将Rx端光纤连接到光功率计模块", "系统提示");
             //设置波长
-            State = PssOPM.OPMConfWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, TxWavelength);
+            State = PssOPM.OPMConfWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, RxWavelength);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_4);
             State = PssOPM.OPMReadWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref readData);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_4);
-            if (readData != TxWavelength)
+            if (readData != RxWavelength)
             {
                 MessageBox.Show("波长设置失败,请重新设置", "系统设置");
                 return;
@@ -1241,12 +1294,10 @@ namespace PssHighLowTemperature.ViewModel
             double cal = 0;
             double att = 0;
             //读取初始Calibration
-            State = PssDOA.DOAConfCalibration(PssBase.CARDID_3, ENDSIGN, cal);
-            Thread.Sleep(200);
-            CheckState(State, PssBase.CARDID_3);
             State = PssDOA.DOAReadCalibration(PssBase.CARDID_3, ENDSIGN, ref cal);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_3);
+            //设置Att
             State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, StandardAtt);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_3);
@@ -1258,10 +1309,8 @@ namespace PssHighLowTemperature.ViewModel
                 MessageBox.Show("衰减模块衰减设置失败,请重试", "系统提示");
                 return;
             }
-            State = PssDOA.DOAReadCalibration(PssBase.CARDID_3, ENDSIGN, ref cal);
-            Thread.Sleep(200);
-            CheckState(State, PssBase.CARDID_3);
-            State = PssOPM.OPMReadPower(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref _actualAtt);
+            //使用光衰减器和设定值比对
+            State = PssDOA.DOAReadPower(PssBase.CARDID_3, ENDSIGN, ref _actualAtt);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_4);
             ActualAtt = _actualAtt;

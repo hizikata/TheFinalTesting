@@ -287,14 +287,14 @@
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="参数展示">
-                        <StackPanel>
+                        <!--<StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="功率计Cal："/>
                                 <TextBlock Text="{Binding Coefficient}"/>
                                 <TextBlock Text="衰减器Cal：" Margin="18,0,0,0"/>
                                 <TextBlock Text="{Binding CalOfDOA}"/>
                             </StackPanel>
-                        </StackPanel>
+                        </StackPanel>-->
                     </GroupBox>
                 </StackPanel>
             </TabItem>

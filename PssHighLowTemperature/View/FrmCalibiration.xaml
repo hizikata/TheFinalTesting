@@ -7,7 +7,7 @@
         mc:Ignorable="d" FontSize="20" WindowStartupLocation="CenterScreen"
         DataContext="{Binding Source={StaticResource locator}, Path=Main}"
         ResizeMode="NoResize"
-        Title="系统校验" Height="477" Width="805">
+        Title="系统校验" Height="477" Width="491.112">
     <StackPanel>
         <GroupBox Header="光功率模块校验" Margin="8">
             <StackPanel>
@@ -55,6 +55,7 @@
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="基准值/dBm:"/>
                     <TextBox Text="{Binding StandardAtt}"/>
+                    <Button Content="设定" Command="{Binding SetDoaAtt}"/>
                     <Button Content="修正" Command="{Binding DoaCalibration}"/>
                 </StackPanel>
 
