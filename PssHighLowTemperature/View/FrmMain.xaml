@@ -31,8 +31,8 @@
                                 <TextBlock Text="地址:" Margin="10,0,5,0"/>
                                 <TextBlock Text="7"/>
                                 <TextBlock Text="通道:"  Margin="10,0,5,0"/>
-                                <ComboBox ItemsSource="{Binding DcaChannelArray}" SelectedIndex="0"
-                                          SelectedItem="{Binding DcaChannelArray, Mode=TwoWay}"/>
+                                <ComboBox ItemsSource="{Binding DcaChannelArray}"
+                                          SelectedItem="{Binding DcaChannle, Mode=TwoWay}"/>
                                 <Button Content="CalModule"/>
                             </StackPanel>
                         </StackPanel>
@@ -51,9 +51,9 @@
                     <GroupBox Header="参数设置">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="200"/>
-                                <ColumnDefinition Width="200"/>
-                                <ColumnDefinition Width="200*"/>
+                                <ColumnDefinition Width="276"/>
+                                <ColumnDefinition Width="232"/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Margin="5" Grid.Column="0">
                                 <StackPanel Margin="5" Orientation="Horizontal">
@@ -65,12 +65,12 @@
                                     <ex:DecimalUpDown Text="{Binding PfMin}"/>
                                 </StackPanel>
                                 <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="CrosMax:"/>
-                                    <ex:DecimalUpDown Text="{Binding CrosMax}"/>
+                                    <TextBlock Text="BiasMax:"/>
+                                    <ex:DecimalUpDown Text="{Binding BiasMax}"/>
                                 </StackPanel>
                                 <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="CrosMin:"/>
-                                    <ex:DecimalUpDown Text="{Binding CrosMin}"/>
+                                    <TextBlock Text="BiasMin:"/>
+                                    <ex:DecimalUpDown Text="{Binding BiasMin}"/>
                                 </StackPanel>
 
                             </StackPanel>
@@ -83,26 +83,26 @@
                                     <TextBlock Text="ERMin:"/>
                                     <ex:DecimalUpDown Text="{Binding ErMin}"/>
                                 </StackPanel>
-
+                                <StackPanel Margin="5" Orientation="Horizontal">
+                                    <TextBlock Text="CrosMax:"/>
+                                    <ex:DecimalUpDown Text="{Binding CrosMax}"/>
+                                </StackPanel>
+                                <StackPanel Margin="5" Orientation="Horizontal">
+                                    <TextBlock Text="CrosMin:"/>
+                                    <ex:DecimalUpDown Text="{Binding CrosMin}"/>
+                                </StackPanel>
 
                             </StackPanel>
                             <StackPanel Margin="5" Grid.Column="2">
-                                <StackPanel Margin="5" Orientation="Horizontal">
+                                <!--<StackPanel Margin="5" Orientation="Horizontal">
                                     <TextBlock Text="TempMax:"/>
                                     <ex:DecimalUpDown Text="{Binding TempMax}"/>
                                 </StackPanel>
                                 <StackPanel Margin="5" Orientation="Horizontal">
                                     <TextBlock Text="TempMin:"/>
                                     <ex:DecimalUpDown Text="{Binding TempMin}"/>
-                                </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="BiasMax:"/>
-                                    <ex:DecimalUpDown Text="{Binding BiasMax}"/>
-                                </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="BiasMin:"/>
-                                    <ex:DecimalUpDown Text="{Binding BiasMin}"/>
-                                </StackPanel>
+                                </StackPanel>-->
+
                             </StackPanel>
                         </Grid>
                     </GroupBox>
@@ -131,34 +131,45 @@
                                     <ComboBox Width="160" ItemsSource="{Binding SpeedArray}" SelectedIndex="{Binding Speed,Mode=TwoWay}"/>
                                 </StackPanel>
                             </StackPanel>
-                            <StackPanel Margin="5" Grid.Column="1">
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="Rx Point1@"/>
-                                    <ex:DecimalUpDown Text="{Binding Rx1Set}"/>
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="356"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Margin="5" Grid.Column="0">
+                                    <StackPanel Margin="5" Orientation="Horizontal">
+                                        <TextBlock Text="Rx Point1@"/>
+                                        <ex:DecimalUpDown Text="{Binding Rx1Set}"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Orientation="Horizontal">
+                                        <TextBlock Text="Rx Point2@"/>
+                                        <ex:DecimalUpDown Text="{Binding Rx2Set}"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Orientation="Horizontal">
+                                        <TextBlock Text="Rx Point3@"/>
+                                        <ex:DecimalUpDown Text="{Binding Rx3Set}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                        <TextBlock Text="Sen@"/>
+                                        <ex:DecimalUpDown Text="{Binding SenSet}"/>
+                                        <TextBlock Text="ErRate@" Margin="5,0"/>
+                                        <ex:DecimalUpDown Text="{Binding ErSet}"/>
+                                    </StackPanel>
+
+
                                 </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="Rx Point2@"/>
-                                    <ex:DecimalUpDown Text="{Binding Rx2Set}"/>
+                                <StackPanel Grid.Column="1">
+                                    <StackPanel Margin="5" Orientation="Horizontal">
+                                        <TextBlock Text="上限:"/>
+                                        <ex:DecimalUpDown Text="{Binding RxMax}"/>
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Orientation="Horizontal">
+                                        <TextBlock Text="下限:"/>
+                                        <ex:DecimalUpDown Text="{Binding RxMin}"/>
+                                    </StackPanel>
                                 </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="Rx Point3@"/>
-                                    <ex:DecimalUpDown Text="{Binding Rx3Set}"/>
-                                </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="上限:"/>
-                                    <ex:DecimalUpDown Text="{Binding RxMax}"/>
-                                </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="下限:"/>
-                                    <ex:DecimalUpDown Text="{Binding RxMin}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="5">
-                                    <TextBlock Text="Sen@"/>
-                                    <ex:DecimalUpDown Text="{Binding SenSet}"/>
-                                    <TextBlock Text="Error Rate@" Margin="10,0"/>
-                                    <ex:DecimalUpDown Text="{Binding ErSet}"/>
-                                </StackPanel>
-                            </StackPanel>
+
+                            </Grid>
 
                         </Grid>
 
@@ -266,9 +277,10 @@
                                         <TextBlock Text="当前温度:"/>
                                         <TextBlock Text="{Binding TempLevel}"/>
                                     </StackPanel>
-                                    <Image Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Height="100" Width="100"
-                                       Source="{Binding TestParas.FinalResult, Converter={StaticResource imageCon}}" Margin="55,21,149,0" />
+                                    
                                 </Grid>
+                                <Image Grid.Row="1" Grid.Column="4" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Center" Height="113" Width="113"
+                                       Source="{Binding TestParas.FinalResult, Converter={StaticResource imageCon}}" Margin="45,10,151,-123" />
                             </Grid>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="COM:" Padding="12,8,0,8"/>

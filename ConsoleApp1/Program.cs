@@ -22,16 +22,11 @@ namespace ConsoleApp1
         {
             try
             {
-                using (FileStream fs = File.Open(@"D:\Test.txt", FileMode.Append,
-                    FileAccess.Write, FileShare.None))
-                {
-                    using(StreamWriter sw=new StreamWriter(fs))
-                    {
-                        sw.WriteLine("hello world!");
-                        sw.WriteLine("nice to meet you !");
-                    }
-                }
+                string a = "10e-003";
+                bool flag= double.TryParse(a, out double result);
+                Console.WriteLine(flag);
                 Console.ReadKey();
+                
             }
             catch (Exception ee)
             {

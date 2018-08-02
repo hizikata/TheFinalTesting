@@ -50,12 +50,22 @@ namespace PssHighLowTemperature.ViewModel
         #region Calibration Paras
         private static double _coefficient;
         /// <summary>
-        /// 光功率计校验系数
+        /// Tx光功率计校验系数
         /// </summary>
         public double Coefficient
         {
             get { return _coefficient; }
             set { _coefficient = value; RaisePropertyChanged(() => Coefficient); }
+        }
+        /// <summary>
+        /// rx校验时光功率计校验系数
+        /// </summary>
+        private double _coeOfRx;
+
+        public double CoeOfRx
+        {
+            get { return _coeOfRx; }
+            set { _coeOfRx = value;RaisePropertyChanged(() => CoeOfRx); }
         }
 
         private double _standardPower;
@@ -94,7 +104,9 @@ namespace PssHighLowTemperature.ViewModel
             set { _standardAtt = value; RaisePropertyChanged(() => StandardAtt); }
         }
         private double _actualAtt;
-
+        /// <summary>
+        /// Doa内部读取衰减
+        /// </summary>
         public double ActualAtt
         {
             get { return _actualAtt; }
@@ -267,20 +279,20 @@ namespace PssHighLowTemperature.ViewModel
             set { _rxMin = value; RaisePropertyChanged(() => RxMin); }
         }
 
-        private double _tempMax;
+        //private double _tempMax;
 
-        public double TempMax
-        {
-            get { return _tempMax; }
-            set { _tempMax = value; RaisePropertyChanged(() => TempMax); }
-        }
-        private double _tempMin;
+        //public double TempMax
+        //{
+        //    get { return _tempMax; }
+        //    set { _tempMax = value; RaisePropertyChanged(() => TempMax); }
+        //}
+        //private double _tempMin;
 
-        public double TempMin
-        {
-            get { return _tempMin; }
-            set { _tempMin = value; RaisePropertyChanged(() => TempMin); }
-        }
+        //public double TempMin
+        //{
+        //    get { return _tempMin; }
+        //    set { _tempMin = value; RaisePropertyChanged(() => TempMin); }
+        //}
 
         private double _biasMax;
 
@@ -485,12 +497,13 @@ namespace PssHighLowTemperature.ViewModel
             ProductTypeArray = new string[] { "ETP69966-7TB4-F2" };
             ProductType = ProductTypeArray[0];
             DcaChannelArray = new string[] { "1", "2", "3", "4" };
+            DcaChannle = DcaChannelArray[0];
             IsIniReady = true;
             //初始化测试参数实例
             TestParas = new TestingParameters();
             ChannelArray = new string[] { "Chan0", "Chan1", "Chan2", "Chan3" };
             WavelengthArray = new uint[] { 850, 1270, 1310, 1330, 1490, 1550, 1577 };
-            TempLevelArray = new string[] { "-40","25", "85" };
+            TempLevelArray = new string[] { "-40", "25", "85" };
             PatterArray = new string[]{ "STYLE_PRB7", "STYLE_PRB9" , "STYLE_PRB15" , "STYLE_PRB23", "STYLE_PRB31", "STYLE_PRB58", "STYLE_CJTPAT",
             "STYLE_CRPAT","STYLE_CSPAT","STYLE_USER","STYLE_CRPATL","STYLE_CRPATH"};
             LevelArray = new string[] { "LEVEL_400", "LEVEL_500", "LEVEL_600", "LEVEL_700", "LEVEL_800", "LEVEL_900", "LEVEL_1000" ,
@@ -505,7 +518,7 @@ namespace PssHighLowTemperature.ViewModel
             OpmChannel = 1;
             StandardPower = 5.86;
             TempLevel = TempLevelArray[1];
-            StandardAtt = -20;
+            StandardAtt = -25;
             TxWavelength = WavelengthArray[1];
             RxWavelength = WavelengthArray[5];
             Patter = PssBert.STYLE_PRB31;
@@ -514,20 +527,20 @@ namespace PssHighLowTemperature.ViewModel
             Rx1Set = -10;
             Rx2Set = -19;
             Rx3Set = -28;
-            PfMax = 10;
-            PfMin = 1;
-            RxMax = 2;
-            RxMin = 2;
+            PfMax = 8.5;
+            PfMin = 4.2;
+            RxMax = 3;
+            RxMin = 3;
             SenSet = -28;
             ErSet = -3;
-            BiasMin = 0;
-            BiasMax = 20;
-            TempMin = 10;
-            TempMax = 70;
-            CrosMin = 45;
-            CrosMax = 55;
-            ErMin = 5;
-            ErMax = 15;
+            BiasMin = 0.1;
+            BiasMax = 50;
+            //TempMin = 10;
+            //TempMax = 70;
+            CrosMin = 35;
+            CrosMax = 65;
+            ErMin = 6.2;
+            ErMax = 10;
             InstruList = new Instru[]
             {
                 new Instru("PPG-4","-1","码型发生器模块",InstType.PssInstru),
@@ -570,6 +583,10 @@ namespace PssHighLowTemperature.ViewModel
                 MessageBox.Show("请先初始化Com", "系统提示");
                 return;
             }
+            //设置光功率计波长波长
+            State = PssOPM.OPMConfWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, TxWavelength);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_4);
             State = PssOPM.OPMReadPower(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref _actualPower);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_4);
@@ -599,7 +616,9 @@ namespace PssHighLowTemperature.ViewModel
             State = PssOPM.OPMReadPower(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref _opmAtt);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_4);
-            OpmAtt = _opmAtt;
+            //添加opm补偿系数？？
+            OpmAtt = _opmAtt-CoeOfRx;
+            
         }
         /// <summary>
         /// 光衰减器内部读取
@@ -618,17 +637,19 @@ namespace PssHighLowTemperature.ViewModel
                 MessageBox.Show("请先初始化Com", "系统提示");
                 return;
             }
+            //设置波长
             State = PssDOA.DOAConfWavelength(PssBase.CARDID_3, ENDSIGN, RxWavelength);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_3);
-            State = PssDOA.DOAReadWavelength(PssBase.CARDID_3, ENDSIGN, ref _rxWavelength);
+
             State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, StandardAtt);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_3);
+
             State = PssDOA.DOAReadPower(PssBase.CARDID_3, ENDSIGN, ref _actualAtt);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_3);
-            ActualAtt = _actualAtt;
+            ; ActualAtt = _actualAtt;
 
         }
         /// <summary>
@@ -843,6 +864,15 @@ namespace PssHighLowTemperature.ViewModel
                     TestParas.Clear();
                     RaisePropertyChanged(() => TestParas);
 #if Ag86100
+                    //查询指定通道温度
+                    double Ag8610Temp = Ag8610.QueryModuleTemp(DcaChannle);
+                    if (Ag8610Temp > 0.5)
+                    {
+                        MessageBox.Show("模组温度大于0.5，请手动校验后重试", "系统提示");
+                        IsTestEnable = true;
+                        TestParas.FinalResult = false;
+                        return;
+                    }
                     Ag8610.AutoScale();
 #endif
                     byte[] serbuf = new byte[50];
@@ -859,11 +889,13 @@ namespace PssHighLowTemperature.ViewModel
                     uint count = 0xC;
                     State = PssDOA.ReadDDM(PssBase.CARDID_3, ENDSIGN, 0xA1, 68, count, serbuf);
                     Thread.Sleep(200);
-                    if (serbuf[0] == 0 && serbuf[1] == 0)
+                    int time = 0;
+                    while (serbuf[0] == 0 && serbuf[1] == 0&&time<5)
                     {
                         Thread.Sleep(1000);
                         State = PssDOA.ReadDDM(PssBase.CARDID_3, ENDSIGN, 0xA1, 68, count, serbuf);
                         Thread.Sleep(200);
+                        time++;
                     }
 
                     //if (State != 0)
@@ -911,7 +943,7 @@ namespace PssHighLowTemperature.ViewModel
                     }
                     RaisePropertyChanged(() => TestParas);
 
-                    
+
 
                     //Rx Points
                     //Rx  Point1
@@ -1090,7 +1122,7 @@ namespace PssHighLowTemperature.ViewModel
                         TestParas.IsExRatioPass = false;
                     }
                     RaisePropertyChanged(() => TestParas);
-                    
+
 #endif
                     IsTestEnable = true;
                     //导出数据
@@ -1133,7 +1165,7 @@ namespace PssHighLowTemperature.ViewModel
                             {
                                 sw.WriteLine("SN,PF,ER,CROSS,SEN,RX PF10,RX PF20,RX PF30,Temp,Bias,Final,time,chtemp,producttype");
                             }
-                            sw.WriteLine(TestParas.ToString());                            
+                            sw.WriteLine(TestParas.ToString());
                             TestParas.SN = string.Empty;
                             RaisePropertyChanged(() => TestParas);
                         }
@@ -1150,6 +1182,7 @@ namespace PssHighLowTemperature.ViewModel
                         TestParas.FinalResult = false;
                         MessageBox.Show("产品测量不合格，请重试", "系统提示");
                     }
+                    RaisePropertyChanged(() => TestParas);
                 });
                 thread.IsBackground = true;
                 thread.Start();
@@ -1277,26 +1310,18 @@ namespace PssHighLowTemperature.ViewModel
             {
                 MessageBox.Show("请设置衰减值", "系统提示");
             }
-            uint readData = 0;
             MessageBox.Show("请将Rx端光纤连接到光功率计模块", "系统提示");
-            //设置波长
+
+            //设置DOA波长
+            State = PssDOA.DOAConfWavelength(PssBase.CARDID_3, ENDSIGN, RxWavelength);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_3);
+            double cal = 0;
+            double att = 0;
+            //设置OPM波长
             State = PssOPM.OPMConfWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, RxWavelength);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_4);
-            State = PssOPM.OPMReadWavelength(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref readData);
-            Thread.Sleep(200);
-            CheckState(State, PssBase.CARDID_4);
-            if (readData != RxWavelength)
-            {
-                MessageBox.Show("波长设置失败,请重新设置", "系统设置");
-                return;
-            }
-            double cal = 0;
-            double att = 0;
-            //读取初始Calibration
-            State = PssDOA.DOAReadCalibration(PssBase.CARDID_3, ENDSIGN, ref cal);
-            Thread.Sleep(200);
-            CheckState(State, PssBase.CARDID_3);
             //设置Att
             State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, StandardAtt);
             Thread.Sleep(200);
@@ -1309,18 +1334,44 @@ namespace PssHighLowTemperature.ViewModel
                 MessageBox.Show("衰减模块衰减设置失败,请重试", "系统提示");
                 return;
             }
-            //使用光衰减器和设定值比对
+            //使用光衰减器读取功率
             State = PssDOA.DOAReadPower(PssBase.CARDID_3, ENDSIGN, ref _actualAtt);
             Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_3);
+            //使用功率计读取功率
+            State = PssOPM.OPMReadPower(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref att);
+            //光功率计补偿
+            _coeOfRx = att - _actualAtt;
+            CoeOfRx = Math.Round(_coeOfRx, 2);
+            
+
+            //读取初始Calibration
+            State = PssDOA.DOAReadCalibration(PssBase.CARDID_3, ENDSIGN, ref cal);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_3);
+            double diff = _actualAtt - StandardAtt;
+            //-0.2??
+            diff = diff + cal;
+            
+            //设置cal
+            State = PssDOA.DOAConfCalibration(PssBase.CARDID_3, ENDSIGN, diff);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_3);
+            MessageBox.Show("修正成功", "系统提示");
+
+            //设定补偿之后，重新读取opm功率值
+            State = PssOPM.OPMReadPower(PssBase.CARDID_4, ENDSIGN, OpmChannel, ref _opmAtt);
+            Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_4);
+            //添加opm补偿系数？？
+            OpmAtt = _opmAtt - CoeOfRx;
+
+            //更改cal 重新读取功率
+            //使用光衰减器读取功率
+            State = PssDOA.DOAReadPower(PssBase.CARDID_3, ENDSIGN, ref _actualAtt);
+            Thread.Sleep(200);
+            CheckState(State, PssBase.CARDID_3);
             ActualAtt = _actualAtt;
-            double diff = ActualAtt - StandardAtt;
-            if (Math.Abs(diff) > 0.2)
-            {
-                State = PssDOA.DOAConfCalibration(PssBase.CARDID_3, ENDSIGN, cal + diff);
-                Thread.Sleep(200);
-                CheckState(State, PssBase.CARDID_3);
-            }
             State = PssDOA.DOAReadCalibration(PssBase.CARDID_3, ENDSIGN, ref _calOfDOA);
             CalOfDOA = _calOfDOA;
             XDoc.Root.Element("CalOfDoa").SetValue(CalOfDOA);
