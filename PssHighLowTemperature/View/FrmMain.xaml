@@ -110,66 +110,67 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="280"/>
-                                <ColumnDefinition Width="200*"/>
+                                <ColumnDefinition Width="224"/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <StackPanel Margin="5" Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
 
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="波长:"/>
-                                    <ComboBox Width="160" ItemsSource="{Binding WavelengthArray}" SelectedItem="{Binding RxWavelength, Mode=TwoWay}"/>
-                                </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="码型:"/>
-                                    <ComboBox Width="160" ItemsSource="{Binding PatterArray}" SelectedIndex="{Binding Patter, Mode=TwoWay}"/>
-                                </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="幅值:"/>
-                                    <ComboBox Width="160" ItemsSource="{Binding LevelArray}" SelectedIndex="{Binding Level, Mode=TwoWay}"/>
-                                </StackPanel>
-                                <StackPanel Margin="5" Orientation="Horizontal">
-                                    <TextBlock Text="速率:"/>
-                                    <ComboBox Width="160" ItemsSource="{Binding SpeedArray}" SelectedIndex="{Binding Speed,Mode=TwoWay}"/>
-                                </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="波长:"/>
+                                <ComboBox Width="160" ItemsSource="{Binding WavelengthArray}" SelectedItem="{Binding RxWavelength, Mode=TwoWay}"/>
                             </StackPanel>
-                            <Grid Grid.Column="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="356"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Margin="5" Grid.Column="0">
-                                    <StackPanel Margin="5" Orientation="Horizontal">
-                                        <TextBlock Text="Rx Point1@"/>
-                                        <ex:DecimalUpDown Text="{Binding Rx1Set}"/>
-                                    </StackPanel>
-                                    <StackPanel Margin="5" Orientation="Horizontal">
-                                        <TextBlock Text="Rx Point2@"/>
-                                        <ex:DecimalUpDown Text="{Binding Rx2Set}"/>
-                                    </StackPanel>
-                                    <StackPanel Margin="5" Orientation="Horizontal">
-                                        <TextBlock Text="Rx Point3@"/>
-                                        <ex:DecimalUpDown Text="{Binding Rx3Set}"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="5">
-                                        <TextBlock Text="Sen@"/>
-                                        <ex:DecimalUpDown Text="{Binding SenSet}"/>
-                                        <TextBlock Text="ErRate@" Margin="5,0"/>
-                                        <ex:DecimalUpDown Text="{Binding ErSet}"/>
-                                    </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="码型:"/>
+                                <ComboBox Width="160" ItemsSource="{Binding PatterArray}" SelectedIndex="{Binding Patter, Mode=TwoWay}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="0" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="幅值:"/>
+                                <ComboBox Width="160" ItemsSource="{Binding LevelArray}" SelectedIndex="{Binding Level, Mode=TwoWay}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="0" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="速率:"/>
+                                <ComboBox Width="160" ItemsSource="{Binding SpeedArray}" SelectedIndex="{Binding Speed,Mode=TwoWay}"/>
+                            </StackPanel>
 
 
-                                </StackPanel>
-                                <StackPanel Grid.Column="1">
-                                    <StackPanel Margin="5" Orientation="Horizontal">
-                                        <TextBlock Text="上限:"/>
-                                        <ex:DecimalUpDown Text="{Binding RxMax}"/>
-                                    </StackPanel>
-                                    <StackPanel Margin="5" Orientation="Horizontal">
-                                        <TextBlock Text="下限:"/>
-                                        <ex:DecimalUpDown Text="{Binding RxMin}"/>
-                                    </StackPanel>
-                                </StackPanel>
 
-                            </Grid>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="Rx Point1@"/>
+                                <ex:DecimalUpDown Text="{Binding Rx1Set}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="Rx Point2@"/>
+                                <ex:DecimalUpDown Text="{Binding Rx2Set}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="Rx Point3@"/>
+                                <ex:DecimalUpDown Text="{Binding Rx3Set}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Sen@"/>
+                                <ex:DecimalUpDown Text="{Binding SenSet}"/>
+                                <TextBlock Text="ErRate@" Margin="5,0"/>
+                                <ex:DecimalUpDown Text="{Binding ErSet}"/>
+                            </StackPanel>
+
+
+                            <StackPanel Grid.Row="0" Grid.Column="2" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="上限:"/>
+                                <ex:DecimalUpDown Text="{Binding RxMax}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="2" Margin="5" Orientation="Horizontal">
+                                <TextBlock Text="下限:"/>
+                                <ex:DecimalUpDown Text="{Binding RxMin}"/>
+                            </StackPanel>
+
+
+
 
                         </Grid>
 
@@ -189,6 +190,8 @@
                                         </TextBox.InputBindings>
                                     </TextBox>
                                     <Button Content="开始测试" Command="{Binding Test}" IsEnabled="{Binding IsTestEnable}"/>
+                                    <CheckBox VerticalAlignment="Center" Margin="10,0" Content="基准键测量" FontWeight="Normal"
+                                              IsChecked="{Binding IsStandard}"/>
                                 </StackPanel>
                             </StackPanel>
                             <Grid>
@@ -231,6 +234,8 @@
                                     <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Sensitivity, Mode= OneWay}"/>
                                     <Image Width="24" Height="24" Source="{Binding TestParas.IsSensitivity, Converter={StaticResource imageCon}}" />
                                 </StackPanel>
+                                <!--显示指数形式的sen-->
+                                <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Sen}"/>
 
 
 
@@ -277,7 +282,7 @@
                                         <TextBlock Text="当前温度:"/>
                                         <TextBlock Text="{Binding TempLevel}"/>
                                     </StackPanel>
-                                    
+
                                 </Grid>
                                 <Image Grid.Row="1" Grid.Column="4" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Center" Height="113" Width="113"
                                        Source="{Binding TestParas.FinalResult, Converter={StaticResource imageCon}}" Margin="45,10,151,-123" />

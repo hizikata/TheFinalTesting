@@ -346,6 +346,17 @@ namespace PssHighLowTemperature.ViewModel
         }
 
         #endregion
+
+        private bool _isStandard;
+        /// <summary>
+        /// 是否在测试基准键
+        /// </summary>
+        public bool IsStandard
+        {
+            get { return _isStandard; }
+            set { _isStandard = value;RaisePropertyChanged(() => IsStandard); }
+        }
+
         /// <summary>
         /// 指示初始化是否完成
         /// </summary>
@@ -438,7 +449,7 @@ namespace PssHighLowTemperature.ViewModel
 
         private string _sen;
         /// <summary>
-        /// 灵敏度
+        /// 灵敏度 指数形式
         /// </summary>
         public string Sen
         {
@@ -516,7 +527,7 @@ namespace PssHighLowTemperature.ViewModel
             //信号类型设置
             Coefficient = 0;
             OpmChannel = 1;
-            StandardPower = 5.86;
+            StandardPower = 0;
             TempLevel = TempLevelArray[1];
             StandardAtt = -25;
             TxWavelength = WavelengthArray[1];
@@ -860,8 +871,16 @@ namespace PssHighLowTemperature.ViewModel
                         MessageBox.Show("系统未初始化", "系统提示");
                         return;
                     }
+                    if (IsStandard)
+                    {
+                        MessageBoxResult result = MessageBox.Show("正在进行基准键测量，将不存储数据", "系统提示", MessageBoxButton.OKCancel);
+                        if (result == MessageBoxResult.Cancel)
+                            return;                       
+                    }
+
                     IsTestEnable = false;
                     TestParas.Clear();
+                    Sen = string.Empty;
                     RaisePropertyChanged(() => TestParas);
 #if Ag86100
                     //查询指定通道温度
@@ -885,41 +904,44 @@ namespace PssHighLowTemperature.ViewModel
                     Thread.Sleep(200);
                     CheckState(State, PssBase.CARDID_3);
 
-                    //获取SN 12位
-                    uint count = 0xC;
-                    State = PssDOA.ReadDDM(PssBase.CARDID_3, ENDSIGN, 0xA1, 68, count, serbuf);
-                    Thread.Sleep(200);
-                    int time = 0;
-                    while (serbuf[0] == 0 && serbuf[1] == 0&&time<5)
+                    //基准键测试将不测量Sn;
+                    if (IsStandard == false)
                     {
-                        Thread.Sleep(1000);
+                        //获取SN 12位
+                        uint count = 0xC;
                         State = PssDOA.ReadDDM(PssBase.CARDID_3, ENDSIGN, 0xA1, 68, count, serbuf);
                         Thread.Sleep(200);
-                        time++;
+                        int time = 0;
+                        while (serbuf[0] == 0 && serbuf[1] == 0 && time < 5)
+                        {
+                            Thread.Sleep(1000);
+                            State = PssDOA.ReadDDM(PssBase.CARDID_3, ENDSIGN, 0xA1, 68, count, serbuf);
+                            Thread.Sleep(200);
+                            time++;
+                        }
+
+                        //if (State != 0)
+                        //{
+                        //    MessageBox.Show("查询SN失败,请重试！", "系统提示");
+                        //    IsTestEnable = true;
+                        //    return;
+                        //}
+
+                        string sn = Encoding.ASCII.GetString(serbuf);
+                        sn = sn.Substring(0, 35);
+
+                        string[] datas = sn.Split(' ');
+
+
+                        byte[] byteSn = new byte[count];
+                        for (int i = 0; i < count; i++)
+                        {
+                            byteSn[i] = Convert.ToByte(datas[i].Trim(), 16);
+                        }
+                        SN = (Encoding.ASCII.GetString(byteSn));
+                        TestParas.SN = SN;
+                        RaisePropertyChanged(() => TestParas);
                     }
-
-                    //if (State != 0)
-                    //{
-                    //    MessageBox.Show("查询SN失败,请重试！", "系统提示");
-                    //    IsTestEnable = true;
-                    //    return;
-                    //}
-
-                    string sn = Encoding.ASCII.GetString(serbuf);
-                    sn = sn.Substring(0, 35);
-                    Console.WriteLine(sn);
-
-                    string[] datas = sn.Split(' ');
-
-
-                    byte[] byteSn = new byte[count];
-                    for (int i = 0; i < count; i++)
-                    {
-                        byteSn[i] = Convert.ToByte(datas[i].Trim(), 16);
-                    }
-                    SN = (Encoding.ASCII.GetString(byteSn));
-                    TestParas.SN = SN;
-                    RaisePropertyChanged(() => TestParas);
 
 
 
@@ -943,140 +965,149 @@ namespace PssHighLowTemperature.ViewModel
                     }
                     RaisePropertyChanged(() => TestParas);
 
+                    //基准键不测量以下参数
+                    if (!IsStandard)
+                    {
+                        //Rx Points
+                        //Rx  Point1
+                        atten = Rx1Set;
+                        State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
+                        Thread.Sleep(1000);
+                        CheckState(State, PssBase.CARDID_3);
+                        //State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
+                        //Thread.Sleep(200);
+                        //MessageBox.Show(string.Format("当前Atten:{0}", attRead));
+                        //CheckState(State, PssBase.CARDID_3);
+                        State = PssDOA.ReadDDM_RxPower(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _rxPoint1);
+                        Thread.Sleep(300);
+                        RxPoint1 = 10 * Math.Log10(_rxPoint1);
+                        TestParas.RxPoint1 = RxPoint1.ToString("f2");
+                        RaisePropertyChanged(() => TestParas);
+                        if ((RxPoint1 >= Rx1Set - RxMin) && (RxPoint1 <= Rx1Set + RxMax))
+                        {
+                            TestParas.IsRxPoint1Pass = true;
+                        }
+                        else
+                        {
+                            TestParas.IsRxPoint1Pass = false;
+                        }
+                        //Rx point 2
+                        atten = Rx2Set;
+                        State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
+                        Thread.Sleep(1000);
+                        CheckState(State, PssBase.CARDID_3);
+                        //State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
+                        //Thread.Sleep(200);
+                        //MessageBox.Show(string.Format("当前Atten:{0}", attRead));
+                        State = PssDOA.ReadDDM_RxPower(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _rxPoint2);
+                        Thread.Sleep(200);
+                        RxPoint2 = 10 * Math.Log10(_rxPoint2);
+                        TestParas.RxPoint2 = RxPoint2.ToString("f2");
+                        RaisePropertyChanged(() => TestParas);
+                        if ((RxPoint2 >= Rx2Set - RxMin) && (RxPoint2 <= Rx2Set + RxMax))
+                        {
+                            TestParas.IsRxPoint2Pass = true;
 
+                        }
+                        else
+                        {
+                            TestParas.IsRxPoint2Pass = false;
+                        }
+                        //Rx point3
+                        atten = Rx3Set;
+                        State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
+                        Thread.Sleep(1000);
+                        CheckState(State, PssBase.CARDID_3);
+                        //State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
+                        //Thread.Sleep(200);
+                        //MessageBox.Show(string.Format("当前Atten:{0}", attRead));
+                        State = PssDOA.ReadDDM_RxPower(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _rxPoint3);
+                        Thread.Sleep(200);
+                        RxPoint3 = 10 * Math.Log10(_rxPoint3);
+                        TestParas.RxPoint3 = RxPoint3.ToString("f2");
+                        RaisePropertyChanged(() => TestParas);
+                        if ((RxPoint3 >= Rx3Set - RxMin) && (RxPoint3 <= Rx3Set + RxMax))
+                        {
+                            TestParas.IsRxPoint3Pass = true;
 
-                    //Rx Points
-                    //Rx  Point1
-                    atten = Rx1Set;
-                    State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
-                    Thread.Sleep(1000);
-                    CheckState(State, PssBase.CARDID_3);
-                    //State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
-                    //Thread.Sleep(200);
-                    //MessageBox.Show(string.Format("当前Atten:{0}", attRead));
-                    //CheckState(State, PssBase.CARDID_3);
-                    State = PssDOA.ReadDDM_RxPower(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _rxPoint1);
-                    Thread.Sleep(300);
-                    RxPoint1 = 10 * Math.Log10(_rxPoint1);
-                    TestParas.RxPoint1 = RxPoint1.ToString("f2");
-                    RaisePropertyChanged(() => TestParas);
-                    if ((RxPoint1 >= Rx1Set - RxMin) && (RxPoint1 <= Rx1Set + RxMax))
-                    {
-                        TestParas.IsRxPoint1Pass = true;
-                    }
-                    else
-                    {
-                        TestParas.IsRxPoint1Pass = false;
-                    }
-                    //Rx point 2
-                    atten = Rx2Set;
-                    State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
-                    Thread.Sleep(1000);
-                    CheckState(State, PssBase.CARDID_3);
-                    //State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
-                    //Thread.Sleep(200);
-                    //MessageBox.Show(string.Format("当前Atten:{0}", attRead));
-                    State = PssDOA.ReadDDM_RxPower(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _rxPoint2);
-                    Thread.Sleep(200);
-                    RxPoint2 = 10 * Math.Log10(_rxPoint2);
-                    TestParas.RxPoint2 = RxPoint2.ToString("f2");
-                    RaisePropertyChanged(() => TestParas);
-                    if ((RxPoint2 >= Rx2Set - RxMin) && (RxPoint2 <= Rx2Set + RxMax))
-                    {
-                        TestParas.IsRxPoint2Pass = true;
+                        }
+                        else
+                        {
+                            TestParas.IsRxPoint3Pass = false;
+                        }
 
-                    }
-                    else
-                    {
-                        TestParas.IsRxPoint2Pass = false;
-                    }
-                    //Rx point3
-                    atten = Rx3Set;
-                    State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
-                    Thread.Sleep(1000);
-                    CheckState(State, PssBase.CARDID_3);
-                    //State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
-                    //Thread.Sleep(200);
-                    //MessageBox.Show(string.Format("当前Atten:{0}", attRead));
-                    State = PssDOA.ReadDDM_RxPower(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _rxPoint3);
-                    Thread.Sleep(200);
-                    RxPoint3 = 10 * Math.Log10(_rxPoint3);
-                    TestParas.RxPoint3 = RxPoint3.ToString("f2");
-                    RaisePropertyChanged(() => TestParas);
-                    if ((RxPoint3 >= Rx3Set - RxMin) && (RxPoint3 <= Rx3Set + RxMax))
-                    {
-                        TestParas.IsRxPoint3Pass = true;
-
-                    }
-                    else
-                    {
-                        TestParas.IsRxPoint3Pass = false;
-                    }
-
-                    //设置测试时衰减
-                    State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
-                    Thread.Sleep(300);
-                    CheckState(State, PssBase.CARDID_3);
-                    State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
-                    Thread.Sleep(200);
-                    CheckState(State, PssBase.CARDID_3);
-                    //temp
-                    State = PssDOA.ReadDDM_Temperature(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _temp);
-                    Thread.Sleep(200);
-                    CheckState(State, PssBase.CARDID_3);
-                    Temp = _temp;
-                    TestParas.Temperature = Temp.ToString("f2");
-                    switch (TempLevel)
-                    {
-                        case "-40":
-                            if (Temp < -15)
-                            {
+                        //设置测试时衰减
+                        State = PssDOA.DOAConfAtten(PssBase.CARDID_3, ENDSIGN, atten);
+                        Thread.Sleep(300);
+                        CheckState(State, PssBase.CARDID_3);
+                        State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref attRead);
+                        Thread.Sleep(200);
+                        CheckState(State, PssBase.CARDID_3);
+                        //temp
+                        State = PssDOA.ReadDDM_Temperature(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _temp);
+                        Thread.Sleep(200);
+                        CheckState(State, PssBase.CARDID_3);
+                        Temp = _temp;
+                        TestParas.Temperature = Temp.ToString("f2");
+                        switch (TempLevel)
+                        {
+                            case "-40":
+                                if (Temp < -15)
+                                {
+                                    TestParas.IsTempPass = true;
+                                }
+                                else
+                                {
+                                    TestParas.IsTempPass = false;
+                                }
+                                break;
+                            case "25":
                                 TestParas.IsTempPass = true;
-                            }
-                            else
-                            {
-                                TestParas.IsTempPass = false;
-                            }
-                            break;
-                        case "25":
-                            TestParas.IsTempPass = true;
-                            break;
-                        case "85":
-                            if (Temp < 0)
-                            {
-                                MessageBox.Show("温度测试条件选择失败", "系统提示");
-                                return;
-                            }
-                            if (Temp < 80)
-                            {
-                                TestParas.IsTempPass = true;
-                            }
-                            else
-                            {
-                                TestParas.IsTempPass = false;
-                            }
-                            break;
+                                break;
+                            case "85":
+                                if (Temp < 0)
+                                {
+                                    MessageBox.Show("温度测试条件选择失败", "系统提示");
+                                    return;
+                                }
+                                if (Temp < 80)
+                                {
+                                    TestParas.IsTempPass = true;
+                                }
+                                else
+                                {
+                                    TestParas.IsTempPass = false;
+                                }
+                                break;
 
-                        default:
-                            break;
-                    }
-                    RaisePropertyChanged(() => TestParas);
-                    //Bias
-                    State = PssDOA.ReadDDM_BiasTx(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _bias);
-                    Thread.Sleep(200);
-                    CheckState(State, PssBase.CARDID_3);
-                    Bias = _bias / 1000;
-                    TestParas.Bias = Bias.ToString("f2");
-                    if (Bias >= BiasMin && Bias <= BiasMax)
-                    {
-                        TestParas.IsBiasPass = true;
+                            default:
+                                break;
+                        }
+                        RaisePropertyChanged(() => TestParas);
+                        //Bias
+                        State = PssDOA.ReadDDM_BiasTx(PssBase.CARDID_3, ENDSIGN, 0XA3, ref _bias);
+                        Thread.Sleep(200);
+                        CheckState(State, PssBase.CARDID_3);
+                        Bias = _bias / 1000;
+                        TestParas.Bias = Bias.ToString("f2");
+                        if (Bias >= BiasMin && Bias <= BiasMax)
+                        {
+                            TestParas.IsBiasPass = true;
 
+                        }
+                        else
+                        {
+                            TestParas.IsBiasPass = false;
+                        }
+                        RaisePropertyChanged(() => TestParas);
                     }
                     else
                     {
-                        TestParas.IsBiasPass = false;
+                        //基准键测量时设置延迟
+                        Thread.Sleep(5000);
                     }
-                    RaisePropertyChanged(() => TestParas);
+
+                   
                     //Sensitivity
 
                     double sen = GetSensitivity(PssBase.CARDID_2);
@@ -1093,7 +1124,6 @@ namespace PssHighLowTemperature.ViewModel
                     }
 
                     RaisePropertyChanged(() => TestParas);
-                    //Thread.Sleep(5000);
 #if Ag86100
                     //Crossing
 
@@ -1112,10 +1142,10 @@ namespace PssHighLowTemperature.ViewModel
 
                     //ExRatio
                     ExRatio = Ag8610.GetExRatio(DcaChannle.Trim());
+                    TestParas.ExRatio = ExRatio.ToString("f2");
                     if (ExRatio >= ErMin && ExRatio <= ErMax)
                     {
-                        TestParas.IsExRatioPass = true;
-                        TestParas.ExRatio = ExRatio.ToString("f2");
+                        TestParas.IsExRatioPass = true;                       
                     }
                     else
                     {
@@ -1124,52 +1154,6 @@ namespace PssHighLowTemperature.ViewModel
                     RaisePropertyChanged(() => TestParas);
 
 #endif
-                    IsTestEnable = true;
-                    //导出数据
-                    TestParas.Time = DateTime.Now.ToString();
-                    TestParas.TempLevel = TempLevel;
-                    if (ProductType == null || ProductType == string.Empty)
-                    {
-                        TestParas.ProductType = "defult";
-                    }
-                    if (TestParas.SN == string.Empty)
-                    {
-                        TestParas.SN = "000000000000";
-                    }
-                    bool isEmpty = false;
-                    if (!Directory.Exists(dirPath))
-                    {
-                        Directory.CreateDirectory(dirPath);
-                    }
-                    string filePath = dirPath + "\\" + DateTime.Now.ToString("yyyyMMdd") + "-" + TempLevel + ".txt";
-                    using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None))
-                    {
-                        using (StreamReader sr = new StreamReader(fs))
-                        {
-                            string output = null;
-                            if ((output = sr.ReadLine()) == null)
-                            {
-                                isEmpty = true;
-                            }
-                            else
-                            {
-                                isEmpty = false;
-                            }
-                        }
-                    }
-                    using (FileStream fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.None))
-                    {
-                        using (StreamWriter sw = new StreamWriter(fs))
-                        {
-                            if (isEmpty == true)
-                            {
-                                sw.WriteLine("SN,PF,ER,CROSS,SEN,RX PF10,RX PF20,RX PF30,Temp,Bias,Final,time,chtemp,producttype");
-                            }
-                            sw.WriteLine(TestParas.ToString());
-                            TestParas.SN = string.Empty;
-                            RaisePropertyChanged(() => TestParas);
-                        }
-                    }
                     //final result
                     if (TestParas.IsBiasPass == true && TestParas.IsCrossPass == true && TestParas.IsExRatioPass == true && TestParas.IsPowerPass == true
                     && TestParas.IsRxPoint1Pass == true && TestParas.IsRxPoint2Pass == true && TestParas.IsRxPoint3Pass == true &&
@@ -1183,6 +1167,59 @@ namespace PssHighLowTemperature.ViewModel
                         MessageBox.Show("产品测量不合格，请重试", "系统提示");
                     }
                     RaisePropertyChanged(() => TestParas);
+
+                    IsTestEnable = true;
+
+                    //基准键测量不导出数据                   
+                    if (!IsStandard)
+                    {
+                        //导出数据
+                        TestParas.Time = DateTime.Now.ToString();
+                        TestParas.TempLevel = TempLevel;
+                        if (ProductType == null || ProductType == string.Empty)
+                        {
+                            TestParas.ProductType = "defult";
+                        }
+                        if (TestParas.SN == string.Empty)
+                        {
+                            TestParas.SN = "000000000000";
+                        }
+                        bool isEmpty = false;
+                        if (!Directory.Exists(dirPath))
+                        {
+                            Directory.CreateDirectory(dirPath);
+                        }
+                        string filePath = dirPath + "\\" + DateTime.Now.ToString("yyyyMMdd") + "-" + TempLevel + ".txt";
+                        using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None))
+                        {
+                            using (StreamReader sr = new StreamReader(fs))
+                            {
+                                string output = null;
+                                if ((output = sr.ReadLine()) == null)
+                                {
+                                    isEmpty = true;
+                                }
+                                else
+                                {
+                                    isEmpty = false;
+                                }
+                            }
+                        }
+                        using (FileStream fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.None))
+                        {
+                            using (StreamWriter sw = new StreamWriter(fs))
+                            {
+                                if (isEmpty == true)
+                                {
+                                    sw.WriteLine("SN,PF,ER,CROSS,SEN,RX PF10,RX PF20,RX PF30,Temp,Bias,Final,time,chtemp,producttype");
+                                }
+                                sw.WriteLine(TestParas.ToString());
+                                TestParas.SN = string.Empty;
+                                RaisePropertyChanged(() => TestParas);
+                            }
+                        }
+                    }
+                    
                 });
                 thread.IsBackground = true;
                 thread.Start();
@@ -1480,17 +1517,17 @@ namespace PssHighLowTemperature.ViewModel
             State = PssDOA.DOAReadAtten(PssBase.CARDID_3, ENDSIGN, ref att);
             Thread.Sleep(200);
             CheckState(State, PssBase.CARDID_3);
-            uint patter = 0, level = 0, speed = 0;
-            State = PssBert.BertPatterGet(PssBase.CARDID_1, ENDSIGN, PssBert.CHANAL_2, ref patter);
-            Thread.Sleep(200);
-            CheckState(State, PssBase.CARDID_3);
-            State = PssBert.BertLevelGet(PssBase.CARDID_1, ENDSIGN, PssBert.CHANAL_2, ref level);
-            Thread.Sleep(200);
-            CheckState(State, PssBase.CARDID_3);
-            //检测速率为0
-            State = PssBert.BertSpeedGet(PssBase.CARDID_1, ENDSIGN, PssBert.CHANAL_1, ref speed);
-            Thread.Sleep(200);
-            CheckState(State, PssBase.CARDID_3);
+            //uint patter = 0, level = 0, speed = 0;
+            //State = PssBert.BertPatterGet(PssBase.CARDID_1, ENDSIGN, PssBert.CHANAL_2, ref patter);
+            //Thread.Sleep(200);
+            //CheckState(State, PssBase.CARDID_3);
+            //State = PssBert.BertLevelGet(PssBase.CARDID_1, ENDSIGN, PssBert.CHANAL_2, ref level);
+            //Thread.Sleep(200);
+            //CheckState(State, PssBase.CARDID_3);
+            ////检测速率为0
+            //State = PssBert.BertSpeedGet(PssBase.CARDID_1, ENDSIGN, PssBert.CHANAL_1, ref speed);
+            //Thread.Sleep(200);
+            //CheckState(State, PssBase.CARDID_3);
             State = PssBert.BertClr(cardId, ENDSIGN, PssBert.CHANAL_2);
             Thread.Sleep(3000);
             CheckState(State, cardId);
