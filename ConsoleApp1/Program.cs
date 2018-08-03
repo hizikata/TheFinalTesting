@@ -18,15 +18,26 @@ namespace ConsoleApp1
     class Program
     {
 #if SimpleTest
-        static void Main(string[]args)
+        static void Main(string[] args)
         {
             try
             {
-                string a = "10e-003";
-                bool flag= double.TryParse(a, out double result);
+                string a = "0.0E+000";
+                bool flag = double.TryParse(a, out double result);
+                double test = 0.0E+00;
+                double b = Math.Log10(result);
+                if (test == 0)
+                {
+                    Console.WriteLine("转换后值为0");
+                }
+                else if (test == 1)
+                {
+                    Console.WriteLine("转换后值为1");
+                }
                 Console.WriteLine(flag);
+                Console.WriteLine(b);
                 Console.ReadKey();
-                
+
             }
             catch (Exception ee)
             {
@@ -216,7 +227,7 @@ namespace ConsoleApp1
 
                 Hp8156.SetAtt("28");
                 Thread.Sleep(2000);
-#region Mp2100
+        #region Mp2100
                 crossing = Mp.GetCrossing();
                 extiRatio = Mp.GetER();
 
@@ -232,7 +243,7 @@ namespace ConsoleApp1
                 GetSensitivity();
                 sensitivity = SenPara.Sensitive.ToString();
                 Console.WriteLine("Sensitivity:{0}", sensitivity);
-#endregion
+        #endregion
 
                 //Saturation
                 Hp8156.SetAtt("9");

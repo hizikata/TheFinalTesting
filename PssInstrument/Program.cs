@@ -257,7 +257,7 @@ namespace PssInstrument
 
 
 
-            double readAtten = 0;
+            //double readAtten = 0;
 
             //读取误码
             uint syncState = 0, errorState = 0;

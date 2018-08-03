@@ -36,20 +36,30 @@ namespace PssHighLowTemperature.Model
             this.SN = this.Power = this.ExRatio = this.Crossing = this.Sensitivity = this.RxPoint1 = this.RxPoint2 = this.RxPoint3 =
                 this.Temperature = this.Bias = this.ProductType = string.Empty;
             this.IsBiasPass = this.IsCrossPass = this.IsExRatioPass = this.IsPowerPass = this.IsRxPoint1Pass = this.IsRxPoint2Pass =
-                this.IsRxPoint3Pass = this.IsSensitivity = this.IsTempPass =this.FinalResult= false;
+                this.IsRxPoint3Pass = this.IsSensitivity=this.IsTempPass =this.FinalResult= false;
         }
         public override string ToString()
         {
-            return this.SN + "," + this.Power + "," + this.ExRatio + "," + this.Crossing + "," + this.Sensitivity + ","
+            if (this.FinalResult == true)
+            {
+                return this.SN + "," + this.Power + "," + this.ExRatio + "," + this.Crossing + "," + this.Sensitivity + ","
                 + this.RxPoint1 + "," + this.RxPoint2 + "," + this.RxPoint3 + "," + this.Temperature + "," + this.Bias + ","
-                + this.FinalResult + "," + this.Time + "," + this.TempLevel + "," + this.ProductType;
+                + "Pass"+ "," + this.Time + "," + this.TempLevel + "," + this.ProductType;
+            }
+            else
+            {
+                return this.SN + "," + this.Power + "," + this.ExRatio + "," + this.Crossing + "," + this.Sensitivity + ","
+                + this.RxPoint1 + "," + this.RxPoint2 + "," + this.RxPoint3 + "," + this.Temperature + "," + this.Bias + ","
+                + "Fail" + "," + this.Time + "," + this.TempLevel + "," + this.ProductType;
+            }
+            
         }
         public void Clear()
         {
             this.Power = this.ExRatio = this.Crossing = this.Sensitivity = this.RxPoint1 = this.RxPoint2 = this.RxPoint3 =
             this.Temperature = this.Bias = this.ProductType = string.Empty;
-            this.IsBiasPass = this.IsCrossPass = this.IsExRatioPass = this.IsPowerPass = this.IsRxPoint1Pass =
-                this.IsRxPoint2Pass = this.IsRxPoint3Pass = this.IsSensitivity = this.IsTempPass =this.FinalResult= false;
+            this.IsBiasPass = this.IsCrossPass = this.IsExRatioPass = this.IsPowerPass =this.IsTempPass= this.IsRxPoint1Pass =
+                this.IsRxPoint2Pass = this.IsRxPoint3Pass = this.IsSensitivity  =this.FinalResult= false;
         }
     }
 }

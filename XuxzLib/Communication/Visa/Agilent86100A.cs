@@ -74,7 +74,15 @@ namespace XuxzLib.Communication
             string[] result = msg.Split(' ');
             if (result.Length == 5)
             {
-                return 0;
+                string data = result[4];
+                if(double.TryParse(data.Trim(),out double temp))
+                {
+                    return temp;
+                }
+                else
+                {
+                    throw new Exception("查询眼图仪温度失败，请联系工程师");
+                }
             }
             else if(result.Length==6)
             {

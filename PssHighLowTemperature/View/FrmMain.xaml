@@ -231,11 +231,11 @@
                                     <Image Width="24" Height="24" Source="{Binding TestParas.IsCrossPass, Converter={StaticResource imageCon}}" />
                                 </StackPanel>
                                 <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
-                                    <TextBox  IsHitTestVisible="False" Text="{Binding TestParas.Sensitivity, Mode= OneWay}"/>
+                                    <TextBox  IsHitTestVisible="False" Text="{Binding Sen, Mode= OneWay}"/>
                                     <Image Width="24" Height="24" Source="{Binding TestParas.IsSensitivity, Converter={StaticResource imageCon}}" />
                                 </StackPanel>
                                 <!--显示指数形式的sen-->
-                                <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Sen}"/>
+                                <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding TestParas.Sensitivity}"/>
 
 
 
